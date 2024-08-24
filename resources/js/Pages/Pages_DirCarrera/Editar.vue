@@ -35,7 +35,10 @@ const form = useForm(valoresIniciales);
 const submit = () => {
     form.put(route('dir_carreras.update', props.DirCarrera.idDirCarrera), {
         onSuccess: () => form.reset(),
-        onError: () => form.errors
+        onError: () => {
+            const firstErrorFieldId = Object.keys(form.errors)[0];
+            document.getElementById(firstErrorFieldId).focus();
+        }
     });
 };
 

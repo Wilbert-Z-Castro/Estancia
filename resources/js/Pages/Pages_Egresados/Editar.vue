@@ -43,7 +43,11 @@ const form = useForm(valoresIniciales);
 const submit = () => {
     form.put(route('egresados.update', props.Egresado.idEgresado), {
         onSuccess: () => form.reset(),
-        onError: () => form.errors
+        onError: () => {
+        // Enfocar el primer campo de entrada con error
+            const firstErrorFieldId = Object.keys(form.errors)[0];
+            document.getElementById(firstErrorFieldId).focus();
+        }
     });
 };
 
@@ -101,6 +105,9 @@ const SectorEmpresaria=[
 ]
 
 
+
+
+
 </script>
 
 <template>
@@ -111,6 +118,9 @@ const SectorEmpresaria=[
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg  ">
             <div class="p-6 mx-2 border-b border-gray-200 overflow-y-auto">
+                <p>
+                    {{ form.errors }}
+                </p>
                 <form @submit.prevent="submit">
                     <!-- Fila 3 -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
@@ -125,8 +135,9 @@ const SectorEmpresaria=[
                                 autofocus
                                 autocomplete="name"
                             />
+                        
                             
-                            <InputError class="mt-2 sm:col-span-2" :message="form.errors.name" />
+                            <InputError   class="mt-2 sm:col-span-2" :message="form.errors.name" />
                         </div>
                         <div class="col-span-6 mt-4">
                             <InputLabel for="username" value="Apodo" />
@@ -150,6 +161,7 @@ const SectorEmpresaria=[
                                 v-model="form.email"
                                 required
                                 
+                                
                                 autocomplete="email"
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.email" />
@@ -163,10 +175,13 @@ const SectorEmpresaria=[
                                 type="password"
                                 class="mt-1 block w-full"
                                 v-model="form.current_password"
+                                :autofocus="!!form.errors.current_password"
+                                
+                                
                                 
                             />
                             
-                            <InputError  class="mt-2" :message="form.errors.current_password" />
+                            <InputError  class="mt-2" :message="form.errors.current_password"  />
                         </div>
                         <div class="col-span-6 mt-4">
                             <InputLabel for="password" value="Nueva Contraseña" />

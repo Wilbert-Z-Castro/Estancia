@@ -23,7 +23,13 @@ const valoresIniviales = {
 const form = useForm(valoresIniviales);
 
 const submit = () => {
-    form.put(route('cat_anuncios.update', props.categoria.idCatAnuncio));
+    form.put(route('cat_anuncios.update', props.categoria.idCatAnuncio),{
+        onSuccess: () => form.reset(),
+        onError: () => {
+        const firstErrorFieldId = Object.keys(form.errors)[0];
+        document.getElementById(firstErrorFieldId).focus();
+        }
+    });
 };
 
 const colores = [

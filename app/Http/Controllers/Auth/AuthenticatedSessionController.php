@@ -34,7 +34,17 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        $user = Auth::user();
+
+        // Redirigir basado en el tipo de usuario
+        switch ($user->Rol) {
+            case 'Egresado':
+                return redirect()->route('anuncios.index');
+            case 'DirCarrera':
+                return redirect()->route('egresados.index');
+            default:
+                return redirect()->route('dashboard');
+        }
     }
 
     /**

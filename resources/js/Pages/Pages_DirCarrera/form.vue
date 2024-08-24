@@ -35,7 +35,10 @@ const form = useForm(valoresIniciales);
 const submit = () => {
     form.post(route('dir_carrera.store'), {
         onSuccess: () => form.reset(),
-        onError: () => form.errors
+        onError: () => {
+            const firstErrorFieldId = Object.keys(form.errors)[0];
+            document.getElementById(firstErrorFieldId).focus();
+        }
     });
 };
 

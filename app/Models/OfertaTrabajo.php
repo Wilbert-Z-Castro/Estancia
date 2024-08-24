@@ -9,13 +9,13 @@ class OfertaTrabajo extends Model
 {
     use HasFactory;
 
-    protected $table = 'OfertaTrabajo';
+    protected $table = 'oferta_trabajo';
+    protected $primaryKey = 'idOfertaTrabajo';
 
     protected $fillable = [
         'TituloOferta',
         'Descripcion',
         'Requisitos',
-        'CarreraDir',
         'Empresa',
         'Ubicacion',
         'FechaOferta',
@@ -23,13 +23,20 @@ class OfertaTrabajo extends Model
         'SectorEmpre',
     ];
 
-    public function carrera()
+    public function ofertasCarreras()
     {
-        return $this->belongsTo(Carrera::class, 'CarreraDir');
+        return $this->hasMany(ofertaCarrera::class, 'idoferta');
     }
 
     public function cvOfertas()
     {
         return $this->hasMany(CvOfertas::class, 'Id_oferta');
     }
+
+    public function carreras()
+    {
+        // Define la relación de muchos a muchos con Carrera
+        return $this->belongsToMany(Carrera::class, 'ofertacarrera', 'idoferta', 'idcarrera');
+    }
+
 }

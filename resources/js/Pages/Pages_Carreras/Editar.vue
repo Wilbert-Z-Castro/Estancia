@@ -63,6 +63,7 @@ const Eliminar = (a) => {
                         'El registro ha sido eliminado.',
                         'success'
                     );
+                    form.PlanEstudios = null;
                 },
                 onError: (error) => {
                     console.error('Error al eliminar:', error);
@@ -79,9 +80,12 @@ const submit = () => {
     formData.append('dirCarrera_id', form.dirCarrera_id);
     formData.append('UbicacionOficinas', form.UbicacionOficinas);
     formData.append('imagenes[]', form.imagenes[0]); 
-    form.put(route('carreras.update',props.carrera.idCarrera), {
+    form.post(route('carreras.update',props.carrera.idCarrera), {
         onSuccess: () => form.reset(),
-        onError: () => form.errors
+        onError: () => {
+            const firstErrorFieldId = Object.keys(form.errors)[0];
+            document.getElementById(firstErrorFieldId).focus();
+        }
     });
 };
 
@@ -195,6 +199,16 @@ const submit = () => {
                                 </svg>
                                 Eliminar imagen
                             </BotonEliminar>
+                        </div>
+                    </div>
+                    <!-- Sección para mostrar previsualización de imágenes -->
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 mt-4">
+                        <div class="col-span-12">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div v-for="(preview, index) in imagePreviews" :key="index" class="relative">
+                                    <img :src="preview" alt="Previsualización de imagen" class="w-20 h-20 object-cover" />
+                                </div>
+                            </div>
                         </div>
                     </div>
 

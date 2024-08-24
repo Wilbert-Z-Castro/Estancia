@@ -29,4 +29,10 @@ class Carrera extends Model
     {
         return $this->hasMany(Egresado::class, 'Carrera');
     }
+
+    public function ofertasTrabajo()
+    {
+        return $this->belongsToMany(OfertaTrabajo::class, 'ofertacarrera', 'idcarrera', 'idoferta');
+    }
+
 }

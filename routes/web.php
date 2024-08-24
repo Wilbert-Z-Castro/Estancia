@@ -7,6 +7,7 @@ use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\AnuncioController;
 use App\Http\Controllers\DirCarreraController;
 use App\Http\Controllers\EgresadoController;
+use App\Http\Controllers\OfertaTrabajoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -36,6 +37,7 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
 Route::middleware('auth')->group(function () {
     Route::get('/about', fn () => Inertia::render('About'))->name('about');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -50,7 +52,7 @@ Route::get('/Gestioncarreras', [CarreraController::class, 'indexGestion'])->name
 Route::get('/carreras/crear', [CarreraController::class, 'create'])->name('carreras.create');
 Route::post('/carreras', [CarreraController::class, 'store'])->name('carreras.store');
 Route::get('/carreras/{carrera}/editar', [CarreraController::class, 'edit'])->name('carreras.edit');
-Route::put('/carreras/{carrera}', [CarreraController::class, 'update'])->name('carreras.update');
+Route::post('/carreras/{carrera}', [CarreraController::class, 'update'])->name('carreras.update');
 Route::delete('/carreras/{carrera}', [CarreraController::class, 'destroyImage'])->name('carreras.destroyImage');
 Route::delete('/carreras/{carrera}/delete', [CarreraController::class, 'destroy'])->name('carreras.destroy');    
 
@@ -93,5 +95,14 @@ Route::delete('/egresados/{egresado}',[EgresadoController::class, 'destroy'])->n
 Route::get('/egresados/{egresado}/editar',[EgresadoController::class, 'edit'])->name('egresados.edit');
 Route::put('/egresados/{egresado}',[EgresadoController::class, 'update'])->name('egresados.update');
 
+
+//ruta para ofertaTrabajo
+Route::get('/ofertasTrabajo',[OfertaTrabajoController::class, 'index'])->name('ofertasTrabajo.index');
+Route::get('/ofertasTrabajo/crear',[OfertaTrabajoController::class, 'create'])->name('ofertasTrabajo.create');
+Route::post('/ofertasTrabajo',[OfertaTrabajoController::class, 'store'])->name('ofertasTrabajo.store'); 
+Route::get('/ofertasTrabajo/{ofertaTrabajo}/editar',[OfertaTrabajoController::class, 'edit'])->name('ofertasTrabajo.edit');
+Route::post('/ofertasTrabajo/{ofertaTrabajo}',[OfertaTrabajoController::class, 'update'])->name('ofertasTrabajo.update');
+Route::delete('/ofertasTrabajo/{ofertaTrabajo}',[OfertaTrabajoController::class, 'destroy'])->name('ofertasTrabajo.destroy');
+Route::delete('/imagenes/{imagen}',[ImagenController::class, 'destroyImageOferta'])->name('ofertasTrabajo.destroyImageOferta');
 
 require __DIR__.'/auth.php';

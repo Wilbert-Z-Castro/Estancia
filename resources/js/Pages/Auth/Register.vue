@@ -80,7 +80,7 @@ const submit = () => {
                         type="text"
                         class="mt-1 block w-full"
                         v-model="form.apellidoP"
-                        required
+                        
                     />
                     <InputError class="mt-2" :message="form.errors.apellidoP" />
                 </div>
@@ -207,7 +207,7 @@ const submit = () => {
                             type="text"
                             class="mt-1 block w-full"
                             v-model="form.matricula"
-                            required
+                            
                         />
                         <InputError class="mt-2" :message="form.errors.matricula" />
                     </div>

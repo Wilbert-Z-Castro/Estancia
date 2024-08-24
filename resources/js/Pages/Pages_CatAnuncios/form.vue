@@ -16,7 +16,13 @@ const valoresIniviales = {
 const form = useForm(valoresIniviales);
 
 const submit = () => {
-    form.post(route('cat_anuncios.store'));
+    form.post(route('cat_anuncios.store'), {
+        onSuccess: () => form.reset(),
+        onError: () => {
+        const firstErrorFieldId = Object.keys(form.errors)[0];
+        document.getElementById(firstErrorFieldId).focus();
+        }
+    });
 };
 
 const colores = [

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ImagenAnuncio;
+use App\Models\OfertaTrabajo;
 use Illuminate\Support\Facades\Storage;
 
 class ImagenController extends Controller
@@ -72,6 +73,19 @@ class ImagenController extends Controller
         // Eliminar el registro de la base de datos
         $imagen->delete();
         return redirect()->back()->with('message', 'Imagen eliminada con éxito');
+
+    }
+
+    public function destroyImageOferta(string $id)
+    {
+        //
+        $oferta = OfertaTrabajo::find($id);
+        if (Storage::disk('public')->exists($oferta->Imagen)){
+            Storage::disk('public')->delete($oferta->Imagen);
+        }
+        $oferta->Imagen =null;
+        $oferta->save();
+        return redirect()->back()->with('message', 'La imagen fue eliminada exitosamente');
 
     }
 }

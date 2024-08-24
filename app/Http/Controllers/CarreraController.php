@@ -125,6 +125,7 @@ class CarreraController extends Controller
         $carrera = Carrera::find($id);
         $carrera->NombreCarrera = $request->input('NombreCarrera');
         $carrera->Descripcion = $request->input('Descripcion');
+        $carrera->UbicacionOficinas = $request->input('UbicacionOficinas');
         $carrera->id_DirCarrera = $request->input('dirCarrera_id');
         
 
@@ -133,7 +134,9 @@ class CarreraController extends Controller
                 // Generar un nombre único para el archivo
                 $timestamp = now()->format('YmdHis');
                 $filename = $timestamp . '_' . $file->getClientOriginalName();
-                Storage::disk('public')->delete($carrera->PlanEstudios);
+                if($carrera->PlanEstudios!=null){
+                    Storage::disk('public')->delete($carrera->PlanEstudios);
+                }
                 $carrera->PlanEstudios =null;
                 // Almacenar el archivo en el disco 'public' con el nuevo nombre
                 $path = $file->storeAs('PlanDeEstudio', $filename, 'public');
@@ -168,6 +171,6 @@ class CarreraController extends Controller
         }
         $carrera->PlanEstudios =null;
         $carrera->save();
-
+        return redirect()->back()->with('message', 'La imagen fue eliminada exitosamente');
     }
 }
