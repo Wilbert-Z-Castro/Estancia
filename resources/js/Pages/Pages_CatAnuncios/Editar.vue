@@ -38,7 +38,13 @@ const colores = [
     { name: 'Azul', value: 'blue' },
     { name: 'Amarillo', value: 'yellow' },
     { name: 'Naranja', value: 'orange' },
+    { name: 'Cyan', value: 'cyan' },
+    { name: 'Rosa', value: 'pink' },
+    { name: 'Gris', value: 'gray' },
+    { name: 'Violeta', value: 'violet' },
+    { name: 'Indigo', value: 'indigo' },
     { name: 'Morado', value: 'purple' }
+    
 ];
 </script>
 

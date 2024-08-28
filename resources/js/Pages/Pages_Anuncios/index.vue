@@ -91,7 +91,6 @@ const submit = (a) => {
     <AuthenticatedLayout>
         <template #header>
             Categoria de anuncios
-            <v-select multiple v-model="selected" :options="['Canada','United States']" />
         </template>
         <div v-if="$page.props.flash.message" class="inline-flex max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden ">
             <div class="flex justify-center items-center w-12 bg-green-500">

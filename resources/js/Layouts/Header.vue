@@ -12,6 +12,7 @@
             <dropdown>
                 <template #trigger>
                     <button @click="dropdownOpen = ! dropdownOpen" class="relative block overflow-hidden">
+                        
                         {{ $page.props.auth.user.name }}
                     </button>
                 </template>

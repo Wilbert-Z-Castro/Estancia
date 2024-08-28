@@ -33,4 +33,8 @@ class Anuncio extends Model
     {
         return $this->hasMany(ImagenAnuncio::class, 'id_relacion', 'idAnuncio');
     }
+    public function CreateDate(){
+
+        return $this->created_at->format('d/m/Y');
+    }
 }

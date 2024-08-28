@@ -8,6 +8,7 @@ use App\Http\Controllers\AnuncioController;
 use App\Http\Controllers\DirCarreraController;
 use App\Http\Controllers\EgresadoController;
 use App\Http\Controllers\OfertaTrabajoController;
+use App\Http\Controllers\PanelController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -105,4 +106,11 @@ Route::post('/ofertasTrabajo/{ofertaTrabajo}',[OfertaTrabajoController::class, '
 Route::delete('/ofertasTrabajo/{ofertaTrabajo}',[OfertaTrabajoController::class, 'destroy'])->name('ofertasTrabajo.destroy');
 Route::delete('/imagenes/{imagen}',[ImagenController::class, 'destroyImageOferta'])->name('ofertasTrabajo.destroyImageOferta');
 
+
+//rutas para paneles
+Route::get('/PanelNoticias',[PanelController::class, 'Noticias'])->name('Panel.Noticias');
+Route::get('/PanelNoticias/{Categoria}',[PanelController::class, 'NoticiasCategoriaSelc'])->name('Panel.CategoriaNoticias');
+//Panel de oferta de trabajo
+Route::get('/Ofertas de Trabajo',[PanelController::class, 'OfertasTrabajo'])->name('Ofertas.OfertasTrabajo');
+Route::get('/Ofertas de Trabajo/{Categoria}',[PanelController::class, 'OfertasTrabajoSelect'])->name('Ofertas.CategoriaOfertasTrabajo');
 require __DIR__.'/auth.php';
