@@ -9,11 +9,10 @@ class CvOfertas extends Model
 {
     use HasFactory;
 
-    protected $table = 'CvOfertas';
-
+    protected $table = 'cv_ofertas';
+    protected $primaryKey = 'idCVOferta';
     protected $fillable = [
         'Id_oferta',
-        'Mensaje',
         'Cv',
         'id_egresado',
     ];

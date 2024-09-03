@@ -7,7 +7,9 @@ use Inertia\Inertia;
 use App\Models\OfertaTrabajo;
 use App\Models\Carrera;
 use App\Models\ofertaCarrera;
+use App\Models\CvOfertas;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 class OfertaTrabajoController extends Controller
 {
     /**
@@ -21,6 +23,49 @@ class OfertaTrabajoController extends Controller
             'ofertas' => $ofertas,
         ]);
     }
+    public function formularioCV(string $id)
+    {
+        //
+        $oferta = OfertaTrabajo::select('idOfertaTrabajo','TituloOferta')->find($id);
+        return Inertia::render('Pages_OfertaTrabajo/EnvioCV', [
+            'oferta' => $oferta,
+        ]);
+    }
+    public function EnvioCV(Request $request)
+    {   
+        
+
+        $user = Auth::user();
+        $egresado = $user->egresado;
+        //
+        
+        $request->validate([
+            'imagenes' => 'nullable|array',
+            'imagenes.*' => 'file|mimes:pdf,jpeg,png,jpg,gif|max:2048',
+        ]);
+        $cvoferta= new CvOfertas();
+        $cvoferta->Id_oferta=$request->Id_oferta;
+        if($request->Mensaje!=null){
+            $cvoferta->Mensaje=$request->Mensaje;
+        }
+        $cvoferta->id_egresado=$egresado->idEgresado;
+        
+        if ($request->hasFile('imagenes')) {
+            foreach ($request->file('imagenes') as $file) {
+                // Generar un nombre único para el archivo
+                $timestamp = now()->format('YmdHis');
+                $filename = $timestamp . '_' . $file->getClientOriginalName();
+
+                // Almacenar el archivo en el disco 'public' con el nuevo nombre
+                $path = $file->storeAs('CVs', $filename, 'public');
+                $cvoferta->Cv = $path;
+            }
+        }
+        $cvoferta->save();
+        return redirect()->route('Ofertas.OfertasTrabajo')->with('message', 'El CV fue enviado exitosamente!');
+
+        
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -31,6 +76,32 @@ class OfertaTrabajoController extends Controller
         $carreras = Carrera::select('idCarrera','NombreCarrera')->get();
         return Inertia::render('Pages_OfertaTrabajo/form', [
             'carreras' => $carreras,
+        ]);
+    }
+
+    public function CVsOfertas(){
+        
+        $cvsEnviados = OfertaTrabajo::with('cvOfertas')->where('idUser',Auth::user()->id)
+        ->orderBy('created_at', 'desc')
+        ->get();
+        
+        return Inertia::render('Pages_Paneles/CvsRepresentante', [
+            'cvsEnviados' => $cvsEnviados,
+        ]);
+    }
+
+    public function filedownload($filename){
+        if (Storage::disk('public')->exists($filename)) {
+            // Devuelve el archivo para descarga
+            return Storage::disk('public')->download($filename);
+        }
+    }
+
+    public function GestionOfertas(){
+        $ofertas = OfertaTrabajo::with(['ofertasCarreras.carrera:idCarrera,NombreCarrera'])
+        ->where('idUser',Auth::user()->id)->paginate(10);
+        return Inertia::render('Pages_OfertaTrabajo/index', [
+            'ofertas' => $ofertas,
         ]);
     }
 
@@ -63,6 +134,7 @@ class OfertaTrabajoController extends Controller
         $oferta->Requisitos = $request->Requisitos;
         $oferta->Empresa = $request->Empresa;
         $oferta->SectorEmpre = $request->SectorEmpre;
+        $oferta->idUser = Auth::user()->id;
 
 
         $oferta->FechaOferta=now();
@@ -89,6 +161,10 @@ class OfertaTrabajoController extends Controller
         }
         $oferta->save();
 
+        if(Auth::user()->Rol="Representante"){
+            return redirect()->route('CVsOfertas.GestionOfertas')->with('message', 'La oferta '.$request->TituloOferta.' fue creada exitosamente!');
+
+        }
         return redirect()->route('ofertasTrabajo.index')->with('message', 'La oferta '.$request->TituloOferta.' fue creada exitosamente!');
         
     }
@@ -160,6 +236,10 @@ class OfertaTrabajoController extends Controller
         }
         $oferta->save();
         $oferta->carreras()->sync($request->carreras);
+        if(Auth::user()->Rol="Representante"){
+            return redirect()->route('CVsOfertas.GestionOfertas')->with('message', 'La oferta '.$request->TituloOferta.' fue creada exitosamente!');
+
+        }
         return redirect()->route('ofertasTrabajo.index')->with('message', 'La oferta '.$request->TituloOferta.' fue actualizada exitosamente!');
 
     }
@@ -178,6 +258,10 @@ class OfertaTrabajoController extends Controller
         }
             
         $oferta->delete();
+        if(Auth::user()->Rol="Representante"){
+            return redirect()->route('CVsOfertas.GestionOfertas')->with('message', 'La oferta fue eliminada exitosamente!');
+
+        }
         return redirect()->route('ofertasTrabajo.index')->with('message', 'La oferta fue eliminada exitosamente!');
     }
 

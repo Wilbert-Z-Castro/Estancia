@@ -9,6 +9,7 @@ use App\Http\Controllers\DirCarreraController;
 use App\Http\Controllers\EgresadoController;
 use App\Http\Controllers\OfertaTrabajoController;
 use App\Http\Controllers\PanelController;
+use App\Http\Controllers\PonenciasController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,9 +35,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard',[PanelController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 
 Route::middleware('auth')->group(function () {
@@ -105,12 +104,26 @@ Route::get('/ofertasTrabajo/{ofertaTrabajo}/editar',[OfertaTrabajoController::cl
 Route::post('/ofertasTrabajo/{ofertaTrabajo}',[OfertaTrabajoController::class, 'update'])->name('ofertasTrabajo.update');
 Route::delete('/ofertasTrabajo/{ofertaTrabajo}',[OfertaTrabajoController::class, 'destroy'])->name('ofertasTrabajo.destroy');
 Route::delete('/imagenes/{imagen}',[ImagenController::class, 'destroyImageOferta'])->name('ofertasTrabajo.destroyImageOferta');
+Route::get('/EnvioCV/{ofertaTrabajo}',[OfertaTrabajoController::class, 'formularioCV'])->name('ofertasTrabajo.EnvioCV');
+Route::post('/EnvioCV',[OfertaTrabajoController::class, 'EnvioCV'])->name('ofertasTrabajo.EnvioCV');
 
 
 //rutas para paneles
-Route::get('/PanelNoticias',[PanelController::class, 'Noticias'])->name('Panel.Noticias');
+Route::get('/PanelNoticias',[PanelController::class, 'Noticias'])->middleware(['auth', 'verified'])->name('Panel.Noticias');
 Route::get('/PanelNoticias/{Categoria}',[PanelController::class, 'NoticiasCategoriaSelc'])->name('Panel.CategoriaNoticias');
 //Panel de oferta de trabajo
 Route::get('/Ofertas de Trabajo',[PanelController::class, 'OfertasTrabajo'])->name('Ofertas.OfertasTrabajo');
 Route::get('/Ofertas de Trabajo/{Categoria}',[PanelController::class, 'OfertasTrabajoSelect'])->name('Ofertas.CategoriaOfertasTrabajo');
+
+
+//rutas para ver los cv de ofertas
+Route::get('/CVsOfertas',[OfertaTrabajoController::class, 'CVsOfertas'])->name('CVsOfertas.VerCvs');
+Route::get('/GestionOfertas',[OfertaTrabajoController::class, 'GestionOfertas'])->name('CVsOfertas.GestionOfertas');
+
+
+//rutas para ponencias
+Route::get('/Ponencias',[PonenciasController::class, 'index'])->name('Ponencias.index');
+Route::get('/Ponencias/ProgramarPonencias',[PonenciasController::class, 'create'])->name('Ponencias.create');
+Route::post('/Ponencias',[PonenciasController::class, 'store'])->name('Ponencias.store');
+
 require __DIR__.'/auth.php';

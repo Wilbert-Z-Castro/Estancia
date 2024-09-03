@@ -115,6 +115,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Modal from '@/Components/Modal.vue';
+import linkAgregar from '@/Components/linkAgregar.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';

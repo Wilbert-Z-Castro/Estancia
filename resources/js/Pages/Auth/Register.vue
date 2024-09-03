@@ -27,7 +27,7 @@ const form = useForm({
     aniosLaboral: 0,
     sectorEmpresarial: '',
     adicional: '',
-    esEgresado: 'false', // Inicialmente no es egresado
+    esEgresado: '', // Inicialmente no es egresado
 });
 
 defineProps({
@@ -59,144 +59,274 @@ const submit = () => {
         <form @submit.prevent="submit">
             <div class="grid grid-cols-2 gap-12 sm:grid-cols-2">
                 <!-- Columna para 'Nombre' -->
-                <div class="col-span-2 mt-4">
-                    <InputLabel for="name" value="Nombre" />
-                    <TextInput
-                        id="name"
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.name"
-                        required
-                        autofocus
-                        autocomplete="name"
-                    />
-                    <InputError class="mt-2 sm:col-span-2" :message="form.errors.name" />
-                </div>
-                <!-- Columna para 'Apellido Paterno' -->
-                <div class="mt-4">
-                    <InputLabel for="apellidoP" value="Apellido Paterno" />
-                    <TextInput
-                        id="apellidoP"
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.apellidoP"
-                        
-                    />
-                    <InputError class="mt-2" :message="form.errors.apellidoP" />
-                </div>
-
-                <!-- Columna para 'Apellido Materno' -->
-                <div class="mt-4">
-                    <InputLabel for="apellidoM" value="Apellido Materno" />
-                    <TextInput
-                        id="apellidoM"
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.apellidoM"
-                        required
-                    />
-                    <InputError class="mt-2" :message="form.errors.apellidoM" />
-                </div>
-
-                <!-- Columna para 'Correo Electrónico' -->
-                <div class="col-span-2 mt-4">
-                    <InputLabel for="email" value="Correo Electrónico" />
-                    <TextInput
-                        id="email"
-                        type="email"
-                        class="mt-1 block w-full"
-                        v-model="form.email"
-                        required
-                        autocomplete="email"
-                    />
-                    <InputError class="mt-2 sm:col-span-2" :message="form.errors.email" />
-                </div>
-
-                <!-- Columna para 'Nombre de Usuario' -->
-                <div class="col-span-2 mt-4">
-                    <InputLabel for="username" value="Nombre de Usuario" />
-                    <TextInput
-                        id="username"
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.username"
-                        required
-                    />
-                    <InputError class="mt-2 sm:col-span-2" :message="form.errors.username" />
-                </div>
-
-                <!-- Columna para 'Contraseña' -->
-                <div class="mt-3">
-                    <InputLabel for="password" value="Contraseña" />
-                    <TextInput
-                        id="password"
-                        type="password"
-                        class="mt-1 block w-full"
-                        v-model="form.password"
-                        required
-                        autocomplete="new-password"
-                    />
-                    <InputError class="mt-2" :message="form.errors.password" />
-                </div>
-
-                <!-- Columna para 'Confirmar Contraseña' -->
-                <div class="mt-3">
-                    <InputLabel for="password_confirmation" value="Confirmar Contraseña" />
-                    <TextInput
-                        id="password_confirmation"
-                        type="password"
-                        class="mt-1 block w-full"
-                        v-model="form.password_confirmation"
-                        required
-                    />
-                    <InputError class="mt-2" :message="form.errors.password_confirmation" />
-                </div>
-
-                
-
-                
-
-                <!-- Columna para 'Teléfono' -->
-                <div class="mt-4">
-                    <InputLabel for="telefono" value="Teléfono" />
-                    <TextInput
-                        id="telefono"
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.telefono"
-                        required
-                    />
-                    <InputError class="mt-2" :message="form.errors.telefono" />
-                </div>
-
-                <!-- Columna para 'Sexo' -->
-                <div class="mt-4">
-                    <InputLabel for="sexo" value="Sexo" />
-                    <select
-                        id="sexo"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                        v-model="form.sexo"
-                        required
-                    >
-                        <option value="Hombre">Hombre</option>
-                        <option value="Mujer">Mujer</option>
-                        <option value="NP">No especificado</option>
-                    </select>
-                    <InputError class="mt-2" :message="form.errors.sexo" />
-                </div>
-                <div class="col-span-2 mt-4">
-                    <InputLabel for="esEgresado" value="¿Eres egresado?" />
+                 <div class="col-span-2 mt-4">
+                    <InputLabel for="esEgresado" value="¿Qué eres?" />
                     <select
                         id="esEgresado"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         v-model="form.esEgresado"
                         
                     >
-                        <option value="false">No soy egresado</option>
+                        <option value="false">Soy alumno</option>
+                        <option value="representante">Soy representante de empresa</option>
                         <option value="true">Soy egresado</option>
                     </select>
                     <InputError class="mt-2" :message="form.errors.esEgresado" />
                 </div>
+                <template v-if="form.esEgresado === 'false'">
+                    <div class="col-span-2 mt-4">
+                        <InputLabel for="name" value="Nombre" />
+                        <TextInput
+                            id="name"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.name"
+                            required
+                            autofocus
+                            autocomplete="name"
+                        />
+                        <InputError class="mt-2 sm:col-span-2" :message="form.errors.name" />
+                    </div>
+                    <!-- Columna para 'Apellido Paterno' -->
+                    <div class="mt-4">
+                        <InputLabel for="apellidoP" value="Apellido Paterno" />
+                        <TextInput
+                            id="apellidoP"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.apellidoP"
+                            
+                        />
+                        <InputError class="mt-2" :message="form.errors.apellidoP" />
+                    </div>
+
+                    <!-- Columna para 'Apellido Materno' -->
+                    <div class="mt-4">
+                        <InputLabel for="apellidoM" value="Apellido Materno" />
+                        <TextInput
+                            id="apellidoM"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.apellidoM"
+                            required
+                        />
+                        <InputError class="mt-2" :message="form.errors.apellidoM" />
+                    </div>
+
+                    <!-- Columna para 'Correo Electrónico' -->
+                    <div class="col-span-2 mt-4">
+                        <InputLabel for="email" value="Correo Electrónico" />
+                        <TextInput
+                            id="email"
+                            type="email"
+                            class="mt-1 block w-full"
+                            v-model="form.email"
+                            required
+                            autocomplete="email"
+                        />
+                        <InputError class="mt-2 sm:col-span-2" :message="form.errors.email" />
+                    </div>
+
+                    <!-- Columna para 'Nombre de Usuario' -->
+                    <div class="col-span-2 mt-4">
+                        <InputLabel for="username" value="Nombre de Usuario" />
+                        <TextInput
+                            id="username"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.username"
+                            required
+                        />
+                        <InputError class="mt-2 sm:col-span-2" :message="form.errors.username" />
+                    </div>
+
+                    <!-- Columna para 'Contraseña' -->
+                    <div class="mt-3">
+                        <InputLabel for="password" value="Contraseña" />
+                        <TextInput
+                            id="password"
+                            type="password"
+                            class="mt-1 block w-full"
+                            v-model="form.password"
+                            required
+                            autocomplete="new-password"
+                        />
+                        <InputError class="mt-2" :message="form.errors.password" />
+                    </div>
+
+                    <!-- Columna para 'Confirmar Contraseña' -->
+                    <div class="mt-3">
+                        <InputLabel for="password_confirmation" value="Confirmar Contraseña" />
+                        <TextInput
+                            id="password_confirmation"
+                            type="password"
+                            class="mt-1 block w-full"
+                            v-model="form.password_confirmation"
+                            required
+                        />
+                        <InputError class="mt-2" :message="form.errors.password_confirmation" />
+                    </div>
+
+                    
+
+                    
+
+                    <!-- Columna para 'Teléfono' -->
+                    <div class="mt-4">
+                        <InputLabel for="telefono" value="Teléfono" />
+                        <TextInput
+                            id="telefono"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.telefono"
+                            required
+                        />
+                        <InputError class="mt-2" :message="form.errors.telefono" />
+                    </div>
+
+                    <!-- Columna para 'Sexo' -->
+                    <div class="mt-4">
+                        <InputLabel for="sexo" value="Sexo" />
+                        <select
+                            id="sexo"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            v-model="form.sexo"
+                            required
+                        >
+                            <option value="Hombre">Hombre</option>
+                            <option value="Mujer">Mujer</option>
+                            <option value="NP">No especificado</option>
+                        </select>
+                        <InputError class="mt-2" :message="form.errors.sexo" />
+                    </div>
+                </template>
+                <template v-if="form.esEgresado === 'representante'">
+                    <div class="col-span-2 mt-4">
+                        <InputLabel for="name" value="Nombre" />
+                        <TextInput
+                            id="name"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.name"
+                            required
+                            autofocus
+                            autocomplete="name"
+                        />
+                        <InputError class="mt-2 sm:col-span-2" :message="form.errors.name" />
+                    </div>
+                    <!-- Columna para 'Apellido Paterno' -->
+                    <div class="mt-4">
+                        <InputLabel for="apellidoP" value="Apellido Paterno" />
+                        <TextInput
+                            id="apellidoP"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.apellidoP"
+                            
+                        />
+                        <InputError class="mt-2" :message="form.errors.apellidoP" />
+                    </div>
+
+                    <!-- Columna para 'Apellido Materno' -->
+                    <div class="mt-4">
+                        <InputLabel for="apellidoM" value="Apellido Materno" />
+                        <TextInput
+                            id="apellidoM"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.apellidoM"
+                            required
+                        />
+                        <InputError class="mt-2" :message="form.errors.apellidoM" />
+                    </div>
+
+                    <!-- Columna para 'Correo Electrónico' -->
+                    <div class="col-span-2 mt-4">
+                        <InputLabel for="email" value="Correo Electrónico" />
+                        <TextInput
+                            id="email"
+                            type="email"
+                            class="mt-1 block w-full"
+                            v-model="form.email"
+                            required
+                            autocomplete="email"
+                        />
+                        <InputError class="mt-2 sm:col-span-2" :message="form.errors.email" />
+                    </div>
+
+                    <!-- Columna para 'Nombre de Usuario' -->
+                    <div class="col-span-2 mt-4">
+                        <InputLabel for="username" value="Nombre de la empresa" />
+                        <TextInput
+                            id="username"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.username"
+                            required
+                        />
+                        <InputError class="mt-2 sm:col-span-2" :message="form.errors.username" />
+                    </div>
+
+                    <!-- Columna para 'Contraseña' -->
+                    <div class="mt-3">
+                        <InputLabel for="password" value="Contraseña" />
+                        <TextInput
+                            id="password"
+                            type="password"
+                            class="mt-1 block w-full"
+                            v-model="form.password"
+                            required
+                            autocomplete="new-password"
+                        />
+                        <InputError class="mt-2" :message="form.errors.password" />
+                    </div>
+
+                    <!-- Columna para 'Confirmar Contraseña' -->
+                    <div class="mt-3">
+                        <InputLabel for="password_confirmation" value="Confirmar Contraseña" />
+                        <TextInput
+                            id="password_confirmation"
+                            type="password"
+                            class="mt-1 block w-full"
+                            v-model="form.password_confirmation"
+                            required
+                        />
+                        <InputError class="mt-2" :message="form.errors.password_confirmation" />
+                    </div>
+
+                    
+
+                    
+
+                    <!-- Columna para 'Teléfono' -->
+                    <div class="mt-4">
+                        <InputLabel for="telefono" value="Teléfono" />
+                        <TextInput
+                            id="telefono"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.telefono"
+                            required
+                        />
+                        <InputError class="mt-2" :message="form.errors.telefono" />
+                    </div>
+
+                    <!-- Columna para 'Sexo' -->
+                    <div class="mt-4">
+                        <InputLabel for="sexo" value="Sexo" />
+                        <select
+                            id="sexo"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            v-model="form.sexo"
+                            required
+                        >
+                            <option value="Hombre">Hombre</option>
+                            <option value="Mujer">Mujer</option>
+                            <option value="NP">No especificado</option>
+                        </select>
+                        <InputError class="mt-2" :message="form.errors.sexo" />
+                    </div>
+                </template>
                 <!-- Mostrar campos adicionales solo si es egresado -->
                 <template v-if="form.esEgresado === 'true'">
                     <!-- Columna para 'Matricula escolar' -->

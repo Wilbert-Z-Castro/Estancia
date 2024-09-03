@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\User;
 use App\Models\Egresado;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 class EgresadoController extends Controller
 {
     /**
@@ -18,7 +21,21 @@ class EgresadoController extends Controller
     public function index()
     {
         //
-        $egresados = Egresado::with('user','Carrera')->paginate(12);
+        $user = Auth::user();
+        if($user->Rol == 'DirCarrera'){
+            $id = $user->dirCarrera->idDirCarrera;
+            
+            $egresados = Egresado::join('carrera', 'egresado.Carrera', '=', 'carrera.idCarrera')
+            ->where('carrera.id_DirCarrera', $id)
+            ->with('user', 'carrera') 
+            ->paginate(12);
+            return Inertia::render('Pages_Egresados/index', [
+                'egresados' => $egresados,
+            ]);
+
+        }
+        $egresados = Egresado::with('user','Carrera')
+        ->paginate(12);
         return Inertia::render('Pages_Egresados/index', [
             'egresados' => $egresados,
         ]);

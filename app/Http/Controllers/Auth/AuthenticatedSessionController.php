@@ -33,8 +33,8 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
-        $user = Auth::user();
+        return redirect()->intended(RouteServiceProvider::HOME);
+        /*$user = Auth::user();
 
         // Redirigir basado en el tipo de usuario
         switch ($user->Rol) {
@@ -44,7 +44,7 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->route('egresados.index');
             default:
                 return redirect()->route('dashboard');
-        }
+        }*/
     }
 
     /**

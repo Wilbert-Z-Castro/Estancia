@@ -9,23 +9,24 @@ class AceptacionPonencia extends Model
 {
     use HasFactory;
 
-    protected $table = 'AceptacionPonencia';
+    protected $table = 'aceptacion_ponencia';
+    protected $primaryKey = 'idAceptacionPonencia ';
 
     protected $fillable = [
         'Estado',
         'Id_Ponencia',
         'id_Egresado',
         'Mensaje',
-        'Archivo',
     ];
 
     public function ponencia()
     {
-        return $this->belongsTo(Ponencias::class, 'Id_Ponencia');
+        return $this->belongsTo(Ponencias::class, 'Id_Ponencia','Id_Ponencia');
+        
     }
 
     public function egresado()
     {
-        return $this->belongsTo(Egresado::class, 'id_Egresado');
+        return $this->belongsTo(Egresado::class, 'id_Egresado','id_Egresado');
     }
 }

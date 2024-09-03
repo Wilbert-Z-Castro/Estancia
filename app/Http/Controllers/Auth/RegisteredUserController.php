@@ -64,7 +64,12 @@ class RegisteredUserController extends Controller
             $request->rol = "Egresado";
 
         }else{
-            $request->rol = "Alumno";
+            if($request->esEgresado == "representante"){
+                $request->rol = "Representante";
+            }else{
+                $request->rol = "Alumno";
+            }
+            
         }
 
         $user = User::create([

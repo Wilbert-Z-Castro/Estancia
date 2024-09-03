@@ -9,6 +9,7 @@ use App\Models\Carrera;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\User;
+use App\Models\Ponencia;
 use Illuminate\Support\Facades\Hash; // Importar la clase Hash
 
 class DirCarreraController extends Controller
@@ -16,6 +17,21 @@ class DirCarreraController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+
+     public function indexPonencia()
+     {
+         //
+         $ponencias = Ponencia::all();
+         dd($ponencias);    
+ 
+     }
+
+    
+    public function storePonencia(Request $request){
+
+    }
+
     public function index()
     {
         //

@@ -23,6 +23,23 @@ class PanelController extends Controller
         //
 
     }
+
+    public function dashboard()
+    {
+        //
+        switch (Auth::user()->Rol) {
+            case 'Egresado':
+                return redirect()->route('Panel.Noticias');
+            case 'DirCarrera':
+                return redirect()->route('egresados.index');
+            case 'Representante':
+                    return redirect()->route('CVsOfertas.GestionOfertas');
+            default:
+                return Inertia::render('Dashboard');
+        }
+        return Inertia::render('Dashboard');
+    }
+
     public function Noticias()
     {
         //

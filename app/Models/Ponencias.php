@@ -27,6 +27,14 @@ class Ponencias extends Model
 
     public function aceptaciones()
     {
-        return $this->hasMany(AceptacionPonencia::class, 'Id_Ponencia');
+        return $this->belongsToMany(AceptacionPonencia::class, 'aceptacion_ponencia','Id_Ponencia','id_Egresado')
+        ->withPivot('Estado');
+    }
+
+    public function egresados()
+    {
+        return $this->belongsToMany(Egresado::class, 'aceptacion_ponencia','Id_Ponencia','id_Egresado')
+                    ->withPivot('Estado')  
+                    ->withTimestamps();  
     }
 }

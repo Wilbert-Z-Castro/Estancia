@@ -38,5 +38,16 @@ class OfertaTrabajo extends Model
         // Define la relación de muchos a muchos con Carrera
         return $this->belongsToMany(Carrera::class, 'ofertacarrera', 'idoferta', 'idcarrera');
     }
+    public function users()
+    {
+        
+        return $this->belongsTo(User::class,  'idUser');
+    }
+
+    public function getCreatedAtFormattedAttribute()
+    {
+        return $this->created_at->format('d-m-Y'); // Cambia el formato según sea necesario
+    }
+
 
 }

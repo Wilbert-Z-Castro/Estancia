@@ -51,10 +51,16 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function dirCarrera()
     {
-        return $this->hasOne(DirCarrera::class, 'idDirCarrera');
+        return $this->hasOne(DirCarrera::class, 'id_userDir');
     }
     public function egresado()
     {
-        return $this->hasOne(Egresado::class, 'idEgresado');
+        return $this->hasOne(Egresado::class, 'Id_user');
     }
+
+    public function representante()
+    {
+        return $this->hasMany(OfertaTrabajo::class, 'idUser');
+    }
+
 }

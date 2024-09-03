@@ -26,6 +26,6 @@ class DirCarrera extends Model
 
     public function carreras()
     {
-        return $this->hasMany(Carrera::class, 'idDirCarrera');
+        return $this->hasMany(Carrera::class, 'id_DirCarrera');
     }
 }
