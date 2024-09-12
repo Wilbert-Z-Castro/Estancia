@@ -38,8 +38,8 @@
                                         Cv enviado el: {{ formatDate(j.created_at) }}
                                     </h5>
                                 </div>
-                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 whitespace-pre-wrap break-words">
-                                    <a :href="`/storage/${a.cv_ofertas[0]?.Cv}`" target="_blank" rel="noopener noreferrer">
+                                <p  class="mb-3 font-normal text-gray-700 dark:text-gray-400 whitespace-pre-wrap break-words">
+                                    <a :href="`/storage/${j.Cv}`" target="_blank" rel="noopener noreferrer">
                                         Descargar CV{{ NombreArchivo(j.Cv) }}
                                     </a></p>
                                 

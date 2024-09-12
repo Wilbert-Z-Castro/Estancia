@@ -105,13 +105,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        switch ($user->Rol) {
-            case 'Egresado':
-                return redirect()->route('anuncios.index');
-            case 'DirCarrera':
-                return redirect()->route('egresados.index');
-            default:
-                return redirect()->route('dashboard');
-        }
+        return redirect(RouteServiceProvider::HOME);
     }
 }

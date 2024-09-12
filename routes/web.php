@@ -10,6 +10,8 @@ use App\Http\Controllers\EgresadoController;
 use App\Http\Controllers\OfertaTrabajoController;
 use App\Http\Controllers\PanelController;
 use App\Http\Controllers\PonenciasController;
+use App\Http\Controllers\NotificacionesController;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -76,8 +78,7 @@ Route::delete('/anuncios/{anuncio}',[AnuncioController::class, 'destroy'])->name
 Route::post('/anuncios/{anuncio}',[AnuncioController::class, 'update'])->name('anuncios.update');
 Route::get('/anuncios/{anuncio}/editar',[AnuncioController::class, 'edit'])->name('anuncios.edit');
 //para imagenes
-Route::delete('/imagenes/{imagen}',[ImagenController::class, 'destroy'])->name('imagenes.destroy');
-
+Route::delete('/imagenes/{imagen}/delete',[ImagenController::class, 'destroy'])->name('imagenes.destroyImage');
 
 //rutas para dir-carrera
 Route::get('/dir-carreras',[DirCarreraController::class, 'index'])->name('dir_carreras.index');
@@ -88,7 +89,7 @@ Route::put('/dir-carreras/{dirCarrera}',[DirCarreraController::class, 'update'])
 Route::delete('dir_Carrera/{dirCarrera}',[DirCarreraController::class,'destroy'])->name('dir_carreras.destroy');
 
 //rutas crud egresados
-Route::get('/egresados',[EgresadoController::class, 'index'])->name('egresados.index');
+Route::get('/egresados',[EgresadoController::class, 'index'])->name('egresados.index')->middleware(['auth', 'verified']);
 Route::get('/egresados/crear',[EgresadoController::class, 'create'])->name('egresados.create'); 
 Route::post('/egresados/subir',[EgresadoController::class, 'store'])->name('egresados.store');
 Route::delete('/egresados/{egresado}',[EgresadoController::class, 'destroy'])->name('egresado.destroy');
@@ -104,13 +105,14 @@ Route::get('/ofertasTrabajo/{ofertaTrabajo}/editar',[OfertaTrabajoController::cl
 Route::post('/ofertasTrabajo/{ofertaTrabajo}',[OfertaTrabajoController::class, 'update'])->name('ofertasTrabajo.update');
 Route::delete('/ofertasTrabajo/{ofertaTrabajo}',[OfertaTrabajoController::class, 'destroy'])->name('ofertasTrabajo.destroy');
 Route::delete('/imagenes/{imagen}',[ImagenController::class, 'destroyImageOferta'])->name('ofertasTrabajo.destroyImageOferta');
-Route::get('/EnvioCV/{ofertaTrabajo}',[OfertaTrabajoController::class, 'formularioCV'])->name('ofertasTrabajo.EnvioCV');
+Route::get('/EnvioCV/{ofertaTrabajo}',[OfertaTrabajoController::class, 'formularioCV'])->name('ofertasTrabajo.FormularioCV');
 Route::post('/EnvioCV',[OfertaTrabajoController::class, 'EnvioCV'])->name('ofertasTrabajo.EnvioCV');
 
 
 //rutas para paneles
 Route::get('/PanelNoticias',[PanelController::class, 'Noticias'])->middleware(['auth', 'verified'])->name('Panel.Noticias');
 Route::get('/PanelNoticias/{Categoria}',[PanelController::class, 'NoticiasCategoriaSelc'])->name('Panel.CategoriaNoticias');
+
 //Panel de oferta de trabajo
 Route::get('/Ofertas de Trabajo',[PanelController::class, 'OfertasTrabajo'])->name('Ofertas.OfertasTrabajo');
 Route::get('/Ofertas de Trabajo/{Categoria}',[PanelController::class, 'OfertasTrabajoSelect'])->name('Ofertas.CategoriaOfertasTrabajo');
@@ -125,5 +127,12 @@ Route::get('/GestionOfertas',[OfertaTrabajoController::class, 'GestionOfertas'])
 Route::get('/Ponencias',[PonenciasController::class, 'index'])->name('Ponencias.index');
 Route::get('/Ponencias/ProgramarPonencias',[PonenciasController::class, 'create'])->name('Ponencias.create');
 Route::post('/Ponencias',[PonenciasController::class, 'store'])->name('Ponencias.store');
+Route::get('/MisInvitaciones',[PonenciasController::class, 'PonenciaUsuario'])->name('Ponencias.MisInvitaciones');
+Route::get('/AceptarPonencia/{ponencia}',[PonenciasController::class, 'AceptarPonencia'])->name('Ponencias.AceptarPonencia');
+Route::post('/Confirmacion',[PonenciasController::class, 'Confirmacion'])->name('Ponencias.Confirmacion');
+Route::get('/VerMenesaje/{AceptacionPonencia}/Aceptar',[PonenciasController::class, 'VerMenesaje'])->name('Ponencias.VerMenesaje');
+Route::post('/RechazarPonencia',[PonenciasController::class, 'RechazarPonencia'])->name('Ponencias.RechazarPonencia');
+//api notificaiones:
+Route::get('/notificaciones', [NotificacionesController::class, 'index'])->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';

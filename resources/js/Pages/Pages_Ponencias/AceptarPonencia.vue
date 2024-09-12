@@ -10,16 +10,17 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 
 const props = defineProps({
-    oferta:{type:Object}
+    aceptacionPonencia:{type:Object}
 });
 
 const cargando = ref(false);
 
 
 const valoresIniciales = {
+    idAceptacion:props.aceptacionPonencia.idAceptacionPonencia,
     Mensaje: '',
-    Id_oferta: props.oferta.idOfertaTrabajo,
-    TituloOferta: props.oferta.TituloOferta,
+    Estado: 'Aceptado',
+    TituloPonencia:props.aceptacionPonencia.ponencia.TituloPonencia,
     imagenes: [],
 };
 const imagePreviews = ref([]);
@@ -28,7 +29,7 @@ const form = useForm(valoresIniciales);
 const submit = () => {
     cargando.value = true;
 
-    form.post(route('ofertasTrabajo.EnvioCV'), {
+    form.post(route('Ponencias.Confirmacion'), {
         onSuccess: () => {
             form.reset(),
             cargando.value = false;
@@ -55,6 +56,18 @@ const handleFileUpload = (event) => {
     });
 };
 
+const Tooltip = ref(false);
+const mostrar = () => {
+    Tooltip.value = true;
+    console.log(Tooltip.value);
+    
+};
+const salir = () => {
+    Tooltip.value = false;
+    console.log(Tooltip.value);
+    
+};
+
 
 </script>
 
@@ -65,6 +78,8 @@ const handleFileUpload = (event) => {
             Envia tu CV junto con un mensaje
             
         </template>
+        
+        {{ form.errors }}
         <div v-if="cargando" role="status">
             <svg aria-hidden="true" class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -79,17 +94,19 @@ const handleFileUpload = (event) => {
                     <!-- Fila 1 -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="TituloOferta" value="Titulo de la oferta" />
+                            <InputLabel for="TituloPonencia" value="Titulo de la Ponencia" />
+                            
                             <TextInput
-                                id="TituloOferta"
+                                id="TituloPonencia"
                                 type="text"
                                 class="mt-1 block w-full"
-                                v-model="form.TituloOferta"
+                                v-model="form.TituloPonencia"
                                 disabled
                                 placeholder="Ingrese el Titulo de la oferta"
-                                autocomplete="TituloOferta"
+                                autocomplete="TituloPonencia"
                             />
-                            <InputError class="mt-2 sm:col-span-2" :message="form.errors.TituloOferta" />
+                            
+                            <InputError class="mt-2 sm:col-span-2" :message="form.errors.TituloPonencia" />
                         </div>
                     </div>
 
@@ -104,23 +121,33 @@ const handleFileUpload = (event) => {
                                 placeholder="Ingrese un mensaje"
                                 autocomplete="Mensaje"
                             />
+                            
                             <InputError class="mt-2" :message="form.errors.Mensaje" />
                         </div>
                     </div>
                     <!-- Fila 4: Imágenes -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-12 mt-4">
-                            <InputLabel for="imagenes" value="CV" />
+                            <InputLabel for="imagenes" value="CV"  />
                             <input
                                 id="imagenes"
                                 type="file"
-                                accept="application/pdf, image/jpeg, image/png"
+                                multiple
+                                accept="application/pdf,.ppt, .pptx, image/jpeg, image/png"
                                 class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                 @change="handleFileUpload"
                             />
                             <InputError class="mt-2" :message="form.errors.imagenes" />
                         </div>
+                        
+
                     </div>
+                    <button disabled @mouseenter="mostrar" @mouseleave="salir" @touchstart="mostrar" @touchend="salir" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">?</button>
+                                <div v-if="Tooltip" class="px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-900 rounded-lg shadow-sm   ">
+                                    Solo se permiten archivos con extensión .pdf, .jpg, .jpeg, .png, .pptx
+                                
+                                </div>
+                    
 
                     <!-- Sección para mostrar previsualización de imágenes 
                      
@@ -146,8 +173,8 @@ const handleFileUpload = (event) => {
                     
 
                     <!-- Botones -->
-                    <div class="flex items-center justify-left mt-4">
-                        <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    <div class="flex flex-wrap items-center justify-left mt-4">
+                        <PrimaryButton class="ms-2" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
                             </svg>

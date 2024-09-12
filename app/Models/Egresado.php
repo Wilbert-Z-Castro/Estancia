@@ -40,6 +40,8 @@ class Egresado extends Model
         return $this->belongsToMany(AceptacionPonencia::class, 'aceptacion_ponencia','Id_Ponencia','id_Egresado')
         ->withPivot('Estado');
     }
+    
+
     public function ponencias()
     {
         return $this->belongsToMany(Ponencias::class, 'aceptacion_ponencia','Id_Ponencia','id_Egresado')

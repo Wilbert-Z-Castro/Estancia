@@ -23,6 +23,10 @@ class PanelController extends Controller
         //
 
     }
+    public function Token(){
+        $token = Auth::user()->createToken('Token-user')->plainTextToken;
+        return response()->json(['token' => $token]);
+    }
 
     public function dashboard()
     {

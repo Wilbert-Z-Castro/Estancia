@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Auth\Events\Registered;
 use App\Models\DirCarrera;
 use App\Models\Carrera;
 use Illuminate\Validation\Rules;
@@ -109,6 +110,7 @@ class DirCarreraController extends Controller
             'AnioInstitucion' => $request->input('AnioInstitucion'),
             'id_userDir' => $user->id,
         ]);
+        event(new Registered($user));
 
         return redirect()->route('dir_carreras.index')->with('message', 'El Director '.$request->name.' fue creado exitosamente!');
     }
@@ -194,20 +196,15 @@ class DirCarreraController extends Controller
         'sexo' => $validated['sexo'],
     ]);
 
-    // Si se proporciona una nueva contraseña, actualizarla
     if ($request->filled('password')) {
-        // Verificar la contraseña actual
         if (!Hash::check($validated['current_password'], $DirCarrera->user->password)) {
             return back()->withErrors(['current_password' => 'La contraseña actual no es correcta.']);
         }
-
-        // Actualizar la contraseña
         $DirCarrera->user->update([
             'password' => Hash::make($validated['password']),
         ]);
     }
 
-    // Actualizar los detalles del DirCarrera
     $DirCarrera->update([
         'Descripcion' => $validated['Descripcion'],
         'FechaAsignacion' => $validated['FechaAsignacion'],
@@ -227,6 +224,7 @@ class DirCarreraController extends Controller
         //
         $DirCarrera = DirCarrera::with('user')->find($id);
         $user = User::find($DirCarrera->id_userDir);
+        
         $user->delete();
         $DirCarrera->delete();
         return redirect()->route('dir_carreras.index')->with('message', 'Director eliminado con éxito');        

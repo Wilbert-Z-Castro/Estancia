@@ -1,7 +1,7 @@
 <template>
     <div class="flex h-screen bg-gray-200 font-roboto">
         <Navigation />
-
+        
         <div class="flex flex-1 flex-col overflow-hidden">
             <Header />
 
@@ -16,9 +16,14 @@
             </main>
         </div>
     </div>
+    
+    
+    
 </template>
 
 <script setup>
 import Header from '@/Layouts/Header.vue';
 import Navigation from '@/Layouts/Navigation.vue';
+import WidgetAyuda from '@/Components/WidgetAyuda.vue';
 </script>
+

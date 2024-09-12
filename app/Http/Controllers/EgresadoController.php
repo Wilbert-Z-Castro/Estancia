@@ -146,6 +146,7 @@ class EgresadoController extends Controller
             'Adicional'=>$request->input('Adicional'),
             'SectorEmpresaria'=>$request->input('SectorEmpresaria'),
         ]);
+        event(new Registered($regresado));
         return redirect()->route('egresados.index')->with('message', 'El Egresado '.$request->name.' fue creado exitosamente!');
         
     }

@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\Ponencias;
 use App\Models\Egresado;
 use App\Models\Carrera;
+use App\Models\AceptacionPonencia;
+use App\Models\imagenAceptacion;
+
 use Illuminate\Support\Facades\Auth;
 
 
@@ -146,8 +149,96 @@ class PonenciasController extends Controller
     public function show(string $id)
     {
         //
+        
+
     }
 
+    public function AceptarPonencia(string $id)
+    {
+        $aceptacionPonencia=AceptacionPonencia::with('ponencia')
+        ->find($id);
+        return Inertia::render('Pages_Ponencias/AceptarPonencia', [
+            'aceptacionPonencia' => $aceptacionPonencia,
+        ]);
+    }
+
+    public function PonenciaUsuario()
+    {
+
+        $idEgresado = Auth::user()->egresado->idEgresado;
+        $ponencias = AceptacionPonencia::where('id_Egresado', $idEgresado)
+            ->select('idAceptacionPonencia','Estado','Id_Ponencia')
+            ->with(['ponencia','ponencia.dirCarrera:idDirCarrera,id_userDir','ponencia.dirCarrera.user:id,name'])
+            ->get();
+        return Inertia::render('Pages_Ponencias/PanelPonencias', [
+            'ponencias' => $ponencias,
+        ]);
+
+    }
+
+    public function Confirmacion(Request $request){
+        $request->validate([
+            'Mensaje' => 'required|string',
+            'imagenes.*' => 'file|mimes:pdf,jpeg,png,jpg,gif,ppt,pptx|max:10240',
+        ],[
+            'Mensaje.required' => 'El campo mensaje es obligatorio.',
+            'Mensaje.string' => 'El campo mensaje debe ser una cadena de texto.',
+            'imagenes.*.mimes' => 'Cada archivo debe ser un tipo de archivo válido: pdf, jpeg, png, jpg, gif, ppt, pptx.',
+            'imagenes.*.max' => 'Cada archivo no debe tener más de 10240 kilobytes.',
+        ]);
+        
+        
+        $aceptacionPonencia = AceptacionPonencia::find($request->idAceptacion);
+        $aceptacionPonencia->Estado = $request->Estado;
+        $aceptacionPonencia->Mensaje = $request->Mensaje;
+        $aceptacionPonencia->save();
+        
+        if ($request->hasFile('imagenes')) {
+            foreach ($request->file('imagenes') as $file) {
+                // Generar un nombre único para el archivo
+                $timestamp = now()->format('YmdHis');
+                $filename = $timestamp . '_' . $file->getClientOriginalName();
+                
+                // Almacenar el archivo en el disco 'public' con el nuevo nombre
+                $path = $file->storeAs('PonenciasAceptadas', $filename, 'public');
+                
+                // Crear el registro en la base de datos
+                $imagenAcepatcion = new imagenAceptacion();
+                $imagenAcepatcion->URLArchivo = $path;
+                $imagenAcepatcion->id_Aceptacion = $request->idAceptacion; // Asocia la imagen con el anuncio
+                $imagenAcepatcion->save();
+            }
+        }
+        
+        
+        
+        return redirect()->route('Ponencias.MisInvitaciones')->with('message', 'Se ha enviado la confirmación de la ponencia');
+
+
+        
+    }
+
+
+    public function VerMenesaje(string $id){
+        $aceptacionPonencia = AceptacionPonencia::with(['imagenes','ponencia'])
+        ->find($id);
+        return Inertia::render('Pages_Ponencias/VerMensaje', [
+            'aceptacionPonencia' => $aceptacionPonencia,
+        ]);
+        
+
+    }
+
+    public function RechazarPonencia(Request $request){
+        $aceptacionPonencia = AceptacionPonencia::find($request->idAceptacionPonencia);
+        if($request->has('Mensaje')){
+            $aceptacionPonencia->Mensaje = $request->Mensaje;
+        }
+        $aceptacionPonencia->Estado = 'Rechazado';
+        $aceptacionPonencia->save();
+
+
+    }
     /**
      * Show the form for editing the specified resource.
      */

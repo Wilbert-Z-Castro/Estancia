@@ -34,7 +34,7 @@ class Ponencias extends Model
     public function egresados()
     {
         return $this->belongsToMany(Egresado::class, 'aceptacion_ponencia','Id_Ponencia','id_Egresado')
-                    ->withPivot('Estado')  
+                    ->withPivot('idAceptacionPonencia','Estado')  
                     ->withTimestamps();  
     }
 }

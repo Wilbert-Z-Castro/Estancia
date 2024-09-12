@@ -91,7 +91,7 @@
                             <pre class="mb-3 font-normal text-gray-700 dark:text-gray-400 whitespace-pre-wrap break-words">Descripcion del trabajo:
 {{ a.Descripcion }}</pre>
                             <div class="flex flex-row sm:flex-row justify-left items-start sm:items-center mb-2">
-                                <linkAgregar :href="route('ofertasTrabajo.EnvioCV',{id:a.idOfertaTrabajo})">
+                                <linkAgregar :href="route('ofertasTrabajo.FormularioCV',{id:a.idOfertaTrabajo})">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 size-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                     </svg>

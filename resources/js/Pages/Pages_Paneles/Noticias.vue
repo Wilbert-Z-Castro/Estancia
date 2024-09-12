@@ -8,6 +8,7 @@
             <div class="justify-center" style="text-align: center;">
                 Noticias Relevantes
             </div>
+            
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
@@ -112,13 +113,17 @@
         </Modal>
     </AuthenticatedLayout>
 </template>
+
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Modal from '@/Components/Modal.vue';
 import linkAgregar from '@/Components/linkAgregar.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
+import axios from 'axios';
+
+
 
 const props = defineProps({
     anuncios:{
@@ -171,7 +176,7 @@ const closeModalViwe = () => {
     showModalView.value = false;
 
 }
-
+const load = ref(false);
 const showingTwoLevelMenu = ref(false);
 </script>
 

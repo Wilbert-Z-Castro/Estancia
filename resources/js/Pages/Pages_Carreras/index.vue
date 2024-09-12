@@ -9,7 +9,7 @@ import linkAgregar from '@/Components/linkAgregar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue';
-import { ref } from 'vue';
+import { ref, onMounted} from 'vue';
 import Swal from 'sweetalert2'
 
 const props = defineProps({
@@ -18,6 +18,9 @@ const props = defineProps({
         default: () => ({ data: [], links: [] })
     }
 });
+
+const {props:pageProps} = usePage();    
+
 const carreras = ref(props.carreras.data);
 const links = ref(props.carreras.links);
 
@@ -52,7 +55,13 @@ const valoresIniviales = {
 };
 const form = useForm(valoresIniviales);
 
-
+onMounted(() => {
+    if (pageProps.flash.message) {
+        setTimeout(() => {
+            pageProps.flash.message = null;
+        }, 4000);
+    }
+});
 
 const submit = (a) => {
     Swal.fire({
@@ -97,7 +106,7 @@ const submit = (a) => {
         <template #header>
             Carreras
         </template>
-        <div v-if="$page.props.flash.message" class="inline-flex max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden ">
+        <div v-if="pageProps.flash.message" class="inline-flex max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden ">
             <div class="flex justify-center items-center w-12 bg-green-500">
                     <svg class="h-6 w-6 fill-current text-white" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
                         <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z"/>
@@ -106,7 +115,7 @@ const submit = (a) => {
             <div class="-mx-3 py-2 px-4">
                 <div class="mx-3">
                     <span class="text-green-500 font-semibold">Success</span>
-                        <p class="text-gray-600 text-sm">{{ $page.props.flash.message }}</p>
+                        <p class="text-gray-600 text-sm">{{ pageProps.flash.message }}</p>
                 </div>
             </div>
         </div>
@@ -145,10 +154,12 @@ const submit = (a) => {
                                 </td>
                                 <td class="px-4 py-3 text-sm">{{a.Descripcion}}</td>
                                 <td  class="px-4 py-3 text-sm">
+                                    
                                         <img v-if="a.PlanEstudios" :src="`/storage/${a.PlanEstudios}`" alt="Imagen" class="w-25 h-25  object-cover" />
                                 </td>
                                 <td class="px-4 py-3 text-sm">{{a.UbicacionOficinas}}</td>
-                                <td class="px-4 py-3 text-sm">{{a.dir_carrera.user.name }}</td>
+                                <td v-if="a.id_DirCarrera==null" class="px-4 py-3 text-sm">No hay director asignado</td>
+                                <td v-else class="px-4 py-3 text-sm">{{a.dir_carrera.user.name  }}</td>
                                 <td class="px-4 py-3 text-sm">
                                     <BotonEditar :href="route('carreras.edit', { id: a.idCarrera })" >
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -187,7 +198,6 @@ const submit = (a) => {
             <div class="p-6">
                 <p > Carrera: <span  class="text-lg font-medium text-gray-900">{{ v.NombreCarrera }}</span></p>
                 <p > Descripcion: <span  class="text-lg font-medium text-gray-900">{{ v.Descripcion }}</span></p>
-                <p > Plan de Estudio: <span  class="text-lg font-medium text-gray-900">{{ v.PlanEstudio }}</span></p>
                 <p > Ubicacion de Oficinas: <span  class="text-lg font-medium text-gray-900">{{ v.UbicacionOficinas }}</span></p>
                 <p > Director: <span  class="text-lg font-medium text-gray-900">{{ v.nombreDir }}</span></p>
                 <p > Info del Director: <span  class="text-lg font-medium text-gray-900">{{ v.descripciondir }}</span></p>

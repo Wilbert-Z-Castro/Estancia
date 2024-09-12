@@ -97,8 +97,8 @@ const submit = () => {
     <Head title="Gestion categorias formulario" />
     <AuthenticatedLayout>
         <template #header>
-            Insertar datos del Carrera
-            {{ DirCarrera }}
+            Editar datos del Carrera
+            {{  }}
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 mx-2 border-b border-gray-200">
@@ -106,7 +106,7 @@ const submit = () => {
                     <!-- Fila 1 -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="NombreCarrera" value="Nombre de la carrera" />
+                            <InputLabel for="NombreCarrera" value="Abreviacion de la carrera" />
                             <TextInput
                                 id="NombreCarrera"
                                 type="text"
@@ -123,13 +123,13 @@ const submit = () => {
                     <!-- Fila 2 -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-12 mt-4">
-                            <InputLabel for="Descripcion" value="Descripción" />
+                            <InputLabel for="Descripcion" value="Nombre completo de la carrera" />
                             <TextArea
                                 id="Descripcion"
                                 class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                 v-model="form.Descripcion"
                                 required
-                                placeholder="Ingrese la descripción de la carrera"
+                                placeholder="Ingrese el Nombre completo de la carrera"
                                 autocomplete="Descripcion"
                             />
                             <InputError class="mt-2" :message="form.errors.Descripcion" />
@@ -220,7 +220,7 @@ const submit = () => {
                             </svg>
                             Actualizar
                         </PrimaryButton>
-                        <LinkRegresar class="mx-2" :href="route('cat_anuncios.index')">
+                        <LinkRegresar class="mx-2" :href="route('carreras.indexGestion')">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
                             </svg>
