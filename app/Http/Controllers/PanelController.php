@@ -64,7 +64,7 @@ class PanelController extends Controller
         //
         
         $anuncios = Anuncio::selectRaw('*, DATE_FORMAT(created_at, "%d/%m/%Y") as formatted_created_at')
-        ->with([ 'imagenes' => function ($query) {
+        ->with(['categoria', 'imagenes' => function ($query) {
             $query->select('id_relacion', 'URL');
         }])
         ->where('Categoria', $id)

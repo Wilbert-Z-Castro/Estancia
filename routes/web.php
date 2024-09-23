@@ -11,6 +11,7 @@ use App\Http\Controllers\OfertaTrabajoController;
 use App\Http\Controllers\PanelController;
 use App\Http\Controllers\PonenciasController;
 use App\Http\Controllers\NotificacionesController;
+use App\Http\Controllers\ProyectosColabController;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -134,5 +135,24 @@ Route::get('/VerMenesaje/{AceptacionPonencia}/Aceptar',[PonenciasController::cla
 Route::post('/RechazarPonencia',[PonenciasController::class, 'RechazarPonencia'])->name('Ponencias.RechazarPonencia');
 //api notificaiones:
 Route::get('/notificaciones', [NotificacionesController::class, 'index'])->middleware(['auth', 'verified']);
+
+
+//para generar pdf
+Route::get('/Reconocimiento/{id}',[PonenciasController::class, 'Reconocimiento'])->name('Ponencias.Reconocimiento');
+
+//para proyectosColab
+Route::get('/ProyectosColab',[ProyectosColabController::class, 'index'])->name('ProyectosColab.index');
+Route::get('/ProyectosColab/crear',[ProyectosColabController::class, 'create'])->name('ProyectosColab.create');
+Route::post('/ProyectosColab',[ProyectosColabController::class, 'store'])->name('ProyectosColab.store');
+Route::get('/ListaDeProyectosColaborativos',[ProyectosColabController::class, 'PanelProyectos'])->name('ProyectosColab.PanelProyectos');
+Route::get('/EnviarSolicitud/{proyecto}',[ProyectosColabController::class, 'EnviarSolicitud'])->name('ProyectosColab.EnviarSolicitud');
+Route::post('/EnviarCvProyecto',[ProyectosColabController::class, 'EnviarCvProyecto'])->name('ProyectosColab.EnviarCvProyecto'); 
+Route::get('/VerSolicitudes',[ProyectosColabController::class, 'VerSolicitudes'])->name('ProyectosColab.VerSolicitudes');  
+Route::get('/VerCV/{id}',[ProyectosColabController::class, 'show'])->name('ProyectosColab.show'); 
+Route::get('EditarProyecto/{proyecto}',[ProyectosColabController::class, 'edit'])->name('ProyectosColab.edit');
+Route::post('EditarProyecto/{proyecto}',[ProyectosColabController::class, 'update'])->name('ProyectosColab.update');
+Route::delete('EliminarProyecto/{proyecto}',[ProyectosColabController::class, 'destroy'])->name('ProyectosColab.destroy');
+Route::delete('ImageneProyectos/{imagen}',[ImagenController::class, 'destroyImagenProyecto'])->name('ProyectosColab.destroyImagenProyecto');
+
 
 require __DIR__.'/auth.php';

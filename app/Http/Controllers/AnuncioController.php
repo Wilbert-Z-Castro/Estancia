@@ -15,7 +15,7 @@ class AnuncioController extends Controller
     public function index()
     {
 
-        $anuncios = Anuncio::with('categoria', 'imagenes')->paginate(10);
+        $anuncios = Anuncio::with('categoria', 'imagenes')->paginate(4);
         return Inertia::render('Pages_Anuncios/index', [
             'anuncios' => $anuncios,
         ]);

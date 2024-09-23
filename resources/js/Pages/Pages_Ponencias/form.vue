@@ -85,9 +85,6 @@ onMounted(() => {
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 mx-2 border-b border-gray-200">
-                {{ EgresadosPorCarrera }}
-                {{  }}
-
 
                 <form @submit.prevent="submit">
                     <!-- Fila 1 -->

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
@@ -12,19 +12,17 @@ import BotonEliminar from '@/Components/BotonEliminar.vue';
 import Swal from 'sweetalert2'
 
 const props = defineProps({
-    DirCarrera: Array,
-    carrera:{type:Object},
+    Proyecto:{type:Object},
 });
 
-const cargando = ref(false);
-
 const valoresIniciales = {
-    NombreCarrera: props.carrera.NombreCarrera,
-    Descripcion: props.carrera.Descripcion,
-    dirCarrera_id: props.carrera.id_DirCarrera,
-    UbicacionOficinas: props.carrera.UbicacionOficinas,
-    PlanEstudios: props.carrera.PlanEstudios,
-    imagenes: [], // Asegúrate de que esto sea un array vacío para manejar múltiples imágenes
+    TituloProyecto: props.Proyecto.TituloProyecto,
+    Descripcion: props.Proyecto.Descripcion,
+    FechaPublicacion: props.Proyecto.FechaPublicacion,
+    Carrera: props.Proyecto.Carrera,
+    Tipo: props.Proyecto.Tipo,
+    Imagen: props.Proyecto.Imagen,
+    imagenes: null 
 };
 
 const imagePreviews = ref([]);
@@ -32,17 +30,15 @@ const imagePreviews = ref([]);
 const form = useForm(valoresIniciales);
 
 const handleFileUpload = (event) => {
-    const files = Array.from(event.target.files);
-    form.imagenes = files;
+    const file = event.target.files[0]; // Solo un archivo
+    form.imagenes = file;
 
     imagePreviews.value = []; 
-    files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            imagePreviews.value.push(e.target.result); 
-        };
-        reader.readAsDataURL(file);
-    });
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        imagePreviews.value.push(e.target.result); 
+    };
+    reader.readAsDataURL(file);
 };
 
 const Eliminar = (a) => {
@@ -74,26 +70,37 @@ const Eliminar = (a) => {
         }
     });
 };
+const maxDate = ref('');
+const cargando = ref(false);
+
+// Función para establecer la fecha máxima
+const setMaxDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    maxDate.value = `${year}-${month}-${day}`;
+};
+
+// Llamar a setMaxDate cuando el componente se monta
+onMounted(() => {
+    setMaxDate();
+});
 
 const submit = () => {
     cargando.value = true;
 
-    let formData = new FormData();
-    formData.append('NombreCarrera', form.NombreCarrera);
-    formData.append('Descripcion', form.Descripcion);
-    formData.append('dirCarrera_id', form.dirCarrera_id);
-    formData.append('UbicacionOficinas', form.UbicacionOficinas);
-    formData.append('imagenes[]', form.imagenes[0]); 
-    form.post(route('carreras.update',props.carrera.idCarrera), {
-        onSuccess: () =>{
+    form.post(route('ProyectosColab.update',props.Proyecto.idProyectoColab), {
+        onSuccess: () => {
             form.reset(),
             cargando.value = false;
 
         },
         onError: () => {
-            cargando.value = false;
             const firstErrorFieldId = Object.keys(form.errors)[0];
             document.getElementById(firstErrorFieldId).focus();
+            cargando.value = false;
+
         }
     });
 };
@@ -122,73 +129,63 @@ const submit = () => {
                 <form @submit.prevent="submit">
                     <!-- Fila 1 -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
-                        <div class="col-span-6 mt-4">
-                            <InputLabel for="NombreCarrera" value="Abreviacion de la carrera" />
+                        <div class="col-span-12 mt-4">
+                            <InputLabel for="TituloProyecto" value="Titulo" />
                             <TextInput
-                                id="NombreCarrera"
+                            id="TituloProyecto"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.TituloProyecto"
+                            required
+                            placeholder="Ingrese el Titulo del proyecto"
+                            autofocus
+                            autocomplete="TituloProyecto"
+                            />
+                            <InputError class="mt-2" :message="form.errors.TituloProyecto" />
+                        </div>
+
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                        <div class="col-span-6 mt-4">
+                            <InputLabel for="Tipo" value="Tipo de proyecto" />
+                            <TextInput
+                                id="Tipo"
                                 type="text"
                                 class="mt-1 block w-full"
-                                v-model="form.NombreCarrera"
+                                v-model="form.Tipo"
                                 required
-                                placeholder="Ingrese el nombre de la carrera"
-                                autocomplete="NombreCarrera"
+                                placeholder="Ingrese el tipo de proyecto"
+                                autocomplete="Tipo"
                             />
-                            <InputError class="mt-2 sm:col-span-2" :message="form.errors.NombreCarrera" />
+                            <InputError class="mt-2 sm:col-span-2" :message="form.errors.Tipo" />
                         </div>
-                    </div>
+                        <div class="col-span-6 mt-4">
+                            <InputLabel for="FechaPublicacion" value="Fecha de limite" />
+                            <TextInput
+                            id="FechaPublicacion"
+                            type="date"
+                            class="mt-1 block w-full"
+                            v-model="form.FechaPublicacion"
+                            :min="maxDate"
+                            />
+                            <InputError class="mt-2" :message="form.errors.FechaPublicacion" />
+                        </div>
 
-                    <!-- Fila 2 -->
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-12 mt-4">
-                            <InputLabel for="Descripcion" value="Nombre completo de la carrera" />
+                            <InputLabel for="Descripcion" value="Descripcion del proyecto" />
                             <TextArea
                                 id="Descripcion"
                                 class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                 v-model="form.Descripcion"
                                 required
-                                placeholder="Ingrese el Nombre completo de la carrera"
+                                placeholder="Ingrese la descripción del proyecto"
                                 autocomplete="Descripcion"
                             />
                             <InputError class="mt-2" :message="form.errors.Descripcion" />
                         </div>
                     </div>
-
-                    <!-- Fila 3 -->
-                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
-                        <div class="col-span-6 mt-4">
-                            <InputLabel for="UbicacionOficinas" value="Ubicación de las oficinas" />
-                            <TextInput
-                                id="UbicacionOficinas"
-                                type="text"
-                                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                                v-model="form.UbicacionOficinas"
-                                required
-                                placeholder="Ingrese la ubicación de las oficinas"
-                                autocomplete="UbicacionOficinas"
-                            />
-                            <InputError class="mt-2" :message="form.errors.UbicacionOficinas" />
-                        </div>
-                        <div class="col-span-6 mt-4">
-                            <InputLabel for="UbicacionOficinas" value="Ubicación de las oficinas" />
-                            <select
-                                id="dirCarrera_id"
-                                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                                v-model="form.dirCarrera_id"
-                                required
-                                autocomplete="id_DirCarrera"
-                                
-                            >
-                            
-                            
-                            <option v-for="director in DirCarrera":key="director.dirCarrera_id":value="director.dirCarrera_id"
-                            >
-                                {{ director.user_name }}
-                            </option>
-                            </select>
-                            
-                        </div>
-                    </div>
-
                     <!-- Fila 4: Imágenes -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-12 mt-4">
@@ -205,12 +202,12 @@ const submit = () => {
                     </div>
 
                     <!-- Sección para mostrar previsualización de imágenes -->
-                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 mt-4" v-if="form.PlanEstudios">
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 mt-4" v-if="form.Imagen">
                         <div class="col-span-12">
                             <div class="grid grid-cols-2 gap-2">
-                                <img  :src="`/storage/${form.PlanEstudios}`" alt="Imagen" class="w-25 h-25  object-cover" />
+                                <img  :src="`/storage/${form.Imagen}`" alt="Imagen" class="w-25 h-25  object-cover" />
                             </div>
-                            <BotonEliminar @click="Eliminar(props.carrera.idCarrera)">
+                            <BotonEliminar @click="Eliminar(props.Proyecto.idProyectoColab)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                 </svg>

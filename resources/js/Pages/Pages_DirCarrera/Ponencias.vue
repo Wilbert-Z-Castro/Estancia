@@ -32,7 +32,7 @@
                         </div>
                     </div>
                 </div>
-                {{ ponencias }}
+                {{  }}
                 <div v-for="a in ponencias":key="a.idPonencias">
                     <div  class="flex justify-center mt-6"  > 
                         <div class="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow md:flex-row  dark:border-gray-700 dark:bg-gray-800 ">

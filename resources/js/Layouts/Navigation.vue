@@ -47,6 +47,48 @@
                 </template>
                 Mis ponencias
             </nav-link>
+            <nav-link :href="route('ProyectosColab.PanelProyectos')" :active="route().current('ProyectosColab.PanelProyectos')" v-if="$page.props.auth.user.Rol == 'Alumno'">
+                <template #icon>
+                    <svg  class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6Z" />
+                    </svg>
+                </template>
+                Lista de proyectos colaborativos
+            </nav-link>
+            <a class="flex items-center mt-4 py-2 px-6 text-gray-100" href="#" @click="showingTwoLevelMenu2 = !showingTwoLevelMenu2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                </svg>
+
+                <span class="mx-3">Mis proyectos</span>
+            </a>
+            <transition
+                enter-to-class="transition-all duration-300 ease-in-out"
+                enter-from-class="max-h-0 opacity-25"
+                leave-from-class="opacity-100 max-h-xl"
+                leave-to-class="max-h-0 opacity-0">
+                <div v-show="showingTwoLevelMenu2">
+                    <ul class="overflow-hidden p-2 mx-4 mt-2 space-y-2 text-sm font-medium text-white bg-gray-700 bg-opacity-50 rounded-md shadow-inner"
+                        aria-label="submenu">
+                        <li class="px-2 py-1 transition-colors duration-150">
+                            <Link class="w-full" :href="route('ProyectosColab.VerSolicitudes')">Ver CV's recibidos</Link>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
+                            </svg>
+                        </li>
+                        <li class="px-2 py-1 transition-colors duration-150" v-if="$page.props.auth.user.Rol == 'Egresado'">
+                            <Link class="w-full" :href="route('ProyectosColab.index')" >Publicar proyecto</Link>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+                            </svg>
+
+                        </li>
+
+                    </ul>
+                </div>
+            </transition>
+
             <nav-link :href="route('cat_anuncios.index')" :active="route().current('cat_anuncios.index')" v-if="$page.props.auth.user.Rol == 'Egresado'">
                 <template #icon>
                     <svg  class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -56,6 +98,7 @@
                 </template>
                 Categoria de anuncios
             </nav-link>
+
 
             <nav-link :href="route('anuncios.index')" :active="route().current('anuncios.index')" v-if="$page.props.auth.user.Rol == 'Egresado'">
                 <template #icon>
@@ -134,7 +177,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"></path>
                 </svg>
-                <span class="mx-3">Two-level menu</span>
+                <span class="mx-3">Fuente informativa</span>
             </a>
             <transition
                 enter-to-class="transition-all duration-300 ease-in-out"
@@ -182,10 +225,13 @@ export default {
 
     setup() {
         let showingTwoLevelMenu = ref(false)
+        let showingTwoLevelMenu2 = ref(false)
 
         return {
-            showingTwoLevelMenu
+            showingTwoLevelMenu,
+            showingTwoLevelMenu2
         }
+        
     },
 }
 </script>

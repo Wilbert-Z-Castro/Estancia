@@ -97,7 +97,7 @@ const SectorEmpresaria=[
                                 class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                 v-model="form.Descripcion"
                                 required
-                                placeholder="Ingrese la descripción de la carrera"
+                                placeholder="Ingrese la descripción de la oferta"
                                 autocomplete="Descripcion"
                             />
                             <InputError class="mt-2" :message="form.errors.Descripcion" />

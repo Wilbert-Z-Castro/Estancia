@@ -9,7 +9,8 @@ class PostulacionProyecto extends Model
 {
     use HasFactory;
 
-    protected $table = 'PostulacionProyecto';
+    protected $table = 'postulacion_proyecto';
+    protected $primaryKey = 'idPostulacionProyecto';
 
     protected $fillable = [
         'Id_proyecto',
@@ -19,13 +20,12 @@ class PostulacionProyecto extends Model
         'Estado',
     ];
 
-    public function proyecto()
-    {
-        return $this->belongsTo(ProyectoColab::class, 'Id_proyecto');
-    }
+    
 
     public function usuario()
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    
 }

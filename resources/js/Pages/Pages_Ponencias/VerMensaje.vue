@@ -8,24 +8,17 @@
                 Mensaje de ponencia
             </div>
         </template>
-
+        
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 border-b border-gray-200">
-                {{ aceptacionPonencia  }}
-                <div v-if="$page.props.flash.message" class="inline-flex max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden ">
-                    <div class="flex justify-center items-center w-12 bg-green-500">
-                            <svg class="h-6 w-6 fill-current text-white" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z"/>
-                            </svg>
-                    </div>        
-                    <div class="-mx-3 py-2 px-4">
-                        <div class="mx-3">
-                            <span class="text-green-500 font-semibold">Success</span>
-                                <p class="text-gray-600 text-sm">{{ $page.props.flash.message }}</p>
-                        </div>
-                    </div>
+            <div  class="p-6 border-b border-gray-200">
+                <div v-if="aceptacionPonencia.Estado=='Aceptado' || aceptacionPonencia.Estado=='Terminado'">
+
+                    <a :href="route('Ponencias.Reconocimiento',{id:aceptacionPonencia.idAceptacionPonencia})" target="_blank" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white  focus:ring-4 focus:outline-none focus:ring-cyan-200 ">
+                        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white  rounded-md group-hover:bg-opacity-0">
+                            General Certificado
+                        </span>
+                    </a>
                 </div>
-                
                 <div >
                     <div class="flex justify-center mt-6"   > 
                         <div class="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow md:flex-row  dark:border-gray-700 dark:bg-gray-800 ">
@@ -38,6 +31,7 @@
                                     <h5 class="text-xl font-medium text-gray-900 dark:text-white sm:ml-4 sm:mt-0 mt-2">
                                     </h5>
                                 </div>
+                                
                                 <p class="mb-3 font-normal text-gray-300  whitespace-pre-wrap break-words">Mensaje del invitado</p>
                                 <p class="mb-3 font-normal text-gray-300  whitespace-pre-wrap break-words">{{ aceptacionPonencia.Mensaje }}</p>
                                 <div  class="flex flex-col sm:flex-row gap-4 p-4 justify-left  items-start sm:items-center mb-2" >
@@ -57,11 +51,12 @@
                                         </div>
                                     </div>
                                 </div>
-                           </div>
+                                
+                            </div>
                         </div>
                     </div>
                 </div>
-                
+                <br>
             </div>
         </div>
         
@@ -74,8 +69,10 @@ import linkAgregar from '@/Components/linkAgregar.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Pagination from '@/Components/Pagination.vue';
 
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, useForm} from '@inertiajs/vue3';
 import { ref } from 'vue';
+
+
 
 const props = defineProps({
     aceptacionPonencia:{type: Object}
@@ -85,39 +82,19 @@ function NombreArchivo(archivo) {
     return archivo.split('/').pop();
 }
 
+const valoresIniciales = {
+    idAceptacionPonencia: props.aceptacionPonencia.idAceptacionPonencia,
+};
+const form = useForm(valoresIniciales);
 
-const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear()}`;
+
+const enviarFormulario = () => {
+    form.post(route('Ponencias.Reconocimiento'), {
+        onSuccess: () => {
+            console.log('success');
+        },
+    });
 }
 
-const v =ref({id:'',TituloOferta:'',Empresa:'',Descripcion:'',FechaOferta:'',Imagen:'',ofertas_carreras:[],Requisitos:'',Ubicacion:'',SectorEmpre:''});
-
-const showModalView = ref(false);
-
-const openModalViwe = (a) => {
-
-    v.value.id = a.idOfertaTrabajo;
-    v.value.TituloOferta = a.TituloOferta;
-    v.value.Empresa = a.Empresa;
-    v.value.Descripcion = a.Descripcion;
-    v.value.FechaOferta = a.FechaOferta;
-    v.value.Imagen = a.Imagen;
-    v.value.ofertas_carreras = a.ofertas_carreras;
-    v.value.Requisitos = a.Requisitos;
-    v.value.Ubicacion = a.Ubicacion;
-    v.value.SectorEmpre = a.SectorEmpre;
-
-    showModalView.value = true;
-
-}
-
-const closeModalViwe = () => {
-   
-    showModalView.value = false;
-
-}
-
-const showingTwoLevelMenu = ref(false);
 </script>
 

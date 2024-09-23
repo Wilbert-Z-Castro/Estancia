@@ -1,74 +1,83 @@
 
 
 <template>
-    <Head title="About us" />
+    <Head title="Proyectos" />
 
     <AuthenticatedLayout>
         <template #header>
             <div class="justify-center" style="text-align: center;">
-                Ponencias
+                Lista de proyectos colaborativos
             </div>
-            {{  }}
+            {{   }}
         </template>
+        <div v-if="pageProps.flash.message" class="inline-flex max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden ">
+            <div class="flex justify-center items-center w-12 bg-green-500">
+                    <svg class="h-6 w-6 fill-current text-white" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z"/>
+                    </svg>
+            </div>        
+            <div class="-mx-3 py-2 px-4">
+                <div class="mx-3">
+                    <span class="text-green-500 font-semibold">Success</span>
+                        <p class="text-gray-600 text-sm">{{ pageProps.flash.message }}</p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
-                <div v-for="a in ponencias":key="a.Id_Ponencia"  class="flex justify-center mt-6"> 
+                <div v-for="a in proyectos":key="a.idProyectoColab" class="flex justify-center mt-6"> 
                     <div class="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow md:flex-row  dark:border-gray-700 dark:bg-gray-800">
-                        <PrimaryButton v-if="a.ponencia.imagen!=null" class="flex flex-col items-center w-full md:w-48">
-                           
-                            <PrimaryButton  @click="openModalViwe(a)" class="bg-green-600 hover:bg-green-700">
-                                <div v-if="a.ponencia.imagen!=null" >
-                                    <img :src="`/storage/${a.ponencia.imagen}`" alt="Imagen" class="object-cover  rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" />
-                                </div>
-                                ver mas
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                </svg>
+                        <PrimaryButton v-if="a.Imagen!=null" class="flex flex-col items-center w-full md:w-48">
+                           <div v-if="a.Imagen!=null" >
+                                   <img :src="`/storage/${a.Imagen}`" alt="Imagen" class="object-cover  rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" />
+                               </div>
+                           <PrimaryButton  @click="openModalViwe(a)" class="bg-green-600 hover:bg-green-700">
+                               
+                               ver mas
+                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                   <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                               </svg>
 
-                            </PrimaryButton>
-                        </PrimaryButton>
-                        
-                        <div class="flex flex-col justify-between p-4 leading-normal w-full ">
+                           </PrimaryButton>
+                       </PrimaryButton>
+                       <div class="flex flex-col justify-between p-4 leading-normal w-full ">
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
                                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                    {{ a.ponencia.TituloPonencia }}
-                                    <span class="bg-purple-100 text-purple-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">{{a.Estado}}</span>
+                                    {{ a.TituloProyecto }}
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ a.Tipo }}</span>
+
 
                                 </h5>
                                 <h5 class="text-xl font-medium text-gray-900 dark:text-white sm:ml-4 sm:mt-0 mt-2">
-                                    Invitación enviada el: {{ formatDate(a.ponencia.created_at) }}
+                                    Fecha de Publicacion: {{ formatDate(a.created_at) }}
     
                                 </h5>
                             </div>
-                            <p class="mb-3 text-xl font-medium text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">Invitación enviada por el director:  {{ a.ponencia.dir_carrera.user.name }}</p>
-                            <p class="mb-3 font-normal text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">Lugar:  {{ a.ponencia.Lugar }}</p>
-                            <p class="mb-3 font-normal text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">Fecha y Hora:  {{ (a.ponencia.Fecha) }}</p>
-                            <p class="mb-3 font-normal text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">Asunto de la ponenecia:</p>
-                            <pre class="mb-3 font-normal text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">{{ a.ponencia.DescripcionPonencia }}
+                            <p class="mb-3 font-normal text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">Fecha limite:  {{ a.FechaPublicacion }}</p>
+                            <p class="mb-3 font-normal text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">Descripcion del proyecto:</p>
+                            <pre class="mb-3 font-normal text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">
+{{ a.Descripcion }}
                             </pre>
+                            
                             <div class="flex flex-col sm:flex-row  justify-left items-center sm:items-center mb-2" >
-                                <div class="">
-                                    <button v-show="a.Estado=='Pendiente'" @click="aceptar(a)" type="button" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Aceptar</button>
-                                    <button v-show="a.Estado!='Aceptado' && a.Estado!='Terminado'"   @click="OpenModalRechazar(a)" type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Rechazar</button>
-                                    <a v-show="a.Estado=='Terminado'" target="_blank"  :href="route('Ponencias.Reconocimiento',{id:a.idAceptacionPonencia})"  class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Imprimir Reconocimiento</a>
-                                </div>
-                            </div>
-                        </div>                      
+                                    <div class="">
+                                        <a :href="route('ProyectosColab.EnviarSolicitud',{id:a.idProyectoColab})" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Enviar CV</a>
+                                    </div>
+                            </div>                         
+                        </div>
                     </div>
+                    <Pagination :links="links" />
                 </div>
             </div>
         </div>
         <Modal :show="showModalView" @close="closeModalViwe">
-            <div class="p-6">
-                <p > Titulo: <span  class="text-lg font-medium text-gray-900">{{ v.Titulo }}</span></p>
-                <p > Categoria: <span  class="text-lg font-medium text-gray-900">{{ v.Categoria }}</span></p>
-                <p > Contenido: <span  class="text-lg font-medium text-gray-900">{{ v.Contenido }}</span></p>
-                <p > Imagen: 
-                    <div v-for="imagen in  v.Imagen" :key="imagen.idImagen" class="flex justify-center items-center">
-                        <img  :src="`/storage/${imagen.URL}`" alt="Imagen" class="w-full h-auto object-contain" />
+            <div class="p-6"> 
+                    <div  class="flex justify-center items-center">
+                        <img  :src="`/storage/${v.Imagen}`" alt="Imagen" class="w-full h-auto object-contain" />
                     </div>
-                </p>
             </div>
             <div class="m-6 flex justify-end">
                 <PrimaryButton @click="closeModalViwe">
@@ -113,24 +122,38 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
+import Pagination from '@/Components/Pagination.vue';
 import TextArea from '@/Components/textarea.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref,onMounted } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 
 const props = defineProps({
-    ponencias:{
+    proyectos:{
         type: Object,
         default: () => ({ data: [], links: [] })
     },
 
 });
 
+const proyectos = ref(props.proyectos.data);
+const links = ref(props.proyectos.links);
+
 const valoresIniciales = {
     idAceptacionPonencia:'',
     Mensaje:'',
 };
 
+const {props:pageProps} = usePage();   
+
+onMounted(() => {
+    if (pageProps.flash.message) {
+        setTimeout(() => {
+            pageProps.flash.message = null;
+        }, 4000);
+    }
+});
 const form = useForm(valoresIniciales);
 
 const formatDate = (dateString) => {
@@ -145,11 +168,7 @@ const showModalView = ref(false);
 const ModalRechazar = ref(false);
 
 const openModalViwe = (a) => {
-    v.value.id = a.idAnuncio;
-    v.value.Titulo = a.Titulo;
-    v.value.Contenido = a.Contenido;
-    v.value.Categoria = a.categoria.Nombre;
-    v.value.Imagen = a.imagenes
+    v.value.Imagen = a.Imagen;
     showModalView.value = true;
 
 }

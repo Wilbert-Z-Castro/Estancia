@@ -199,14 +199,26 @@ class OfertaTrabajoController extends Controller
         //
         $request->validate([
             'TituloOferta' => 'required|string|max:100', 
-            'Descripcion' => 'required|string|max:200',
+            'Descripcion' => 'required|string',
             'Ubicacion' => 'required|string|max:100',
-            'Requisitos' => 'required|string|max:200',
-            'Empresa'=> 'required|string|max:100',
-            'SectorEmpre'=> 'required|string|max:100',
-            'carreras'=>'required|array',
+            'Requisitos' => 'required|string',
+            'Empresa' => 'required|string|max:100',
+            'SectorEmpre' => 'required|string|max:100',
+            'carreras' => 'required|array',
             'imagenes' => 'nullable|array',
             'imagenes.*' => 'file|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'TituloOferta.required' => 'El título de la oferta es obligatorio.',
+            'TituloOferta.max' => 'El título de la oferta no debe superar los 100 caracteres.',
+            'Descripcion.required' => 'La descripción es obligatoria.',
+            'Ubicacion.required' => 'La ubicación es obligatoria.',
+            'Ubicacion.max' => 'La ubicación no debe superar los 100 caracteres.',
+            'Requisitos.required' => 'Los requisitos son obligatorios.',
+            'Empresa.required' => 'El nombre de la empresa es obligatorio.',
+            'SectorEmpre.required' => 'El sector de la empresa es obligatorio.',
+            'carreras.required' => 'Debes seleccionar al menos una carrera.',
+            'imagenes.*.mimes' => 'Solo se aceptan imágenes en formato jpeg, png, jpg o gif.',
+            'imagenes.*.max' => 'Cada imagen no debe superar los 2 MB.',
         ]);
         $oferta = OfertaTrabajo::find($id);
         $oferta->TituloOferta = $request->TituloOferta;
@@ -229,7 +241,7 @@ class OfertaTrabajoController extends Controller
                 
                 $oferta->Imagen =null;
                 // Almacenar el archivo en el disco 'public' con el nuevo nombre
-                $path = $file->storeAs('PlanDeEstudio', $filename, 'public');
+                $path = $file->storeAs('OfertasTrabajo', $filename, 'public');
                 $oferta->Imagen = $path;
 
             }

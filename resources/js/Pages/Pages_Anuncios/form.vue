@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
@@ -7,7 +8,6 @@ import TextInput from '@/Components/TextInput.vue';
 import TextArea from '@/Components/textarea.vue';
 import LinkRegresar from '@/Components/linkRegresar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
 
 const valoresIniciales = {
     Titulo:'',

@@ -11,7 +11,12 @@ use App\Models\Egresado;
 use App\Models\Carrera;
 use App\Models\AceptacionPonencia;
 use App\Models\imagenAceptacion;
+use Barryvdh\DomPDF\Facade\Pdf;
+use setasign\Fpdi\Fpdi;  
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
+use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -169,6 +174,7 @@ class PonenciasController extends Controller
         $ponencias = AceptacionPonencia::where('id_Egresado', $idEgresado)
             ->select('idAceptacionPonencia','Estado','Id_Ponencia')
             ->with(['ponencia','ponencia.dirCarrera:idDirCarrera,id_userDir','ponencia.dirCarrera.user:id,name'])
+            ->orderBy('created_at', 'desc') 
             ->get();
         return Inertia::render('Pages_Ponencias/PanelPonencias', [
             'ponencias' => $ponencias,
@@ -239,6 +245,71 @@ class PonenciasController extends Controller
 
 
     }
+
+    public function Reconocimiento(string $id){
+        $aceptacionPonencia = AceptacionPonencia::with(['ponencia','ponencia.dirCarrera:idDirCarrera,id_userDir','ponencia.dirCarrera.user:id,name'])
+        ->find($id);
+        $aceptacionPonencia->Estado = 'Terminado';
+        $aceptacionPonencia->save();
+        // Crear un nuevo objeto FPDI
+        $egresado=Egresado::with(['user:id,name,ApellidoP,ApellidoM','Carrera:idCarrera,NombreCarrera'])
+        ->find($aceptacionPonencia->id_Egresado);
+
+
+        $pdf = new Fpdi();
+
+        $pdf->AddPage('L', [2000, 1414]);
+
+        // Cargar  de plantilla
+        $pdf->Image(public_path('img/plantilla.jpg'), 0, 0, 2000, 1414, 'jpg');
+
+        $pdf->SetFont('Arial', 'B', 200);
+        $pdf->SetXY(900, 790);
+        $nombreCompleto = $egresado->user->name .' '.$egresado->user->ApellidoP.' '.$egresado->user->ApellidoM;
+        $pdf->Cell(200, 10, utf8_decode($nombreCompleto), 0, 0, 'C');
+
+        $date = Carbon::parse($aceptacionPonencia->Fecha)->locale('es');
+        $formattedDate = $date->translatedFormat('d \d\e F \d\e Y');
+        $pdf->SetFont('Arial', 'B', 90);
+        $pdf->SetXY(900, 900);
+        $pdf->Cell(200, 10, utf8_decode('Jiutepec, Morelos a: '.$formattedDate), 0, 0, 'C');
+
+        $pdf->SetFont('Arial', 'I', 90);
+        $pdf->SetXY(920, 520);
+        $pdf->Cell(200, 10, utf8_decode('Por su asistencia en la ponencia:'), 0, 0, 'C');
+        $pdf->SetFont('Arial', 'I', 100);
+        $pdf->SetXY(910, 590);
+        $pdf->Cell(200, 10, utf8_decode($aceptacionPonencia->ponencia->TituloPonencia), 0, 0, 'C');
+        $pdf->SetFont('Arial', 'I', 100);
+        $pdf->SetXY(910, 700);
+        $pdf->Cell(200, 10, utf8_decode('Al egresado:'), 0, 0, 'C');
+
+        $pdf->SetFont('', 'I', 100);
+        $pdf->SetXY(590, 1010);
+        $pdf->Cell(200, 10, utf8_decode($aceptacionPonencia->ponencia->dirCarrera->user->name), 0, 0, 'C');
+
+        $pdf->SetFont('Arial','',100);
+        $pdf->SetXY(1205, 1010);
+        $pdf->Cell(200, 10, utf8_decode('Arturo Mazari Espín'), 0, 0, 'C');
+
+        return response($pdf->Output('S'), 200)
+            ->header('Content-Type', 'application/pdf');
+        
+    
+        //return view('Plantilla.ReconocimientoPonencia', compact('aceptacionPonencia'));
+        //return $pdf->stream('reconocimiento.pdf');
+    }
+
+    /** 
+     * $pdf = Pdf::loadView('Plantilla.ReconocimientoPonencia', compact('aceptacionPonencia'))
+    * ->setPaper('a4', 'landscape'); 
+     * $path = public_path('img/UPE_vertical.jpg'); // Ruta a tu imagen
+        
+     *$base64Image = base64_encode(file_get_contents($path));
+     *         <img src="data:image/jpeg;base64,{{ $base64Image }}" alt="Descripción de la imagen" class="centered-image">
+
+     * 
+     */
     /**
      * Show the form for editing the specified resource.
      */
