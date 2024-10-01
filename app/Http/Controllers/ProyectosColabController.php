@@ -10,6 +10,8 @@ use App\Models\ProyectosColab;
 use App\Models\PostulacionProyecto;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\answerCv;
 
 
 
@@ -230,6 +232,25 @@ class ProyectosColabController extends Controller
         return redirect()->route('ProyectosColab.index')->with('message', 'Proyecto actualizado exitosamente');
         
 
+    }
+    
+    public function ReponderSolicitud(Request $request){
+        $request->validate([
+            'MensajeEgresado' => 'required|string',
+        ], [
+            'MensajeEgresado.required' => 'El mensaje al estudiante es obligatorio.',
+            'MensajeEgresado.string' => 'El mensaje debe ser una cadena de texto válida.',
+        ]);
+        
+        $postulacion = PostulacionProyecto::findOrFail($request->idPostulacionProyecto);
+        $postulacion->MensajeEgresado = $request->MensajeEgresado;
+        $postulacion->Estado = $request->Estado;
+        $postulacion->save();
+        $user = $postulacion->usuario->email;
+        $mensajeCorreo= PostulacionProyecto::with(['proyecto','proyecto.egresado:idEgresado,Id_user','proyecto.egresado.user:id,name,ApellidoP,ApellidoM,email,Telefono'])
+        ->findOrFail($request->idPostulacionProyecto);
+        Mail::to($user)->send(new answerCv($mensajeCorreo));
+        return redirect()->route('ProyectosColab.VerSolicitudes')->with('message', 'Respuesta enviada exitosamente');
     }
 
 

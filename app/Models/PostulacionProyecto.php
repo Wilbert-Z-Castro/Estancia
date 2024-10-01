@@ -27,5 +27,10 @@ class PostulacionProyecto extends Model
         return $this->belongsTo(User::class, 'id_user');
     }
 
+    public function proyecto()
+    {
+        return $this->belongsTo(ProyectosColab::class, 'Id_proyecto');
+    }
+
     
 }

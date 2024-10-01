@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Anuncio;
 use App\Models\CatAnuncio;
 use App\Models\ImagenAnuncio;
+use Illuminate\Support\Facades\Auth;
+
 
 class AnuncioController extends Controller
 {
@@ -15,7 +17,9 @@ class AnuncioController extends Controller
     public function index()
     {
 
-        $anuncios = Anuncio::with('categoria', 'imagenes')->paginate(4);
+        $anuncios = Anuncio::with('categoria', 'imagenes')
+        ->where('Id_userCreado', Auth()->user()->id)
+        ->paginate(4);
         return Inertia::render('Pages_Anuncios/index', [
             'anuncios' => $anuncios,
         ]);

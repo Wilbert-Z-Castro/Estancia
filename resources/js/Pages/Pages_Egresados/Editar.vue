@@ -90,6 +90,7 @@ const jobPositions = [
   { value: "Representante de Servicio al Cliente", label: "Representante de Servicio al Cliente" },
   { value: "Supervisor", label: "Supervisor" },
   { value: "Técnico", label: "Técnico" },
+  { value: "Desempleado", label: "Desempleado" },
 ];
 
 const SectorEmpresaria=[

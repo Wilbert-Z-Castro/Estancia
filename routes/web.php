@@ -42,7 +42,7 @@ Route::get('/dashboard',[PanelController::class, 'dashboard'])->middleware(['aut
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/about', fn () => Inertia::render('About'))->name('about');
+    Route::get('/about', [EgresadoController::class,'showEgresado'])->name('about');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -86,8 +86,10 @@ Route::get('/dir-carreras',[DirCarreraController::class, 'index'])->name('dir_ca
 Route::get('/dir-carreras/crear',[DirCarreraController::class, 'create'])->name('dir_carreras.create');
 Route::post('/dir-carreras',[DirCarreraController::class, 'store'])->name('dir_carrera.store');
 Route::get('/dir-carreras/{dirCarrera}/editar',[DirCarreraController::class, 'edit'])->name('dir_carreras.edit');
-Route::put('/dir-carreras/{dirCarrera}',[DirCarreraController::class, 'update'])->name('dir_carreras.update');
+Route::post('/dir-carreras/{dirCarrera}',[DirCarreraController::class, 'update'])->name('dir_carreras.update');
 Route::delete('dir_Carrera/{dirCarrera}',[DirCarreraController::class,'destroy'])->name('dir_carreras.destroy');
+Route::get('MiPerfil',[DirCarreraController::class, 'MiPerfil'])->name('dir_carreras.MiPerfil');
+Route::post('ActualizarMiPerfil',[DirCarreraController::class, 'ActualizarMiPerfil'])->name('dir_carreras.ActualizarMiPerfil');
 
 //rutas crud egresados
 Route::get('/egresados',[EgresadoController::class, 'index'])->name('egresados.index')->middleware(['auth', 'verified']);
@@ -96,6 +98,7 @@ Route::post('/egresados/subir',[EgresadoController::class, 'store'])->name('egre
 Route::delete('/egresados/{egresado}',[EgresadoController::class, 'destroy'])->name('egresado.destroy');
 Route::get('/egresados/{egresado}/editar',[EgresadoController::class, 'edit'])->name('egresados.edit');
 Route::put('/egresados/{egresado}',[EgresadoController::class, 'update'])->name('egresados.update');
+Route::post('EditaraMiPerfil/{egresado}',[EgresadoController::class, 'EditaraMiPerfil'])->name('egresados.EditaraMiPerfil');
 
 
 //ruta para ofertaTrabajo
@@ -153,6 +156,13 @@ Route::get('EditarProyecto/{proyecto}',[ProyectosColabController::class, 'edit']
 Route::post('EditarProyecto/{proyecto}',[ProyectosColabController::class, 'update'])->name('ProyectosColab.update');
 Route::delete('EliminarProyecto/{proyecto}',[ProyectosColabController::class, 'destroy'])->name('ProyectosColab.destroy');
 Route::delete('ImageneProyectos/{imagen}',[ImagenController::class, 'destroyImagenProyecto'])->name('ProyectosColab.destroyImagenProyecto');
+Route::post('ReponderSolicitud',[ProyectosColabController::class, 'ReponderSolicitud'])->name('ProyectosColab.ReponderSolicitud');
 
+//para mandar crear pdf
+Route::get('ReporteEgresados',[EgresadoController::class, 'ReporteEgresados'])->name('Egresados.ReporteEgresados');
+Route::get('ReporteCarreras',[CarreraController::class, 'ReporteCarreras'])->name('Carreras.ReporteCarreras');
+Route::get('ReportePonencias',[DirCarreraController::class, 'ReportePonencias'])->name('Ponencias.ReportePonencias');
 
+//Dashboard
+Route::get('DashBoardDirector',[PanelController::class, 'DashBoardDirector'])->name('Panel.DashBoardDirector');
 require __DIR__.'/auth.php';

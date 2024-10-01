@@ -6,6 +6,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import TextArea from '@/Components/textarea.vue';
 import LinkRegresar from '@/Components/linkRegresar.vue';
+import axios from 'axios';
+import Swal from 'sweetalert2'
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 
@@ -28,21 +30,49 @@ const valoresIniciales = {
     Descripcion: props.DirCarrera.Descripcion,
     AnioInstitucion: props.DirCarrera.AnioInstitucion,
     FechaAsignacion: props.DirCarrera.FechaAsignacion,
-    MiPerfil: null,
+    MiPerfil: '1',
 };
 
 const form = useForm(valoresIniciales);
 
 const submit = () => {
-    form.post(route('dir_carreras.update', props.DirCarrera.idDirCarrera), {
-        onSuccess: () => form.reset(),
-        onError: () => {
-            const firstErrorFieldId = Object.keys(form.errors)[0];
-            document.getElementById(firstErrorFieldId).focus();
+    // Mostrar alerta de carga
+    Swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera mientras se envían los datos...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
         }
     });
-};
 
+    // Usar axios para enviar los datos
+    axios.post(route('dir_carreras.update', props.DirCarrera.idDirCarrera), form)
+        .then(response => {
+            // Si la solicitud es exitosa, reiniciar el formulario
+            form.reset();
+            Swal.close();  // Cerrar alerta de carga
+
+            // Mostrar mensaje de éxito
+            setTimeout(() => {
+                Swal.fire({
+                    title: "Bien!",
+                    text: "Los datos se han actualizado correctamente",
+                    icon: "success"
+                }).then(() => {
+                // Recargar la página
+                window.location.reload();
+            });
+            }, 300);
+            
+        })
+        .catch(error => {
+            Swal.close();
+            const firstErrorFieldId = Object.keys(error.response.data.errors)[0];
+            document.getElementById(firstErrorFieldId).focus();
+
+        });
+};
 // Fecha máxima para el campo de fecha
 const maxDate = ref('');
 
@@ -232,14 +262,14 @@ onMounted(() => {
                             <InputError class="mt-2" :message="form.errors.AnioInstitucion" />
                         </div>
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="FechaAsignacion" value="Fecha de Asignación del Puesto" />
+                            <InputLabel for="FechaAsignacion" value="Fecha de Asignación" />
                             <TextInput
-                                id="FechaAsignacion"
-                                type="date"
-                                class="mt-1 block w-full"
-                                v-model="form.FechaAsignacion"
-                                required
-                                :max="maxDate"
+                            id="FechaAsignacion"
+                            type="date"
+                            class="mt-1 block w-full"
+                            v-model="form.FechaAsignacion"
+                            :max="maxDate"
+                            required
                             />
                             <InputError class="mt-2" :message="form.errors.FechaAsignacion" />
                         </div>

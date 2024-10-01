@@ -5,6 +5,7 @@ import BotonEditar from '@/Components/BotonEditar.vue';
 import BotonEliminar from '@/Components/BotonEliminar.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Modal from '@/Components/Modal.vue';
+import LinkPDF from '@/Components/LinkPDF.vue';
 import linkAgregar from '@/Components/linkAgregar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
@@ -133,11 +134,16 @@ onMounted(() => {
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
             Agregar
-        </linkAgregar> 
-        <p>
-            {{  }}
-        </p>
+        </linkAgregar>
+        <br>
+        <a :href="route('Egresados.ReporteEgresados')" target="_blank" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white  focus:ring-4 focus:outline-none focus:ring-cyan-200 ">
+                <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white  rounded-md group-hover:bg-opacity-0">
+                Crear pdf
+            </span>
+        </a>
+
         
+        <br>        
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
                 <div class="w-full overflow-x-auto">
@@ -149,8 +155,8 @@ onMounted(() => {
                                 <th class="px-4 py-3">Email</th>
                                 <th class="px-4 py-3">Apellidos</th>
                                 <th class="px-4 py-3">Descripción</th>
-                                <th class="px-4 py-3">Añios en la Institucion</th>
-                                <th class="px-4 py-3">Fecha de Asignacion</th>
+                                <th class="px-4 py-3">Añio de egreso</th>
+                                <th class="px-4 py-3">Direccion</th>
                                 <th class="px-4 py-3">Editar</th>
                                 <th class="px-4 py-3">Ver</th>
                                 <th class="px-4 py-3">Borrar</th>

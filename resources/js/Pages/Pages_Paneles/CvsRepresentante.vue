@@ -1,12 +1,12 @@
 
 
 <template>
-    <Head title="About us" />
+    <Head title="Cv's Enviados" />
 
     <AuthenticatedLayout>
         <template #header>
             <div class="justify-center" style="text-align: center;">
-                Noticias Relevantes
+                Cv's enviados
             </div>
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">

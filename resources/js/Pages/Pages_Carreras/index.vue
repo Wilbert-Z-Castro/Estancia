@@ -202,7 +202,7 @@ const submit = (a) => {
                 <p > Director: <span  class="text-lg font-medium text-gray-900">{{ v.nombreDir }}</span></p>
                 <p > Info del Director: <span  class="text-lg font-medium text-gray-900">{{ v.descripciondir }}</span></p>
                 <p > Fecha de asginacion del director: <span  class="text-lg font-medium text-gray-900">{{ v.fechaAsginacion }}</span></p>
-                <img :src="`/storage/${v.PlanEstudios}`" alt="Imagen" class="w-25 h-25 object-cover" />
+                <img v-if="v.PlanEstudios"  :src="`/storage/${v.PlanEstudios}`" alt="Imagen" class="w-25 h-25 object-cover" />
 
             </div>
             <div class="m-6 flex justify-end">

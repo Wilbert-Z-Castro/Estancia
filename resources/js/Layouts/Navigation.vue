@@ -25,10 +25,22 @@
                 </template>
                 Dashboard
             </nav-link>
+            <nav-link :href="route('Panel.DashBoardDirector')" :active="route().current('Panel.DashBoardDirector')" v-if="$page.props.auth.user.Rol == 'DirCarrera'">
+                <template #icon>
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/>
+                    </svg>
+                </template>
+                Dashboard
+            </nav-link>
 
             
 
-            <nav-link :href="route('about')" :active="route().current('about')">
+            <nav-link v-if="$page.props.auth.user.Rol == 'Egresado'" :href="route('about')" :active="route().current('about')">
                 <template #icon>
                     <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
                          stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
@@ -36,7 +48,17 @@
                             d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
                     </svg>
                 </template>
-                About us
+                Mi perfil
+            </nav-link>
+            <nav-link  v-if="$page.props.auth.user.Rol == 'DirCarrera'" :href="route('dir_carreras.MiPerfil')" :active="route().current('dir_carreras.MiPerfil')">
+                <template #icon>
+                    <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                         stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                            d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
+                    </svg>
+                </template>
+                Mi perfil
             </nav-link>
             <nav-link :href="route('Ponencias.MisInvitaciones')" :active="route().current('Ponencias.MisInvitaciones')" v-if="$page.props.auth.user.Rol == 'Egresado'">
                 <template #icon>
@@ -56,14 +78,14 @@
                 </template>
                 Lista de proyectos colaborativos
             </nav-link>
-            <a class="flex items-center mt-4 py-2 px-6 text-gray-100" href="#" @click="showingTwoLevelMenu2 = !showingTwoLevelMenu2">
+            <a v-if="$page.props.auth.user.Rol == 'Egresado'" class="flex items-center mt-4 py-2 px-6 text-gray-100" href="#" @click="showingTwoLevelMenu2 = !showingTwoLevelMenu2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
                 </svg>
 
                 <span class="mx-3">Mis proyectos</span>
             </a>
-            <transition
+            <transition 
                 enter-to-class="transition-all duration-300 ease-in-out"
                 enter-from-class="max-h-0 opacity-25"
                 leave-from-class="opacity-100 max-h-xl"
@@ -89,18 +111,18 @@
                 </div>
             </transition>
 
-            <nav-link :href="route('cat_anuncios.index')" :active="route().current('cat_anuncios.index')" v-if="$page.props.auth.user.Rol == 'Egresado'">
+            <nav-link :href="route('cat_anuncios.index')" :active="route().current('cat_anuncios.index')" v-if="$page.props.auth.user.Rol == 'Admin'">
                 <template #icon>
                     <svg  class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6Z" />
                     </svg>
                 </template>
-                Categoria de anuncios
+                Gestion Categoria de anuncios
             </nav-link>
 
 
-            <nav-link :href="route('anuncios.index')" :active="route().current('anuncios.index')" v-if="$page.props.auth.user.Rol == 'Egresado'">
+            <nav-link :href="route('anuncios.index')" :active="route().current('anuncios.index')" v-if="$page.props.auth.user.Rol == 'DirCarrera'">
                 <template #icon>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
@@ -108,7 +130,7 @@
                 </template>
                 Gestion de Anuncios
             </nav-link>
-            <nav-link :href="route('dir_carreras.index')" :active="route().current('dir_carreras.index')" v-if="$page.props.auth.user.Rol == 'Egresado'">
+            <nav-link :href="route('dir_carreras.index')" :active="route().current('dir_carreras.index')" v-if="$page.props.auth.user.Rol == 'Admin'">
                 <template #icon>
                     <svg  class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
@@ -117,7 +139,7 @@
                 </template>
                 Directores de carrera
             </nav-link>
-            <nav-link :href="route('carreras.indexGestion')" :active="route().current('carreras.indexGestion')" v-if="$page.props.auth.user.Rol == 'Egresado'">
+            <nav-link :href="route('carreras.indexGestion')" :active="route().current('carreras.indexGestion')" v-if="$page.props.auth.user.Rol == 'Admin'">
                 <template #icon>
                     <svg  class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
@@ -135,7 +157,7 @@
                 </template>
                 Gestión Egresados
             </nav-link>
-            <nav-link :href="route('ofertasTrabajo.index')" :active="route().current('ofertasTrabajo.index')" v-if="$page.props.auth.user.Rol == 'Egresado'">
+            <nav-link :href="route('ofertasTrabajo.index')" :active="route().current('ofertasTrabajo.index')" v-if="$page.props.auth.user.Rol == 'Representante' || $page.props.auth.user.Rol == 'Admin'">
                 <template #icon>
                     <svg  class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
@@ -144,7 +166,7 @@
                 </template>
                 Gestión OfertasTrabajo
             </nav-link>
-            <nav-link :href="route('CVsOfertas.VerCvs')" :active="route().current('CVsOfertas.VerCvs')" v-if="$page.props.auth.user.Rol == 'Representante'">
+            <nav-link :href="route('CVsOfertas.VerCvs')" :active="route().current('CVsOfertas.VerCvs')" v-if="$page.props.auth.user.Rol == 'Representante' || $page.props.auth.user.Rol == 'Admin'">
                 <template #icon>
                     <svg  class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
@@ -162,7 +184,7 @@
                 </template>
                 Ponencias
             </nav-link>
-            <nav-link :href="route('CVsOfertas.GestionOfertas')" :active="route().current('CVsOfertas.GestionOfertas')" v-if="$page.props.auth.user.Rol == 'Representante'">
+            <nav-link :href="route('CVsOfertas.GestionOfertas')" :active="route().current('CVsOfertas.GestionOfertas')" v-if="$page.props.auth.user.Rol == 'Representante' || $page.props.auth.user.Rol == 'Admin'">
                 <template #icon>
                     <svg  class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />

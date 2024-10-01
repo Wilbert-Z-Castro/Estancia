@@ -7,10 +7,18 @@ use Inertia\Inertia;
 use Illuminate\Auth\Events\Registered;
 use App\Models\DirCarrera;
 use App\Models\Carrera;
+use App\Models\Anuncio;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\User;
-use App\Models\Ponencia;
+use App\Models\Ponencias;
+use App\Models\AceptacionPonencia;
+use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
+
 use Illuminate\Support\Facades\Hash; // Importar la clase Hash
 
 class DirCarreraController extends Controller
@@ -146,6 +154,7 @@ class DirCarreraController extends Controller
     // Obtener el ID del usuario actual
     $userId = $DirCarrera->user->id;
 
+
     // Validar solo los campos que se están enviando
     $rules = [
         'name' => 'required|string|max:45',
@@ -211,9 +220,21 @@ class DirCarreraController extends Controller
         'AnioInstitucion' => $validated['AnioInstitucion'],
     ]);
 
-    return redirect()->route('dir_carreras.index')->with('message', 'El Director ' . $validated['name'] . ' fue actualizado exitosamente!');
+    if($request->MiPerfil==1){
+        return redirect()->route('dir_carreras.MiPerfil')->with('message', 'Perfil actualizado exitosamente!');
+    }else{
+        return redirect()->route('dir_carreras.index')->with('message', 'El Director ' . $validated['name'] . ' fue actualizado exitosamente!');
+    }
 }
 
+    public function  MiPerfil(){
+        $DirCarrera = DirCarrera::with('user')->find(Auth::user()->dirCarrera->idDirCarrera);
+        return Inertia::render('Pages_DirCarrera/perfil', [
+            'DirCarrera' => $DirCarrera,
+        ]);
+    }
+
+    
 
 
     /**
@@ -228,5 +249,55 @@ class DirCarreraController extends Controller
         $user->delete();
         $DirCarrera->delete();
         return redirect()->route('dir_carreras.index')->with('message', 'Director eliminado con éxito');        
+    }
+
+
+    public function ReportePonencias(){
+
+        
+
+        $datosDirector = DirCarrera::with('user:id,name,email,ApellidoP,ApellidoM,Telefono,Sexo')
+        ->where('id_userDir','=',Auth()->user()->id)
+        ->first(); 
+
+        $informacionPonencias = Ponencias::with(['egresados:idEgresado,Id_user','egresados.user:id,name,email,ApellidoP,ApellidoM,Telefono,Sexo'])
+        ->where('Id_DirCarrera', Auth::user()->dirCarrera->idDirCarrera)
+        ->whereYear('created_at', '=', Carbon::now()->year)
+        ->orderBy('created_at','desc')
+        ->get();
+
+        $informacionAnuncios = Anuncio::with(['categoria:idCatAnuncio,Nombre'])
+        ->select('Titulo','Categoria','Contenido','Id_userCreado','created_at')
+        ->where('Id_userCreado', Auth::user()->id)
+        ->whereYear('created_at', '=', Carbon::now()->year)
+        ->orderBy('created_at','desc')
+        ->get();
+
+        //egresados con mayor numero de ponencias terminadas
+        $egresados = AceptacionPonencia::join('ponencias', 'aceptacion_ponencia.Id_Ponencia', '=', 'ponencias.idPonencias')
+        ->join('egresado', 'aceptacion_ponencia.id_Egresado', '=', 'egresado.idEgresado')
+        ->join('users', 'egresado.Id_user', '=', 'users.id')
+        ->select('egresado.idEgresado','egresado.Id_user','users.name','users.ApellidoP','users.ApellidoM',DB::raw('COUNT(aceptacion_ponencia.idAceptacionPonencia) as total'))
+        ->where('aceptacion_ponencia.Estado', 'Terminado')
+        ->where('ponencias.Id_DirCarrera', Auth::user()->dirCarrera->idDirCarrera)
+        ->whereYear('ponencias.created_at', '=', Carbon::now()->year)
+        ->groupBy('egresado.idEgresado','egresado.Id_user','users.name','users.ApellidoP','users.ApellidoM','users.Telefono','users.Sexo')
+        ->orderBy('total','desc')
+        ->limit(5)
+        ->get();
+
+        $numeroDePonencias = $informacionPonencias->count();
+        $numeroDeAnuncios = $informacionAnuncios->count();
+        
+        $datos = [
+            'informacionPonencias' => $informacionPonencias,
+            'datosDirector' => $datosDirector,
+            'informacionAnuncios' => $informacionAnuncios,
+            'egresados' => $egresados,
+            'numeroDePonencias' => $numeroDePonencias,
+            'numeroDeAnuncios' => $numeroDeAnuncios,
+        ];
+        $pdf = Pdf::loadView('ReportesPDF.reporte3', compact('datos'));
+        return $pdf->stream('ReportePonencias.pdf');
     }
 }

@@ -552,6 +552,7 @@ const submit = () => {
                             <option value="Representante de Servicio al Cliente">Representante de Servicio al Cliente</option>
                             <option value="Supervisor">Supervisor</option>
                             <option value="Técnico">Técnico</option>
+                            <option value="Desempleado">Desempleado</option>
                         </select>
                         <InputError class="mt-2" :message="form.errors.puestoTrabajo" />
                     </div>

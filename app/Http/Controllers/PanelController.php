@@ -117,6 +117,11 @@ class PanelController extends Controller
         ]);
     }
 
+
+    public function DashBoardDirector(){
+        return Inertia::render('Pages_Dashboard/DashboardDir');
+    }
+
     public function create()
     {
         //
