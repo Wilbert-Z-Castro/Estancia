@@ -42,7 +42,7 @@ Route::get('/dashboard',[PanelController::class, 'dashboard'])->middleware(['aut
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/about', [EgresadoController::class,'showEgresado'])->name('about');
+    Route::get('/about', [EgresadoController::class,'showEgresado'])->name('about')->middleware(['verified','role:Egresado']);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -51,86 +51,96 @@ Route::middleware('auth')->group(function () {
 
 //ruta para carreras
 Route::get('/carreras', [CarreraController::class, 'index'])->name('carreras.index');
-Route::get('/Gestioncarreras', [CarreraController::class, 'indexGestion'])->name('carreras.indexGestion');
-Route::get('/carreras/crear', [CarreraController::class, 'create'])->name('carreras.create');
-Route::post('/carreras', [CarreraController::class, 'store'])->name('carreras.store');
-Route::get('/carreras/{carrera}/editar', [CarreraController::class, 'edit'])->name('carreras.edit');
-Route::post('/carreras/{carrera}', [CarreraController::class, 'update'])->name('carreras.update');
-Route::delete('/carreras/{carrera}', [CarreraController::class, 'destroyImage'])->name('carreras.destroyImage');
-Route::delete('/carreras/{carrera}/delete', [CarreraController::class, 'destroy'])->name('carreras.destroy');    
-
-
-
+Route::middleware(['auth', 'verified', 'role:Admin'])->group(function () {
+    Route::get('/Gestioncarreras', [CarreraController::class, 'indexGestion'])->name('carreras.indexGestion');
+    Route::get('/carreras/crear', [CarreraController::class, 'create'])->name('carreras.create');
+    Route::post('/carreras', [CarreraController::class, 'store'])->name('carreras.store');
+    Route::get('/carreras/{carrera}/editar', [CarreraController::class, 'edit'])->name('carreras.edit');
+    Route::post('/carreras/{carrera}', [CarreraController::class, 'update'])->name('carreras.update');
+    Route::delete('/carreras/{carrera}', [CarreraController::class, 'destroyImage'])->name('carreras.destroyImage');
+    Route::delete('/carreras/{carrera}/delete', [CarreraController::class, 'destroy'])->name('carreras.destroy');
+});
 
 //rutas para cat anuncios
-Route::get('/categoria_anauncios',[CatAnuncioController::class, 'index'])->name('cat_anuncios.index');
-Route::get('/categoria_anauncios/crear',[CatAnuncioController::class, 'create'])->name('cat_anuncios.create');
-Route::post('/categoria_anauncios',[CatAnuncioController::class, 'store'])->name('cat_anuncios.store');
-Route::get('/categoria_anauncios/{catAnuncio}/editar',[CatAnuncioController::class, 'edit'])->name('cat_anuncios.edit');
-Route::put('/categoria_anauncios/{catAnuncio}',[CatAnuncioController::class, 'update'])->name('cat_anuncios.update');
-Route::delete('/categoria_anauncios/{catAnuncio}',[CatAnuncioController::class, 'destroy'])->name('cat_anuncios.destroy');
-
+Route::middleware(['auth','verified', 'role:Admin'])->group(function (){
+    Route::get('/categoria_anauncios',[CatAnuncioController::class, 'index'])->name('cat_anuncios.index');
+    Route::get('/categoria_anauncios/crear',[CatAnuncioController::class, 'create'])->name('cat_anuncios.create');
+    Route::post('/categoria_anauncios',[CatAnuncioController::class, 'store'])->name('cat_anuncios.store');
+    Route::get('/categoria_anauncios/{catAnuncio}/editar',[CatAnuncioController::class, 'edit'])->name('cat_anuncios.edit');
+    Route::put('/categoria_anauncios/{catAnuncio}',[CatAnuncioController::class, 'update'])->name('cat_anuncios.update');
+    Route::delete('/categoria_anauncios/{catAnuncio}',[CatAnuncioController::class, 'destroy'])->name('cat_anuncios.destroy');
+});
 
 //rutas para anuncios
-Route::get('/anuncios',[AnuncioController::class, 'index'])->name('anuncios.index');
-Route::get('/anuncios/crear',[AnuncioController::class, 'create'])->name('anuncios.create');
-Route::post('/anuncios',[AnuncioController::class, 'store'])->name('anuncios.store');
-Route::delete('/anuncios/{anuncio}',[AnuncioController::class, 'destroy'])->name('anuncios.destroy');
-Route::post('/anuncios/{anuncio}',[AnuncioController::class, 'update'])->name('anuncios.update');
-Route::get('/anuncios/{anuncio}/editar',[AnuncioController::class, 'edit'])->name('anuncios.edit');
-//para imagenes
-Route::delete('/imagenes/{imagen}/delete',[ImagenController::class, 'destroy'])->name('imagenes.destroyImage');
+Route::middleware(['auth','verified', 'role:DirCarrera'])->group(function (){
+    Route::get('/anuncios',[AnuncioController::class, 'index'])->name('anuncios.index');
+    Route::get('/anuncios/crear',[AnuncioController::class, 'create'])->name('anuncios.create');
+    Route::post('/anuncios',[AnuncioController::class, 'store'])->name('anuncios.store');
+    Route::delete('/anuncios/{anuncio}',[AnuncioController::class, 'destroy'])->name('anuncios.destroy');
+    Route::post('/anuncios/{anuncio}',[AnuncioController::class, 'update'])->name('anuncios.update');
+    Route::get('/anuncios/{anuncio}/editar',[AnuncioController::class, 'edit'])->name('anuncios.edit');
+    //para imagenes
+    Route::delete('/imagenes/{imagen}/delete',[ImagenController::class, 'destroy'])->name('imagenes.destroyImage');
+
+}); //para que solo los admin puedan acceder a estas rutas
+
 
 //rutas para dir-carrera
-Route::get('/dir-carreras',[DirCarreraController::class, 'index'])->name('dir_carreras.index');
-Route::get('/dir-carreras/crear',[DirCarreraController::class, 'create'])->name('dir_carreras.create');
-Route::post('/dir-carreras',[DirCarreraController::class, 'store'])->name('dir_carrera.store');
-Route::get('/dir-carreras/{dirCarrera}/editar',[DirCarreraController::class, 'edit'])->name('dir_carreras.edit');
-Route::post('/dir-carreras/{dirCarrera}',[DirCarreraController::class, 'update'])->name('dir_carreras.update');
-Route::delete('dir_Carrera/{dirCarrera}',[DirCarreraController::class,'destroy'])->name('dir_carreras.destroy');
-Route::get('MiPerfil',[DirCarreraController::class, 'MiPerfil'])->name('dir_carreras.MiPerfil');
-Route::post('ActualizarMiPerfil',[DirCarreraController::class, 'ActualizarMiPerfil'])->name('dir_carreras.ActualizarMiPerfil');
+Route::middleware(['auth','verified', 'role:Admin'])->group(function (){
+    Route::get('/dir-carreras',[DirCarreraController::class, 'index'])->name('dir_carreras.index');
+    Route::get('/dir-carreras/crear',[DirCarreraController::class, 'create'])->name('dir_carreras.create');
+    Route::post('/dir-carreras',[DirCarreraController::class, 'store'])->name('dir_carrera.store');
+    Route::get('/dir-carreras/{dirCarrera}/editar',[DirCarreraController::class, 'edit'])->name('dir_carreras.edit');
+    Route::post('/dir-carreras/{dirCarrera}',[DirCarreraController::class, 'update'])->name('dir_carreras.update');
+    Route::delete('dir_Carrera/{dirCarrera}',[DirCarreraController::class,'destroy'])->name('dir_carreras.destroy');
+    
+});
 
-//rutas crud egresados
-Route::get('/egresados',[EgresadoController::class, 'index'])->name('egresados.index')->middleware(['auth', 'verified']);
-Route::get('/egresados/crear',[EgresadoController::class, 'create'])->name('egresados.create'); 
-Route::post('/egresados/subir',[EgresadoController::class, 'store'])->name('egresados.store');
-Route::delete('/egresados/{egresado}',[EgresadoController::class, 'destroy'])->name('egresado.destroy');
-Route::get('/egresados/{egresado}/editar',[EgresadoController::class, 'edit'])->name('egresados.edit');
-Route::put('/egresados/{egresado}',[EgresadoController::class, 'update'])->name('egresados.update');
+Route::get('MiPerfil',[DirCarreraController::class, 'MiPerfil'])->middleware(['auth', 'verified','role:DirCarrera'])->name('dir_carreras.MiPerfil');
+Route::post('ActualizarMiPerfil',[DirCarreraController::class, 'ActualizarMiPerfil'])->middleware(['auth', 'verified','role:DirCarrera'])->name('dir_carreras.ActualizarMiPerfil');
+
+//rutas crud egresados1
+Route::get('/egresados',[EgresadoController::class, 'index'])->name('egresados.index')->middleware(['auth', 'verified','role:DirCarrera']);
+Route::get('/egresados/crear',[EgresadoController::class, 'create'])->name('egresados.create')->middleware(['auth', 'verified','role:DirCarrera']); 
+Route::post('/egresados/subir',[EgresadoController::class, 'store'])->name('egresados.store')->middleware(['auth', 'verified','role:DirCarrera']);
+Route::delete('/egresados/{egresado}',[EgresadoController::class, 'destroy'])->name('egresado.destroy')->middleware(['auth', 'verified','role:DirCarrera']);
+Route::get('/egresados/{egresado}/editar',[EgresadoController::class, 'edit'])->name('egresados.edit')->middleware(['auth', 'verified','role:DirCarrera']);
+Route::put('/egresados/{egresado}',[EgresadoController::class, 'update'])->name('egresados.update')->middleware(['auth', 'verified','role:DirCarrera']);
+
 Route::post('EditaraMiPerfil/{egresado}',[EgresadoController::class, 'EditaraMiPerfil'])->name('egresados.EditaraMiPerfil');
 
 
 //ruta para ofertaTrabajo
-Route::get('/ofertasTrabajo',[OfertaTrabajoController::class, 'index'])->name('ofertasTrabajo.index');
+Route::get('/ofertasTrabajo',[OfertaTrabajoController::class, 'index'])->name('ofertasTrabajo.index')->middleware(['auth', 'verified','role:DirCarrera']);;
 Route::get('/ofertasTrabajo/crear',[OfertaTrabajoController::class, 'create'])->name('ofertasTrabajo.create');
 Route::post('/ofertasTrabajo',[OfertaTrabajoController::class, 'store'])->name('ofertasTrabajo.store'); 
 Route::get('/ofertasTrabajo/{ofertaTrabajo}/editar',[OfertaTrabajoController::class, 'edit'])->name('ofertasTrabajo.edit');
 Route::post('/ofertasTrabajo/{ofertaTrabajo}',[OfertaTrabajoController::class, 'update'])->name('ofertasTrabajo.update');
 Route::delete('/ofertasTrabajo/{ofertaTrabajo}',[OfertaTrabajoController::class, 'destroy'])->name('ofertasTrabajo.destroy');
 Route::delete('/imagenes/{imagen}',[ImagenController::class, 'destroyImageOferta'])->name('ofertasTrabajo.destroyImageOferta');
+
 Route::get('/EnvioCV/{ofertaTrabajo}',[OfertaTrabajoController::class, 'formularioCV'])->name('ofertasTrabajo.FormularioCV');
-Route::post('/EnvioCV',[OfertaTrabajoController::class, 'EnvioCV'])->name('ofertasTrabajo.EnvioCV');
+Route::post('/EnvioCV',[OfertaTrabajoController::class, 'EnvioCV'])->middleware(['auth', 'verified','role:Egresado'])->name('ofertasTrabajo.EnvioCV');
 
 
 //rutas para paneles
 Route::get('/PanelNoticias',[PanelController::class, 'Noticias'])->middleware(['auth', 'verified'])->name('Panel.Noticias');
-Route::get('/PanelNoticias/{Categoria}',[PanelController::class, 'NoticiasCategoriaSelc'])->name('Panel.CategoriaNoticias');
+Route::get('/PanelNoticias/{Categoria}',[PanelController::class, 'NoticiasCategoriaSelc'])->middleware(['auth', 'verified'])->name('Panel.CategoriaNoticias');
 
 //Panel de oferta de trabajo
-Route::get('/Ofertas de Trabajo',[PanelController::class, 'OfertasTrabajo'])->name('Ofertas.OfertasTrabajo');
-Route::get('/Ofertas de Trabajo/{Categoria}',[PanelController::class, 'OfertasTrabajoSelect'])->name('Ofertas.CategoriaOfertasTrabajo');
+Route::get('/Ofertas de Trabajo',[PanelController::class, 'OfertasTrabajo'])->middleware(['auth', 'verified'])->name('Ofertas.OfertasTrabajo');
+Route::get('/Ofertas de Trabajo/{Categoria}',[PanelController::class, 'OfertasTrabajoSelect'])->middleware(['auth', 'verified'])->name('Ofertas.CategoriaOfertasTrabajo');
 
 
 //rutas para ver los cv de ofertas
-Route::get('/CVsOfertas',[OfertaTrabajoController::class, 'CVsOfertas'])->name('CVsOfertas.VerCvs');
-Route::get('/GestionOfertas',[OfertaTrabajoController::class, 'GestionOfertas'])->name('CVsOfertas.GestionOfertas');
+Route::get('/CVsOfertas',[OfertaTrabajoController::class, 'CVsOfertas'])->middleware(['auth', 'verified'])->name('CVsOfertas.VerCvs');
+Route::get('/GestionOfertas',[OfertaTrabajoController::class, 'GestionOfertas'])->middleware(['auth', 'verified','role:Representante'])->name('CVsOfertas.GestionOfertas');
 
 
 //rutas para ponencias
-Route::get('/Ponencias',[PonenciasController::class, 'index'])->name('Ponencias.index');
-Route::get('/Ponencias/ProgramarPonencias',[PonenciasController::class, 'create'])->name('Ponencias.create');
-Route::post('/Ponencias',[PonenciasController::class, 'store'])->name('Ponencias.store');
+Route::get('/Ponencias',[PonenciasController::class, 'index'])->name('Ponencias.index')->middleware(['auth', 'verified','role:DirCarrera']);
+Route::get('/Ponencias/ProgramarPonencias',[PonenciasController::class, 'create'])->name('Ponencias.create')->middleware(['auth', 'verified','role:DirCarrera']);
+Route::post('/Ponencias',[PonenciasController::class, 'store'])->name('Ponencias.store')->middleware(['auth', 'verified','role:DirCarrera']);
 Route::get('/MisInvitaciones',[PonenciasController::class, 'PonenciaUsuario'])->name('Ponencias.MisInvitaciones');
 Route::get('/AceptarPonencia/{ponencia}',[PonenciasController::class, 'AceptarPonencia'])->name('Ponencias.AceptarPonencia');
 Route::post('/Confirmacion',[PonenciasController::class, 'Confirmacion'])->name('Ponencias.Confirmacion');
@@ -141,7 +151,7 @@ Route::get('/notificaciones', [NotificacionesController::class, 'index'])->middl
 
 
 //para generar pdf
-Route::get('/Reconocimiento/{id}',[PonenciasController::class, 'Reconocimiento'])->name('Ponencias.Reconocimiento');
+Route::get('/Reconocimiento/{id}',[PonenciasController::class, 'Reconocimiento'])->name('Ponencias.Reconocimiento')->middleware(['auth', 'verified','role:DirCarrera']);;
 
 //para proyectosColab
 Route::get('/ProyectosColab',[ProyectosColabController::class, 'index'])->name('ProyectosColab.index');
@@ -165,4 +175,8 @@ Route::get('ReportePonencias',[DirCarreraController::class, 'ReportePonencias'])
 
 //Dashboard
 Route::get('DashBoardDirector',[PanelController::class, 'DashBoardDirector'])->name('Panel.DashBoardDirector');
+
+Route::post('/Restaurar', [PanelController::class, 'RestaurarDB'])->middleware(['auth:sanctum'])->name('ResturacionDB');
+
+Route::Get('/Respaldo', [PanelController::class, 'RespaldoDB'])->middleware(['auth:sanctum'])->name('RespaldoDB');
 require __DIR__.'/auth.php';

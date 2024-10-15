@@ -27,6 +27,17 @@
         <br>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
+                
+                <div v-if="proyectos.length == 0">
+                    <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+                        <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Lo sentimos</h5>
+                        <p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">Por el momento no hay proyectos disponibles</p>
+                        <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4 rtl:space-x-reverse">
+                            
+                        </div>
+                    </div>
+                </div>
+
                 <div v-for="a in proyectos":key="a.idProyectoColab" class="flex justify-center mt-6"> 
                     <div class="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow md:flex-row  dark:border-gray-700 dark:bg-gray-800">
                         <PrimaryButton v-if="a.Imagen!=null" class="flex flex-col items-center w-full md:w-48">

@@ -89,6 +89,7 @@ class ProyectosColabController extends Controller
     {
         $proyectos = ProyectosColab::with(['egresado'])
         ->orderBy('FechaPublicacion', 'asc')
+        ->where('FechaPublicacion','>',Carbon::now())
         ->paginate(5);
         return Inertia::render('Pages_ProyectosColab/PanelProyectos', [
             'proyectos' => $proyectos,

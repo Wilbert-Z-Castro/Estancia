@@ -152,11 +152,9 @@ class OfertaTrabajoController extends Controller
                 // Generar un nombre único para el archivo
                 $timestamp = now()->format('YmdHis');
                 $filename = $timestamp . '_' . $file->getClientOriginalName();
-
                 // Almacenar el archivo en el disco 'public' con el nuevo nombre
                 $path = $file->storeAs('OfertasTrabajo', $filename, 'public');
                 $oferta->Imagen = $path;
-
             }
         }
         $oferta->save();

@@ -535,6 +535,7 @@ class EgresadoController extends Controller
             ->groupBy('AnioEgreso')
             ->orderBy('AnioEgreso', 'asc')
             ->get();
+            
         $data = $egreso->pluck('total')->all();
         $labels = $egreso->pluck('AnioEgreso')->all();
         $chartUrl = 'https://quickchart.io/chart?c=' . urlencode(json_encode([

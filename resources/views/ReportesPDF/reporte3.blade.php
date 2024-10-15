@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Egresados</title>
+    <title>Lista de Anuncios y ponencias</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -84,13 +84,13 @@
         </thead>
         <tbody>
                 <tr>
-                    <td>{{$datos['numeroDePonencias']}}</td>
                     <td>{{$datos['numeroDeAnuncios']}}</td>
+                    <td>{{$datos['numeroDePonencias']}}</td>
                 </tr>
         </tbody>
 
     </table>
-    <h2>Ponencias:</h2>
+    <h2>Invitaciones a Ponencias:</h2>
     @foreach($datos['informacionPonencias'] as $ponencia)
         <table class="table">
             <thead>

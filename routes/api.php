@@ -24,4 +24,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/notificaciones', [NotificacionesController::class, 'index'])->middleware(['auth:sanctum']);
 
+//para graficas
+Route::post('/GraficaNEgresados', [PanelController::class, 'GraficaNEgresados'])->middleware(['auth:sanctum']);
+Route::post('/GraficaAnunciosPonencias', [PanelController::class, 'GraficaAnunciosPonencias'])->middleware(['auth:sanctum']);
+Route::post('/GraficaPonencias', [PanelController::class, 'GraficaPonencias'])->middleware(['auth:sanctum']);
+Route::post('/Restaurar', [PanelController::class, 'RestaurarDB'])->middleware(['auth:sanctum']);
+Route::Get('/Respaldo', [PanelController::class, 'RespaldoDB'])->middleware(['auth:sanctum']);
+
+
 Route::get('/token', [PanelController::class, 'Token'])->middleware(['auth']);

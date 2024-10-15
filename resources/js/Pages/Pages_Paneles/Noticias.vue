@@ -65,7 +65,7 @@
                     <div class="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                         <PrimaryButton class="flex flex-col items-center w-full md:w-48">
                             <div v-if="a.imagenes!=null" v-for="imagen in a.imagenes" :key="imagen.idImagen">
-                                    <img :src="`/storage/${imagen.URL}`" alt="Imagen" class="object-cover  rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" />
+                                    <img  :src="`/storage/${imagen.URL}`" alt="Imagen" class="object-cover  rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" />
                             </div>
                             <PrimaryButton @click="openModalViwe(a)" class="bg-green-600 hover:bg-green-700">
                                 ver mas
@@ -100,7 +100,7 @@
                 <p > Contenido: <span  class="text-lg font-medium text-gray-900">{{ v.Contenido }}</span></p>
                 <p > Imagen: 
                     <div v-for="imagen in  v.Imagen" :key="imagen.idImagen" class="flex justify-center items-center">
-                        <img  :src="`/storage/${imagen.URL}`" alt="Imagen" class="w-full h-auto object-contain" />
+                        <img @error="imageError" @contextmenu.prevent :src="`/storage/${imagen.URL}`" alt="Imagen" class="w-full h-auto object-contain" />
                     </div>
                 </p>
             </div>
@@ -135,6 +135,10 @@ const props = defineProps({
         default: () => ({ data: [], links: [] })
     }
 });
+
+const imageError = (event) => {
+    event.target.src = '/img/NotFund.jpg';
+};
 
 const colorClasses = {
   red: 'bg-red-500',

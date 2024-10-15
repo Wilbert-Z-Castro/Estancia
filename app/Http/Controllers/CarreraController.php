@@ -131,6 +131,19 @@ class CarreraController extends Controller
             'dirCarrera_id' => 'required|integer',
             'imagenes' => 'nullable|array',
             'imagenes.*' => 'file|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'NombreCarrera.required' => 'El campo Nombre de la Carrera es obligatorio.',
+            'NombreCarrera.string' => 'El campo Nombre de la Carrera debe ser una cadena de texto.',
+            'NombreCarrera.max' => 'El campo Nombre de la Carrera no puede tener más de 255 caracteres.',
+            'Descripcion.required' => 'El campo Descripción es obligatorio.',
+            'Descripcion.string' => 'El campo Descripción debe ser una cadena de texto.',
+            'UbicacionOficinas.required' => 'El campo Ubicación de Oficinas es obligatorio.',
+            'UbicacionOficinas.string' => 'El campo Ubicación de Oficinas debe ser una cadena de texto.',
+            'dirCarrera_id.required' => 'El campo Dirección de Carrera es obligatorio.',
+            'dirCarrera_id.integer' => 'El campo Dirección de Carrera debe ser un de los nombre en la lista.',
+            'imagenes.*.file' => 'Cada archivo debe ser una imagen válida.',
+            'imagenes.*.mimes' => 'Las imágenes deben estar en formato jpeg, png, jpg o gif.',
+            'imagenes.*.max' => 'Cada imagen no puede ser mayor de 2MB.',
         ]);
         $carrera = Carrera::find($id);
         $carrera->NombreCarrera = $request->input('NombreCarrera');
