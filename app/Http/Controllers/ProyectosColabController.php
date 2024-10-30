@@ -8,6 +8,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\ProyectosColab;
 use App\Models\PostulacionProyecto;
+use App\Models\Carrera;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
@@ -51,9 +52,21 @@ class ProyectosColabController extends Controller
             'TituloProyecto' => 'required|string|max:255',
             'Descripcion' => 'required|string',
             'FechaPublicacion' => 'required|date',
-            'imagenes' => 'nullable|array',
-            'imagenes.*' => 'file|mimes:jpeg,png,jpg,gif|max:2048',
+            'imagenes' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'TituloProyecto.required' => 'El título del proyecto es obligatorio.',
+            'TituloProyecto.string' => 'El título del proyecto debe ser una cadena de caracteres.',
+            'TituloProyecto.max' => 'El título del proyecto no puede tener más de 255 caracteres.',
+            'Descripcion.required' => 'La descripción del proyecto es obligatoria.',
+            'Descripcion.string' => 'La descripción del proyecto debe ser una cadena de caracteres.',
+            'FechaPublicacion.required' => 'La fecha de publicación es obligatoria.',
+            'FechaPublicacion.date' => 'La fecha de publicación debe ser una fecha válida.',
+            'imagenes.file' => 'Si se proporciona, debe ser un archivo válido.',
+            'imagenes.mimes' => 'La imagen debe ser de tipo: jpeg, png, jpg, gif.',
+            'imagenes.max' => 'La imagen no puede exceder los 2MB.',
         ]);
+        
+        
         $proyecto = new ProyectosColab();
         $proyecto->TituloProyecto = $request->TituloProyecto;
         $proyecto->Descripcion = $request->Descripcion;
@@ -87,14 +100,33 @@ class ProyectosColabController extends Controller
 
     public function PanelProyectos()
     {
+        $carreras= Carrera::select('idCarrera','NombreCarrera')
+        ->get();
         $proyectos = ProyectosColab::with(['egresado'])
         ->orderBy('FechaPublicacion', 'asc')
         ->where('FechaPublicacion','>',Carbon::now())
         ->paginate(5);
         return Inertia::render('Pages_ProyectosColab/PanelProyectos', [
             'proyectos' => $proyectos,
+            'carreras'=>$carreras,
         ]);
     }
+
+    public function PanelProyectosCarrera(String $id){
+
+        $carreras= Carrera::select('idCarrera','NombreCarrera')
+        ->get();
+        $proyectos = ProyectosColab::with(['egresado'])
+        ->orderBy('FechaPublicacion', 'asc')
+        ->where('FechaPublicacion','>',Carbon::now())
+        ->where('Carrera','=',$id)
+        ->paginate(5);
+        return Inertia::render('Pages_ProyectosColab/PanelProyectos', [
+            'proyectos' => $proyectos,
+            'carreras'=>$carreras,
+        ]);
+    }
+
 
     public function EnviarSolicitud(string $id){
         $proyecto=ProyectosColab::find($id);

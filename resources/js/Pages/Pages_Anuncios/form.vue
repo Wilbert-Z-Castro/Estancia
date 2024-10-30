@@ -8,6 +8,7 @@ import TextInput from '@/Components/TextInput.vue';
 import TextArea from '@/Components/textarea.vue';
 import LinkRegresar from '@/Components/linkRegresar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import Swal from 'sweetalert2'
 
 const valoresIniciales = {
     Titulo:'',
@@ -27,6 +28,14 @@ const handleFileUpload = (event) => {
 };
 
 const submit = () => {
+    Swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera mientras se envían los datos...',
+        allowOutsideClick: false, // Deshabilita que el usuario cierre la alerta
+        didOpen: () => {
+            Swal.showLoading(); // Muestra el spinner
+        }
+    });
     cargando.value = true;
     let formData = new FormData();
     formData.append('Titulo', form.Titulo);
@@ -40,11 +49,14 @@ const submit = () => {
     form.post(route('anuncios.store'), {
         onSuccess: () => {
             form.reset(),
+            Swal.close();
             cargando.value = false;
         },
         onError: () => {
             form.errors,
             cargando.value = false;
+            const firstErrorFieldId = Object.keys(form.errors)[0];
+            document.getElementById(firstErrorFieldId).focus();
         },
     });
 };

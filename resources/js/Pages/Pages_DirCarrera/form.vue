@@ -8,6 +8,7 @@ import TextArea from '@/Components/textarea.vue';
 import LinkRegresar from '@/Components/linkRegresar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
+import Swal from 'sweetalert2'
 
 const valoresIniciales = {
     name: '',
@@ -33,9 +34,22 @@ const props = defineProps({
 const form = useForm(valoresIniciales);
 
 const submit = () => {
+    Swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera mientras se envían los datos...',
+        allowOutsideClick: false, // Deshabilita que el usuario cierre la alerta
+        didOpen: () => {
+            Swal.showLoading(); // Muestra el spinner
+        }
+    });
     form.post(route('dir_carrera.store'), {
-        onSuccess: () => form.reset(),
+        onSuccess: () => {
+            form.reset();
+            Swal.close();
+
+        },
         onError: () => {
+            Swal.close();
             const firstErrorFieldId = Object.keys(form.errors)[0];
             document.getElementById(firstErrorFieldId).focus();
         }

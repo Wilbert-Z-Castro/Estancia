@@ -8,6 +8,7 @@ import TextArea from '@/Components/textarea.vue';
 import LinkRegresar from '@/Components/linkRegresar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
+import Swal from 'sweetalert2'
 
 
 const valoresIniciales = {
@@ -16,7 +17,7 @@ const valoresIniciales = {
     FechaPublicacion: '',
     Carrera: '',
     Tipo: '',
-    imagenes: [],
+    imagenes: '',
 
 };
 
@@ -25,11 +26,11 @@ const imagePreviews = ref([]);
 const form = useForm(valoresIniciales);
 
 const handleFileUpload = (event) => {
-    const files = Array.from(event.target.files);
-    form.imagenes = files;
+    const file = event.target.files[0];
+    form.imagenes = file;
 
     imagePreviews.value = []; 
-    files.forEach(file => {
+    file.forEach(file => {
         const reader = new FileReader();
         reader.onload = (e) => {
             imagePreviews.value.push(e.target.result); 
@@ -41,13 +42,23 @@ const handleFileUpload = (event) => {
 const cargando = ref(false);
 const submit = () => {
     cargando.value = true;
+    Swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera mientras se envían los datos...',
+        allowOutsideClick: false, // Deshabilita que el usuario cierre la alerta
+        didOpen: () => {
+            Swal.showLoading(); // Muestra el spinner
+        }
+    });
 
     form.post(route('ProyectosColab.store'), {
         onSuccess: () => {
             form.reset(),
             cargando.value = false;
+            Swal.close();
         },
         onError: () => {
+            Swal.close();
             const firstErrorFieldId = Object.keys(form.errors)[0];
             document.getElementById(firstErrorFieldId).focus();
             cargando.value = false;
@@ -157,6 +168,8 @@ onMounted(() => {
                             <input
                                 id="imagenes"
                                 type="file"
+                                accept="image/*"
+
                                 class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                 @change="handleFileUpload"
                                 
@@ -185,7 +198,7 @@ onMounted(() => {
 
                                 Registrar
                             </PrimaryButton>
-                            <LinkRegresar class="mx-2" :href="route('egresados.index')">
+                            <LinkRegresar class="mx-2" :href="route('ProyectosColab.index')">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
                                 </svg>

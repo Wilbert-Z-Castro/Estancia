@@ -8,6 +8,7 @@ import TextInput from '@/Components/TextInput.vue';
 import TextArea from '@/Components/textarea.vue';
 import LinkRegresar from '@/Components/linkRegresar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import Swal from 'sweetalert2'
 
 const valoresIniciales = {
     NombreCarrera: '',
@@ -36,6 +37,14 @@ const handleFileUpload = (event) => {
 };
 
 const submit = () => {
+    Swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera mientras se envían los datos...',
+        allowOutsideClick: false, // Deshabilita que el usuario cierre la alerta
+        didOpen: () => {
+            Swal.showLoading(); // Muestra el spinner
+        }
+    });
     let formData = new FormData();
     formData.append('NombreCarrera', form.NombreCarrera);
     formData.append('Descripcion', form.Descripcion);
@@ -43,8 +52,13 @@ const submit = () => {
     formData.append('UbicacionOficinas', form.UbicacionOficinas);
     formData.append('imagenes[]', form.imagenes[0]); 
     form.post(route('carreras.store'), {
-        onSuccess: () => form.reset(),
+        onSuccess: () => {
+            form.reset();
+            Swal.close();
+        },
         onError: () => {
+            Swal.close();
+
             const firstErrorFieldId = Object.keys(form.errors)[0];
             document.getElementById(firstErrorFieldId).focus();
         }
@@ -62,7 +76,7 @@ const props = defineProps({
     <AuthenticatedLayout>
         <template #header>
             Insertar datos del Carrera
-            {{  }}
+            {{ form.errors  }}
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 mx-2 border-b border-gray-200">
@@ -76,7 +90,6 @@ const props = defineProps({
                                 type="text"
                                 class="mt-1 block w-full"
                                 v-model="form.NombreCarrera"
-                                required
                                 placeholder="Ingrese el nombre de la carrera"
                                 autocomplete="NombreCarrera"
                             />

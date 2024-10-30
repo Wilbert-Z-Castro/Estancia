@@ -10,9 +10,14 @@ import 'vue-select/dist/vue-select.css';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    title: (title) => `${title} - UPEMOR`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
+        const link = document.createElement('link');
+        link.rel = 'icon';
+        link.type = 'image/jpg';
+        link.href = '/img/UPE_vertical.jpg'; // Cambia la ruta si es necesario
+        document.head.appendChild(link);
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)

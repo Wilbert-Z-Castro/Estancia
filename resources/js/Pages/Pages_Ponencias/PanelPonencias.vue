@@ -1,7 +1,7 @@
 
 
 <template>
-    <Head title="About us" />
+    <Head title="Mis ponencias" />
 
     <AuthenticatedLayout>
         <template #header>
@@ -41,7 +41,10 @@
     
                                 </h5>
                             </div>
-                            <p class="mb-3 text-xl font-medium text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">Invitación enviada por el director:  {{ a.ponencia.dir_carrera.user.name }}</p>
+                            <p v-if="a.ponencia.dir_carrera!=null" class="mb-3 text-xl font-medium text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">Invitación enviada por el director:  {{ a.ponencia.dir_carrera.user.name }}</p>
+                            <p v-else class="mb-3 text-xl font-medium text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">
+                                Director de carrera no asignado
+                            </p>
                             <p class="mb-3 font-normal text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">Lugar:  {{ a.ponencia.Lugar }}</p>
                             <p class="mb-3 font-normal text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">Fecha y Hora:  {{ (a.ponencia.Fecha) }}</p>
                             <p class="mb-3 font-normal text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">Asunto de la ponenecia:</p>

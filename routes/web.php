@@ -151,13 +151,16 @@ Route::get('/notificaciones', [NotificacionesController::class, 'index'])->middl
 
 
 //para generar pdf
-Route::get('/Reconocimiento/{id}',[PonenciasController::class, 'Reconocimiento'])->name('Ponencias.Reconocimiento')->middleware(['auth', 'verified','role:DirCarrera']);;
+Route::get('/Reconocimiento/{id}',[PonenciasController::class, 'Reconocimiento'])->name('Ponencias.Reconocimiento')->middleware(['auth', 'verified']);;
 
 //para proyectosColab
 Route::get('/ProyectosColab',[ProyectosColabController::class, 'index'])->name('ProyectosColab.index');
 Route::get('/ProyectosColab/crear',[ProyectosColabController::class, 'create'])->name('ProyectosColab.create');
 Route::post('/ProyectosColab',[ProyectosColabController::class, 'store'])->name('ProyectosColab.store');
 Route::get('/ListaDeProyectosColaborativos',[ProyectosColabController::class, 'PanelProyectos'])->name('ProyectosColab.PanelProyectos');
+Route::get('/LisaDeProyectosColaborativos/{idCarrera}',[ProyectosColabController::class, 'PanelProyectosCarrera'])->name('ProyectosColab.PanelCarrera');
+
+
 Route::get('/EnviarSolicitud/{proyecto}',[ProyectosColabController::class, 'EnviarSolicitud'])->name('ProyectosColab.EnviarSolicitud');
 Route::post('/EnviarCvProyecto',[ProyectosColabController::class, 'EnviarCvProyecto'])->name('ProyectosColab.EnviarCvProyecto'); 
 Route::get('/VerSolicitudes',[ProyectosColabController::class, 'VerSolicitudes'])->name('ProyectosColab.VerSolicitudes');  
@@ -168,6 +171,7 @@ Route::delete('EliminarProyecto/{proyecto}',[ProyectosColabController::class, 'd
 Route::delete('ImageneProyectos/{imagen}',[ImagenController::class, 'destroyImagenProyecto'])->name('ProyectosColab.destroyImagenProyecto');
 Route::post('ReponderSolicitud',[ProyectosColabController::class, 'ReponderSolicitud'])->name('ProyectosColab.ReponderSolicitud');
 
+
 //para mandar crear pdf
 Route::get('ReporteEgresados',[EgresadoController::class, 'ReporteEgresados'])->name('Egresados.ReporteEgresados');
 Route::get('ReporteCarreras',[CarreraController::class, 'ReporteCarreras'])->name('Carreras.ReporteCarreras');
@@ -176,7 +180,12 @@ Route::get('ReportePonencias',[DirCarreraController::class, 'ReportePonencias'])
 //Dashboard
 Route::get('DashBoardDirector',[PanelController::class, 'DashBoardDirector'])->name('Panel.DashBoardDirector');
 
-Route::post('/Restaurar', [PanelController::class, 'RestaurarDB'])->middleware(['auth:sanctum'])->name('ResturacionDB');
+Route::post('/Restaurar', [PanelController::class, 'RestaurarDB'])->middleware(['auth'])->name('ResturacionDB');
 
-Route::Get('/Respaldo', [PanelController::class, 'RespaldoDB'])->middleware(['auth:sanctum'])->name('RespaldoDB');
+Route::Get('/Respaldo', [PanelController::class, 'RespaldoDB'])->middleware(['auth'])->name('RespaldoDB');
+
+
+//busquedas:
+Route::post('/BuscarCarreras',[CarreraController::class, 'Buscar'])->middleware(['auth', 'verified'])->name('Carreras.Buscar');
+
 require __DIR__.'/auth.php';

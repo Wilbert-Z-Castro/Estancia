@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
+
 
 
 
@@ -29,14 +31,26 @@ class CarreraController extends Controller
             'carreras' => $carreras,
         ]);
     }
-    public function indexGestion()
+    public function indexGestion(Request $request)
     {
         //
-        $carreras = Carrera::with('dirCarrera.user')->paginate(12); 
-        return inertia('Pages_Carreras/index', [
-            'carreras' => $carreras,
-        ]);
+            if($request->has('nombreCarrera') && $request->nombreCarrera != ''){
+                $carreras = Carrera::with('dirCarrera.user')
+                ->where('Descripcion', 'like', '%' . $request->nombreCarrera . '%')
+                ->orWhere('NombreCarrera', 'like', '%' . $request->nombreCarrera . '%')
+                ->orWhere('UbicacionOficinas', 'like', '%' . $request->nombreCarrera . '%')
+                ->paginate(5)
+                ->withQueryString();
+
+            }else{
+                $carreras = Carrera::with('dirCarrera.user')->paginate(5); 
+            }
+            return inertia('Pages_Carreras/index', [
+                'carreras' => $carreras,
+            ]);
     }
+    
+
 
     /**
      * Show the form for creating a new resource.

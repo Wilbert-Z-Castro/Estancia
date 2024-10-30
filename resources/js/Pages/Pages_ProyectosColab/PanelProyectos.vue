@@ -26,6 +26,32 @@
         <br>
         <br>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <a class="flex items-center mt-4 py-2 px-6 text-black-100" href="#" @click="showingTwoLevelMenu = !showingTwoLevelMenu">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+
+                    <span class="mx-3">Carreras</span>
+                    
+                </a>
+                <transition v-for="carrera in carreras":key="carrera.idCarrera"
+                    enter-to-class="transition-all duration-300 ease-in-out"
+                    enter-from-class="max-h-0 "
+                    leave-from-class=" max-h-xl"
+                    leave-to-class="max-h-0 ">
+                    <div  v-show="showingTwoLevelMenu">
+                        <ul
+                            class="bg-opacity-50 overflow-hidden p-2 mx-4 mt-2 space-y-2 text-sm font-medium text-black  rounded-md shadow-inner"
+                            aria-label="submenu"
+                        >
+                            <li class="px-2 py-1 transition-colors duration-150">
+                                <Link class="block w-full h-full" :href="route('ProyectosColab.PanelCarrera',{id:carrera.idCarrera})" >{{ carrera.NombreCarrera }}</Link>
+                            </li>
+                        </ul>
+                        
+                    </div>
+                    
+                </transition>
             <div class="p-6 border-b border-gray-200">
                 
                 <div v-if="proyectos.length == 0">
@@ -58,15 +84,15 @@
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
                                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                                     {{ a.TituloProyecto }}
-                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ a.Tipo }}</span>
-
-
                                 </h5>
                                 <h5 class="text-xl font-medium text-gray-900 dark:text-white sm:ml-4 sm:mt-0 mt-2">
-                                    Fecha de Publicacion: {{ formatDate(a.created_at) }}
-    
+                                    Publicado: {{ formatDate(a.created_at) }}
                                 </h5>
                             </div>
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">                                
+                                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ a.Tipo }}</span>
+                            </div>
+
                             <p class="mb-3 font-normal text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">Fecha limite:  {{ a.FechaPublicacion }}</p>
                             <p class="mb-3 font-normal text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">Descripcion del proyecto:</p>
                             <pre class="mb-3 font-normal text-gray-500 dark:text-gray-300 whitespace-pre-wrap break-words">
@@ -75,7 +101,7 @@
                             
                             <div class="flex flex-col sm:flex-row  justify-left items-center sm:items-center mb-2" >
                                     <div class="">
-                                        <a :href="route('ProyectosColab.EnviarSolicitud',{id:a.idProyectoColab})" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Enviar CV</a>
+                                        <a :href="route('ProyectosColab.EnviarSolicitud',{id:a.idProyectoColab})" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Enviar CV</a>
                                     </div>
                             </div>                         
                         </div>
@@ -145,6 +171,9 @@ const props = defineProps({
         type: Object,
         default: () => ({ data: [], links: [] })
     },
+    carreras:{
+        type:Object,
+    }
 
 });
 
@@ -203,18 +232,7 @@ const CloseModalRechazar = () => {
 }
 
 
-const aceptar = (a) =>{
-    form.get(route('Ponencias.AceptarPonencia',a.idAceptacionPonencia),{
-        onSuccess: () => {
-            fetchData();
-        },
-        onError: () => {
-            cargando.value = false;
-            const firstErrorFieldId = Object.keys(form.errors)[0];
-            document.getElementById(firstErrorFieldId).focus();
-        }
-    });
-}
+
 
 const rechazar = () => {
     CloseModalRechazar();

@@ -74,8 +74,19 @@ const Eliminar = (a) => {
         }
     });
 };
+const imageError = (event) => {
+    event.target.src = '/img/image0_0.jpg'; // Ruta de la imagen por defecto
+};
 
 const submit = () => {
+    Swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera mientras se envían los datos...',
+        allowOutsideClick: false, // Deshabilita que el usuario cierre la alerta
+        didOpen: () => {
+            Swal.showLoading(); // Muestra el spinner
+        }
+    });
     cargando.value = true;
 
     let formData = new FormData();
@@ -86,11 +97,14 @@ const submit = () => {
     formData.append('imagenes[]', form.imagenes[0]); 
     form.post(route('carreras.update',props.carrera.idCarrera), {
         onSuccess: () =>{
-            form.reset(),
+            form.reset();
             cargando.value = false;
+            Swal.close();
 
         },
         onError: () => {
+            Swal.close();
+
             cargando.value = false;
             const firstErrorFieldId = Object.keys(form.errors)[0];
             document.getElementById(firstErrorFieldId).focus();
@@ -208,7 +222,7 @@ const submit = () => {
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 mt-4" v-if="form.PlanEstudios">
                         <div class="col-span-12">
                             <div class="grid grid-cols-2 gap-2">
-                                <img  :src="`/storage/${form.PlanEstudios}`" alt="Imagen" class="w-25 h-25  object-cover" />
+                                <img @error="imageError" :src="`/storage/${form.PlanEstudios}`" alt="Imagen" class="w-25 h-25  object-cover" />
                             </div>
                             <BotonEliminar @click="Eliminar(props.carrera.idCarrera)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">

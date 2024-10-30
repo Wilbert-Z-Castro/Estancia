@@ -237,6 +237,21 @@ class PanelController extends Controller
     }
 
     public function RestaurarDB(Request $request){
+        $request->validate([
+            'imagenes' => 'required|file|mimetypes:text/plain', // Verifica que sea un archivo de texto
+        ], [
+            'imagenes.required' => 'El archivo es requerido',
+            'imagenes.file' => 'El archivo debe ser un archivo',
+            'imagenes.mimetypes' => 'El archivo debe ser de tipo SQL',
+        ]);
+        $archivo = $request->file('imagenes');
+
+        // Validar la extensión
+        $extension = $archivo->getClientOriginalExtension();
+        if ($extension !== 'sql') {
+            return redirect()->back()->withErrors(['error' => 'El archio debe ser de tipo SQL.']);
+        }
+
         if ($request->hasFile('imagenes')) {
             // Guardar el archivo SQL en la carpeta temporal de storage
             $archivo = $request->file('imagenes')->storeAs('temp', 'import.sql');
@@ -258,7 +273,7 @@ class PanelController extends Controller
                 return response()->json(['error' => 'Error al restaurar la base de datos: ' . $e->getMessage()], 500);
             }
         } else {
-            return response()->json(['error' => 'No se ha proporcionado ningún archivo para la restauración.'], 400);
+            return redirect()->back()->withErrors(['error' => 'No se ha proporcionado ningún archivo para la restauración.']);
         }
 
 
@@ -286,6 +301,35 @@ class PanelController extends Controller
             unlink($archivoTemporal);
             return $response;
         }
+    }
+
+    public function UsuariosGrafica(){
+        $usuariosPorRol=User::select('Rol',DB::raw('COUNT(id) as total'))
+        ->groupby('Rol')
+        ->get();
+        $egresadosCarrea=Egresado::with(['carrera:idCarrera,NombreCarrera'])
+        ->select('Carrera',DB::raw('COUNT(idEgresado) as total'))
+        ->groupby('Carrera')
+        ->get();
+        $anioEgreso=Egresado::select('AnioEgreso',DB::raw('COUNT(idEgresado) as total'))
+        ->groupby('AnioEgreso')
+        ->get();
+        $TrabajoPorCarrera=ofertaCarrera::with('carrera:idCarrera,NombreCarrera')
+        ->select('idcarrera',DB::raw('COUNT(idcarrera) as total'))
+        ->groupby('idcarrera')
+        ->get();
+
+        
+        
+        return response()->json(
+            [
+            'usuariosPorRol'=>$usuariosPorRol,
+            'egresados'=>$egresadosCarrea,
+            'anioEgreso'=>$anioEgreso,
+            'TrabajoPorCarrera'=>$TrabajoPorCarrera,
+            ]
+        );
+        
     }
 
 

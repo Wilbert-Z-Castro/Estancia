@@ -11,6 +11,8 @@ import { usePage } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue';
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2'
+import TextInput from '@/Components/TextInput.vue';
+
 
 const props = defineProps({
     ofertas:{
@@ -98,6 +100,27 @@ onMounted(() => {
     }
 });
 
+const valoresBusqueda = {
+    search: '',
+};
+const formBuscar = useForm(valoresBusqueda);
+
+const buscarCarrera = () => {
+    formBuscar.get(route('ofertasTrabajo.index'),{
+        onSuccess: () =>{
+            formBuscar.search = '';
+        }
+    });
+};
+
+const buscarCarreraRepresentante = () => {
+    formBuscar.get(route('CVsOfertas.GestionOfertas'),{
+        onSuccess: () =>{
+            formBuscar.search = '';
+        }
+    });
+};
+
 </script>
 
 <template>
@@ -122,12 +145,45 @@ onMounted(() => {
             </div>
         </div>
         <br>
-        <linkAgregar :href="route('ofertasTrabajo.create')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            Agregar
-        </linkAgregar> 
+        <div class="flex flex-wrap items-center">             
+            <!-- Campo de búsqueda para carreras -->
+            <linkAgregar :href="route('ofertasTrabajo.create')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                Agregar
+            </linkAgregar> 
+            
+            <TextInput
+            type="text" 
+            
+            class="flex-grow w-full sm:w-auto mx-2" 
+            placeholder="Buscar..." 
+            v-model="formBuscar.search" 
+            />
+            <br>
+            <br>
+            <br>
+            <form v-if="$page.props.auth.user.Rol == 'Admin'" @submit.prevent="buscarCarrera">
+                <PrimaryButton>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+    
+                    Buscar
+                </PrimaryButton>
+            </form>
+            <form v-else-if="$page.props.auth.user.Rol === 'Representante'" @submit.prevent="buscarCarreraRepresentante">
+                <PrimaryButton>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                    Buscar
+                </PrimaryButton>
+            </form>
+            
+            </div>
+        <br>
         <p>
             {{  }}
         </p>
@@ -142,7 +198,7 @@ onMounted(() => {
                                 <th class="px-4 py-3">Titulo</th>
                                 <th class="px-4 py-3">Empresa</th>
                                 <th class="px-4 py-3">Carreras</th>
-                                <th class="px-4 py-3">Descripción</th>
+                                <th class="px-4 py-3">Sector Empresarial</th>
                                 <th class="px-4 py-3">Fecha publicación</th>
                                 <th class="px-4 py-3">Imagen</th>
                                 <th class="px-4 py-3">Editar</th>
@@ -151,6 +207,12 @@ onMounted(() => {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y ">
+                            <tr v-if="ofertas.length === 0" class="text-gray-700">
+                                <td class="px-4 py-3 text-sm" colspan="10">
+                                    No hay registros
+                                </td>
+
+                            </tr>
                             <tr v-for="a,i in ofertas":key="a.idOfertaTrabajo " class="text-gray-700">
                                 <td class="px-4 py-3 text-sm">
                                     {{(i+1)}}
@@ -168,7 +230,7 @@ onMounted(() => {
                                     </p>
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ a.Descripcion }} 
+                                    {{ a.SectorEmpre }} 
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ a.FechaOferta }}

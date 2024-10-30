@@ -197,6 +197,7 @@ const openModalViwe = (a) => {
 
     form.idPostulacionProyecto = a.idPostulacionProyecto;
     form.Estado = 'Aceptado';
+    form.MensajeEgresado = '';
     showModalView.value = true;
 
 }
@@ -208,6 +209,8 @@ const closeModalViwe = () => {
 }
 
 const OpenModalRechazar = (a) => {
+    form.MensajeEgresado = '';
+
     form.idPostulacionProyecto = a.idPostulacionProyecto;
     form.Estado = 'Rechazado';
     showModalView.value = true;

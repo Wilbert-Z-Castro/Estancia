@@ -247,7 +247,7 @@ class PonenciasController extends Controller
     }
 
     public function Reconocimiento(string $id){
-        $aceptacionPonencia = AceptacionPonencia::with(['ponencia','ponencia.dirCarrera:idDirCarrera,id_userDir','ponencia.dirCarrera.user:id,name'])
+        $aceptacionPonencia = AceptacionPonencia::with(['ponencia','ponencia.dirCarrera:idDirCarrera,id_userDir','ponencia.dirCarrera.user:id,name,ApellidoP,ApellidoM'])
         ->find($id);
         $aceptacionPonencia->Estado = 'Terminado';
         $aceptacionPonencia->save();
@@ -286,10 +286,15 @@ class PonenciasController extends Controller
 
         $pdf->SetFont('', 'I', 100);
         $pdf->SetXY(590, 1010);
-        $pdf->Cell(200, 10, utf8_decode($aceptacionPonencia->ponencia->dirCarrera->user->name), 0, 0, 'C');
+        if($aceptacionPonencia->ponencia->dirCarrera==null){
+            $pdf->Cell(200, 10, utf8_decode('Sin Director'), 0, 0, 'C');
+        }else{
+            
+            $pdf->Cell(200, 10, utf8_decode($aceptacionPonencia->ponencia->dirCarrera->user->name.' '.$aceptacionPonencia->ponencia->dirCarrera->user->ApellidoP.' '.$aceptacionPonencia->ponencia->dirCarrera->user->ApellidoM), 0, 0, 'C');
+        }
 
         $pdf->SetFont('Arial','',100);
-        $pdf->SetXY(1205, 1010);
+        $pdf->SetXY(1230, 1010);
         $pdf->Cell(200, 10, utf8_decode('Arturo Mazari Espín'), 0, 0, 'C');
 
         return response($pdf->Output('S'), 200)

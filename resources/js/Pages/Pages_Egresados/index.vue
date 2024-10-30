@@ -5,18 +5,18 @@ import BotonEditar from '@/Components/BotonEditar.vue';
 import BotonEliminar from '@/Components/BotonEliminar.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Modal from '@/Components/Modal.vue';
-import LinkPDF from '@/Components/LinkPDF.vue';
 import linkAgregar from '@/Components/linkAgregar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue';
-import { ref, onMounted} from 'vue';
+import { ref, onMounted, watch} from 'vue';
+import TextInput from '@/Components/TextInput.vue';
 import Swal from 'sweetalert2'
+import axios from 'axios';
 
 const props = defineProps({
     egresados:{
-        type: Object,
-        default: () => ({ data: [], links: [] })
+        type: Object
     }
 });
 
@@ -106,6 +106,16 @@ onMounted(() => {
     }
 });
 
+
+const valoresBusqueda = {
+    busqueda: '',
+};
+const formBuscar = useForm(valoresBusqueda);
+
+const buscarCarrera = () => {
+    formBuscar.get(route('egresados.index'));
+};
+
 </script>
 
 <template>
@@ -129,12 +139,35 @@ onMounted(() => {
             </div>
         </div>
         <br>
-        <linkAgregar :href="route('egresados.create')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            Agregar
-        </linkAgregar>
+        <form @submit.prevent="buscarCarrera">
+        <div class="flex flex-wrap items-center">             
+            <!-- Campo de búsqueda para carreras -->
+            <linkAgregar :href="route('egresados.create')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                Agregar
+            </linkAgregar>
+
+                <TextInput
+                    type="text" 
+                
+                    class="flex-grow w-full sm:w-auto mx-2" 
+                    placeholder="Buscar..." 
+                    v-model="formBuscar.busqueda" 
+                />
+                <br>
+                <br>
+                <br>
+                <PrimaryButton>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+    
+                    Buscar
+                </PrimaryButton>
+            </div>
+        </form>
         <br>
         <a :href="route('Egresados.ReporteEgresados')" target="_blank" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white  focus:ring-4 focus:outline-none focus:ring-cyan-200 ">
                 <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white  rounded-md group-hover:bg-opacity-0">
@@ -154,15 +187,24 @@ onMounted(() => {
                                 <th class="px-4 py-3">Nombre</th>
                                 <th class="px-4 py-3">Email</th>
                                 <th class="px-4 py-3">Apellidos</th>
-                                <th class="px-4 py-3">Descripción</th>
+                                <th class="px-4 py-3">Carrera</th>
                                 <th class="px-4 py-3">Añio de egreso</th>
-                                <th class="px-4 py-3">Direccion</th>
                                 <th class="px-4 py-3">Editar</th>
                                 <th class="px-4 py-3">Ver</th>
                                 <th class="px-4 py-3">Borrar</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y ">
+                            <tr v-if="egresados.length === 0">
+                                <td class="px-4 py-3 text-sm" :colspan="9">
+                                    No hay registros
+                                </td>
+                                <td class="px-4 py-3 text-sm" :colspan="9">
+                                    <a :href="route('egresados.index')" target="_blank" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white  focus:ring-4 focus:outline-none focus:ring-cyan-200 ">
+                                        Volvert
+                                    </a>
+                                </td>
+                            </tr>
                             <tr v-for="a,i in egresados":key="a.idEgresado" class="text-gray-700">
                                 <td class="px-4 py-3 text-sm">
                                     {{(i+1)}}
@@ -176,14 +218,14 @@ onMounted(() => {
                                 <td class="px-4 py-3 text-sm">
                                     {{a.user.ApellidoP }} {{a.user.ApellidoM }}
                                 </td>
-                                <td class="px-4 py-3 text-sm">
+                                <td v-if="a.carrera!=null" class="px-4 py-3 text-sm">
                                     {{a.carrera.NombreCarrera}}
+                                </td>
+                                <td v-else class="px-4 py-3 text-sm">
+                                    No asignado
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{a.AnioEgreso}}
-                                </td>
-                                <td class="px-4 py-3 text-sm">
-                                    {{a.Direccion}}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     <BotonEditar :href="route('egresados.edit', { id: a.idEgresado })" >

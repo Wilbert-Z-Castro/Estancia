@@ -53,6 +53,7 @@ const submit = () => {
                     required
                     autofocus
                     autocomplete="username"
+                    placeholder="Ingrese Correo"
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />

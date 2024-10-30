@@ -90,13 +90,24 @@ onMounted(() => {
 const submit = () => {
     cargando.value = true;
 
+    Swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera mientras se envían los datos...',
+        allowOutsideClick: false, // Deshabilita que el usuario cierre la alerta
+        didOpen: () => {
+            Swal.showLoading(); // Muestra el spinner
+        }
+    });
     form.post(route('ProyectosColab.update',props.Proyecto.idProyectoColab), {
         onSuccess: () => {
             form.reset(),
             cargando.value = false;
+            Swal.close();
 
         },
         onError: () => {
+            Swal.close();
+
             const firstErrorFieldId = Object.keys(form.errors)[0];
             document.getElementById(firstErrorFieldId).focus();
             cargando.value = false;
@@ -234,7 +245,7 @@ const submit = () => {
                             </svg>
                             Actualizar
                         </PrimaryButton>
-                        <LinkRegresar class="mx-2" :href="route('carreras.indexGestion')">
+                        <LinkRegresar class="mx-2" :href="route('ProyectosColab.index')">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
                             </svg>

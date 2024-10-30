@@ -19,7 +19,7 @@
                         aria-label="submenu"
                         >
                         <li class="px-2 py-1 transition-colors duration-150">
-                                <Link class="block w-full h-full" :href="route('Panel.Noticias')" >{{ notificacion.Estado }} {{ notificacion.ponencia.TituloPonencia }} </Link>
+                                <Link class="block w-full h-full" :href="route('Ponencias.MisInvitaciones')" >{{ notificacion.Estado }} {{ notificacion.ponencia.TituloPonencia }} </Link>
                             </li>
                         </ul>
                         

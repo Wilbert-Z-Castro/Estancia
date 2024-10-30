@@ -9,9 +9,10 @@ import linkAgregar from '@/Components/linkAgregar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted,watch } from 'vue';
 import Swal from 'sweetalert2'
-
+import TextInput from '@/Components/TextInput.vue';
+import axios from 'axios';
 const props = defineProps({
     DirCarrera:{
         type: Object,
@@ -59,7 +60,7 @@ const form = useForm(valoresIniviales);
 
 const submit = (a) => {
     Swal.fire({
-        title: `¿Deseas eliminar ${a.user.name}?`,
+        title: `¿Deseas eliminar a ${a.user.name}?`,
         text: `No podrás revertir este proceso`,
         icon: "warning",
         showCancelButton: true,
@@ -100,6 +101,20 @@ onMounted(() => {
 });
 
 
+const valoresBusqueda = {
+    busqueda: '',
+};
+const formBuscar = useForm(valoresBusqueda);
+
+const buscarCarrera = () => {
+    formBuscar.get(route('dir_carreras.index'),{
+        onSuccess: () =>{
+            formBuscar.busqueda = '';
+        }
+    }
+);
+
+};
 </script>
 
 <template>
@@ -123,12 +138,36 @@ onMounted(() => {
             </div>
         </div>
         <br>
-        <linkAgregar :href="route('dir_carreras.create')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            Agregar
-        </linkAgregar> 
+        <form @submit.prevent="buscarCarrera">
+        <div class="flex flex-wrap items-center">             
+            <!-- Campo de búsqueda para carreras -->
+            <linkAgregar :href="route('dir_carreras.create')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                Agregar
+            </linkAgregar>
+
+                <TextInput
+                    type="text" 
+                
+                    class="flex-grow w-full sm:w-auto mx-2" 
+                    placeholder="Buscar..." 
+                    v-model="formBuscar.busqueda" 
+                />
+                <br>
+                <br>
+                <br>
+                <PrimaryButton>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+    
+                    Buscar
+                </PrimaryButton>
+            </div>
+        </form>
+        <br>
         
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
@@ -141,14 +180,28 @@ onMounted(() => {
                                 <th class="px-4 py-3">Email</th>
                                 <th class="px-4 py-3">Apellidos</th>
                                 <th class="px-4 py-3">Descripción</th>
-                                <th class="px-4 py-3">Añios en la Institucion</th>
-                                <th class="px-4 py-3">Fecha de Asignacion</th>
+                                <th class="px-4 py-3">Añios en la Institución</th>
+                                <th class="px-4 py-3">Fecha de Asignación</th>
                                 <th class="px-4 py-3">Editar</th>
-                                <th class="px-4 py-3">Ver</th>
                                 <th class="px-4 py-3">Borrar</th>
+                                <th class="px-4 py-3">Ver</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y ">
+                            <tr v-if="DirCarrera.length === 0" class="text-gray-700">
+                                <td class="px-4 py-3 text-sm" colspan="10">
+                                    No se encontraron resultados
+                                    
+                                </td>
+                                <td class="px-4 py-3 text-sm" :colspan="9">
+                                    <linkAgregar :href="route('dir_carreras.index')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                                        </svg>
+                                        Volver
+                                    </linkAgregar>
+                                </td>
+                            </tr>
                             <tr v-for="a,i in DirCarrera":key="a.idDirCarrera" class="text-gray-700">
                                 <td class="px-4 py-3 text-sm">
                                     {{(i+1)}}

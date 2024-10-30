@@ -74,6 +74,14 @@ const form = useForm(valoresIniciales);
 
 
 const submit = () => {
+    Swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera mientras se envían los datos...',
+        allowOutsideClick: false, // Deshabilita que el usuario cierre la alerta
+        didOpen: () => {
+            Swal.showLoading(); // Muestra el spinner
+        }
+    });
     cargando.value = true;
 
     let formData = new FormData();
@@ -87,11 +95,14 @@ const submit = () => {
     form.post(route('anuncios.update',props.anuncio.idAnuncio), {
         onSuccess: () => {
             form.reset(),
+            Swal.close();
             cargando.value = false;
         },
         onError: () => {
             form.errors,
             cargando.value = false;
+            const firstErrorFieldId = Object.keys(form.errors)[0];
+            document.getElementById(firstErrorFieldId).focus();
         },
     });
 };

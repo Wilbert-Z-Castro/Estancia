@@ -1,7 +1,7 @@
 
 
 <template>
-    <Head title="About us" />
+    <Head title="Noticias" />
 
     <AuthenticatedLayout>
         <template #header>

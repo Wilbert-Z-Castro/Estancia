@@ -31,7 +31,7 @@ class answerCv extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Aceptación de CV',
+            subject: 'Respuesta de CV',
         );
     }
 

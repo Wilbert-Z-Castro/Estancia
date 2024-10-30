@@ -8,6 +8,8 @@ import TextArea from '@/Components/textarea.vue';
 import LinkRegresar from '@/Components/linkRegresar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
+import Swal from 'sweetalert2'
+
 const props = defineProps({
     carreras:{type:Object}
 });
@@ -17,7 +19,7 @@ const valoresIniciales = {
     Requisitos: '',
     Empresa: '',
     Ubicacion: '',
-    imagenes: [],
+    imagenes: '',
     carreras: [],
     SectorEmpre: '',
 };
@@ -25,11 +27,23 @@ const imagePreviews = ref([]);
 const form = useForm(valoresIniciales);
 
 const submit = () => {
+    Swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera mientras se envían los datos...',
+        allowOutsideClick: false, // Deshabilita que el usuario cierre la alerta
+        didOpen: () => {
+            Swal.showLoading(); // Muestra el spinner
+        }
+    });
     form.post(route('ofertasTrabajo.store'), {
-        onSuccess: () => form.reset(),
+        onSuccess: () => {
+            form.reset();
+            Swal.close();
+        },
         onError: () => {
-        const firstErrorFieldId = Object.keys(form.errors)[0];
-        document.getElementById(firstErrorFieldId).focus();
+            Swal.close();
+            const firstErrorFieldId = Object.keys(form.errors)[0];
+            document.getElementById(firstErrorFieldId).focus();
         }
     });
 };
@@ -74,7 +88,7 @@ const SectorEmpresaria=[
                     <!-- Fila 1 -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="TituloOferta" value="Titulo de la oferta" />
+                            <InputLabel for="TituloOferta" value="Título de la oferta" />
                             <TextInput
                                 id="TituloOferta"
                                 type="text"

@@ -14,16 +14,26 @@ class AnuncioController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
 
-        $anuncios = Anuncio::with('categoria', 'imagenes')
-        ->where('Id_userCreado', Auth()->user()->id)
-        ->paginate(4);
+        if($request->has('Titulo') && $request->Titulo != ''){
+            $anuncios = Anuncio::with('categoria', 'imagenes')
+            ->where('Id_userCreado', Auth()->user()->id)
+            ->where('Titulo', 'like', '%'.$request->Titulo.'%')
+            ->orWhere('Categoria', 'like', '%'.$request->Titulo.'%')
+            ->paginate(10)
+            ->withQueryString();
+        }else{
+            $anuncios = Anuncio::with('categoria', 'imagenes')
+            ->where('Id_userCreado', Auth()->user()->id)
+            ->paginate(10);
+        }
+
         return Inertia::render('Pages_Anuncios/index', [
             'anuncios' => $anuncios,
         ]);
-        }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -96,9 +106,19 @@ class AnuncioController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function Buscar(Request $request)
     {
-        //
+        $anuncios = Anuncio::with('categoria', 'imagenes')
+        ->where('Id_userCreado', Auth()->user()->id)
+        ->where('Titulo', 'like', '%'.$request->Titulo.'%')
+        ->get();
+        
+        return response()->json(
+            [
+            'anuncios'=>$anuncios,
+        ]); 
+        
+        
     }
 
     /**

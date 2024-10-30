@@ -15,10 +15,25 @@ class OfertaTrabajoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $ofertas = OfertaTrabajo::with(['ofertasCarreras.carrera:idCarrera,NombreCarrera'])->paginate(10);
+        if($request->has('search') && $request->search != ''){
+            $ofertas = OfertaTrabajo::with(['ofertasCarreras.carrera:idCarrera,NombreCarrera'])
+            ->where('TituloOferta','LIKE','%'.$request->search.'%')
+            ->orWhere('Descripcion','LIKE','%'.$request->search.'%')
+            ->orWhere('Ubicacion','LIKE','%'.$request->search.'%')
+            ->orWhere('Requisitos','LIKE','%'.$request->search.'%')
+            ->orWhere('Empresa','LIKE','%'.$request->search.'%')
+            ->orWhere('SectorEmpre','LIKE','%'.$request->search.'%')
+            ->paginate(10)
+            ->withQueryString();
+            return Inertia::render('Pages_OfertaTrabajo/index', [
+                'ofertas' => $ofertas,
+            ]);
+        }else{
+            $ofertas = OfertaTrabajo::with(['ofertasCarreras.carrera:idCarrera,NombreCarrera'])->paginate(10);
+        }
         return Inertia::render('Pages_OfertaTrabajo/index', [
             'ofertas' => $ofertas,
         ]);
@@ -97,9 +112,26 @@ class OfertaTrabajoController extends Controller
         }
     }
 
-    public function GestionOfertas(){
-        $ofertas = OfertaTrabajo::with(['ofertasCarreras.carrera:idCarrera,NombreCarrera'])
-        ->where('idUser',Auth::user()->id)->paginate(10);
+    public function GestionOfertas(Request $request){
+
+        
+        if($request->has('search') && $request->search != ''){
+            $ofertas = OfertaTrabajo::with(['ofertasCarreras.carrera:idCarrera,NombreCarrera'])
+            ->where('idUser',Auth::user()->id)
+            ->where('TituloOferta','LIKE','%'.$request->search.'%')
+            ->orWhere('Descripcion','LIKE','%'.$request->search.'%')
+            ->orWhere('Ubicacion','LIKE','%'.$request->search.'%')
+            ->orWhere('Requisitos','LIKE','%'.$request->search.'%')
+            ->orWhere('Empresa','LIKE','%'.$request->search.'%')
+            ->orWhere('SectorEmpre','LIKE','%'.$request->search.'%')
+            ->paginate(10)
+            ->withQueryString();
+
+        }else{
+            $ofertas = OfertaTrabajo::with(['ofertasCarreras.carrera:idCarrera,NombreCarrera'])
+            ->where('idUser',Auth::user()->id)->paginate(10);
+        }
+
         return Inertia::render('Pages_OfertaTrabajo/index', [
             'ofertas' => $ofertas,
         ]);
@@ -121,11 +153,39 @@ class OfertaTrabajoController extends Controller
             'Empresa'=> 'required|string|max:100',
             'SectorEmpre'=> 'required|string|max:100',
             'carreras'=>'required|array',
-            'imagenes' => 'nullable|array',
-            'imagenes.*' => 'file|mimes:jpeg,png,jpg,gif|max:2048',
-
+            'imagenes' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'TituloOferta.required' => 'El campo título de la oferta es obligatorio.',
+            'TituloOferta.string' => 'El título de la oferta debe ser un texto válido.',
+            'TituloOferta.max' => 'El título de la oferta no debe exceder los 100 caracteres.',
             
+            'Descripcion.required' => 'La descripción es obligatoria.',
+            'Descripcion.string' => 'La descripción debe ser un texto válido.',
+            'Descripcion.max' => 'La descripción no debe exceder los 200 caracteres.',
+            
+            'Ubicacion.required' => 'La ubicación es obligatoria.',
+            'Ubicacion.string' => 'La ubicación debe ser un texto válido.',
+            'Ubicacion.max' => 'La ubicación no debe exceder los 100 caracteres.',
+            
+            'Requisitos.required' => 'Los requisitos son obligatorios.',
+            'Requisitos.string' => 'Los requisitos deben ser un texto válido.',
+            'Requisitos.max' => 'Los requisitos no deben exceder los 200 caracteres.',
+            
+            'Empresa.required' => 'El nombre de la empresa es obligatorio.',
+            'Empresa.string' => 'El nombre de la empresa debe ser un texto válido.',
+            'Empresa.max' => 'El nombre de la empresa no debe exceder los 100 caracteres.',
+            
+            'SectorEmpre.required' => 'El sector de la empresa es obligatorio.',
+            'SectorEmpre.string' => 'El sector de la empresa debe ser un texto válido.',
+            'SectorEmpre.max' => 'El sector de la empresa no debe exceder los 100 caracteres.',
+            
+            'carreras.required' => 'Debes seleccionar al menos una carrera.',
+            
+            'imagenes.file' => 'el archivo debe ser una imagen válida: jpeg, png, jpg o gif.',
+            'imagenes.mimes' => 'La Imagen deben ser de los tipos: jpeg, png, jpg o gif.',
+            'imagenes.max' => 'El tamaño de la imagen no debe exceder los 2048 KB.',
         ]);
+        
 
         $oferta = new OfertaTrabajo();
         $oferta->TituloOferta = $request->TituloOferta;
@@ -159,7 +219,7 @@ class OfertaTrabajoController extends Controller
         }
         $oferta->save();
 
-        if(Auth::user()->Rol="Representante"){
+        if(Auth::user()->Rol=="Representante"){
             return redirect()->route('CVsOfertas.GestionOfertas')->with('message', 'La oferta '.$request->TituloOferta.' fue creada exitosamente!');
 
         }
@@ -197,26 +257,43 @@ class OfertaTrabajoController extends Controller
         //
         $request->validate([
             'TituloOferta' => 'required|string|max:100', 
-            'Descripcion' => 'required|string',
+            'Descripcion' => 'required|string|max:200',
             'Ubicacion' => 'required|string|max:100',
-            'Requisitos' => 'required|string',
-            'Empresa' => 'required|string|max:100',
-            'SectorEmpre' => 'required|string|max:100',
-            'carreras' => 'required|array',
-            'imagenes' => 'nullable|array',
-            'imagenes.*' => 'file|mimes:jpeg,png,jpg,gif|max:2048',
+            'Requisitos' => 'required|string|max:200',
+            'Empresa'=> 'required|string|max:100',
+            'SectorEmpre'=> 'required|string|max:100',
+            'carreras'=>'required|array',
+            'imagenes' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
-            'TituloOferta.required' => 'El título de la oferta es obligatorio.',
-            'TituloOferta.max' => 'El título de la oferta no debe superar los 100 caracteres.',
+            'TituloOferta.required' => 'El campo título de la oferta es obligatorio.',
+            'TituloOferta.string' => 'El título de la oferta debe ser un texto válido.',
+            'TituloOferta.max' => 'El título de la oferta no debe exceder los 100 caracteres.',
+            
             'Descripcion.required' => 'La descripción es obligatoria.',
+            'Descripcion.string' => 'La descripción debe ser un texto válido.',
+            'Descripcion.max' => 'La descripción no debe exceder los 200 caracteres.',
+            
             'Ubicacion.required' => 'La ubicación es obligatoria.',
-            'Ubicacion.max' => 'La ubicación no debe superar los 100 caracteres.',
+            'Ubicacion.string' => 'La ubicación debe ser un texto válido.',
+            'Ubicacion.max' => 'La ubicación no debe exceder los 100 caracteres.',
+            
             'Requisitos.required' => 'Los requisitos son obligatorios.',
+            'Requisitos.string' => 'Los requisitos deben ser un texto válido.',
+            'Requisitos.max' => 'Los requisitos no deben exceder los 200 caracteres.',
+            
             'Empresa.required' => 'El nombre de la empresa es obligatorio.',
+            'Empresa.string' => 'El nombre de la empresa debe ser un texto válido.',
+            'Empresa.max' => 'El nombre de la empresa no debe exceder los 100 caracteres.',
+            
             'SectorEmpre.required' => 'El sector de la empresa es obligatorio.',
+            'SectorEmpre.string' => 'El sector de la empresa debe ser un texto válido.',
+            'SectorEmpre.max' => 'El sector de la empresa no debe exceder los 100 caracteres.',
+            
             'carreras.required' => 'Debes seleccionar al menos una carrera.',
-            'imagenes.*.mimes' => 'Solo se aceptan imágenes en formato jpeg, png, jpg o gif.',
-            'imagenes.*.max' => 'Cada imagen no debe superar los 2 MB.',
+            
+            'imagenes.file' => 'el archivo debe ser una imagen válida: jpeg, png, jpg o gif.',
+            'imagenes.mimes' => 'La Imagen deben ser de los tipos: jpeg, png, jpg o gif.',
+            'imagenes.max' => 'El tamaño de la imagen no debe exceder los 2048 KB.',
         ]);
         $oferta = OfertaTrabajo::find($id);
         $oferta->TituloOferta = $request->TituloOferta;
@@ -246,9 +323,9 @@ class OfertaTrabajoController extends Controller
         }
         $oferta->save();
         $oferta->carreras()->sync($request->carreras);
-        if(Auth::user()->Rol="Representante"){
-            return redirect()->route('CVsOfertas.GestionOfertas')->with('message', 'La oferta '.$request->TituloOferta.' fue creada exitosamente!');
 
+        if(Auth::user()->Rol=="Representante"){
+            return redirect()->route('CVsOfertas.GestionOfertas')->with('message', 'La oferta '.$request->TituloOferta.' fue creada exitosamente!');
         }
         return redirect()->route('ofertasTrabajo.index')->with('message', 'La oferta '.$request->TituloOferta.' fue actualizada exitosamente!');
 

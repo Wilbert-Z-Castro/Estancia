@@ -21,7 +21,7 @@ const valoresIniciales = {
     Requisitos: props.oferta.Requisitos,
     Empresa: props.oferta.Empresa,
     Ubicacion: props.oferta.Ubicacion,
-    imagenes: [],
+    imagenes: '',
     Imagen: props.oferta.Imagen,
     carreras: [],
     SectorEmpre: props.oferta.SectorEmpre,
@@ -35,11 +35,23 @@ const imagePreviews = ref([]);
 const form = useForm(valoresIniciales);
 
 const submit = () => {
+    Swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera mientras se envían los datos...',
+        allowOutsideClick: false, // Deshabilita que el usuario cierre la alerta
+        didOpen: () => {
+            Swal.showLoading(); // Muestra el spinner
+        }
+    });
     form.post(route('ofertasTrabajo.update',props.oferta.idOfertaTrabajo), {
-        onSuccess: () => form.reset(),
+        onSuccess: () => {
+            form.reset();
+            Swal.close();
+        },
         onError: () => {
-        const firstErrorFieldId = Object.keys(form.errors)[0];
-        document.getElementById(firstErrorFieldId).focus();
+            Swal.close();
+            const firstErrorFieldId = Object.keys(form.errors)[0];
+            document.getElementById(firstErrorFieldId).focus();
         }
     });
 };
@@ -107,8 +119,7 @@ const SectorEmpresaria=[
     <Head title="Gestion categorias formulario" />
     <AuthenticatedLayout>
         <template #header>
-            Insertar datos de la oferta
-            {{ form.errors }}
+            Actualizar datos de la oferta
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ">
             <div class="p-6 mx-2 border-b border-gray-200 overflow-y-auto">
@@ -116,7 +127,7 @@ const SectorEmpresaria=[
                     <!-- Fila 1 -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="TituloOferta" value="Titulo de la oferta" />
+                            <InputLabel for="TituloOferta" value="Título de la oferta" />
                             <TextInput
                                 id="TituloOferta"
                                 type="text"

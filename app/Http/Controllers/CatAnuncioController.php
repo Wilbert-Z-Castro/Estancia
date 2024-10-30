@@ -11,16 +11,40 @@ class CatAnuncioController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $categorias = CatAnuncio::all();
-        
+        if($request->has('search')){
+            if($request->has('search') && $request->search != ''){
+                $categorias = CatAnuncio::where('Nombre', 'like', '%' . $request->search . '%')
+                ->orwhere('Descripcion', 'like', '%' . $request->search . '%')
+                ->orwhere('Color', 'like', '%' . $request->search . '%')
+                ->paginate(4)
+                ->withQueryString();
+                return Inertia::render('Pages_CatAnuncios/index',[
+                    'categorias' => $categorias,
+                ]);
+            }else{
+                $categorias = CatAnuncio::paginate(4);
+            }
+        }else{
+            $categorias = CatAnuncio::paginate(4);
+        }        
         return Inertia::render('Pages_CatAnuncios/index',[
             'categorias' => $categorias,
         ]);
 
     }
+    public function Buscar(Request $request)
+    {
+        // Puedes agregar validaciones si es necesario
+        $categorias = CatAnuncio::where('Nombre', 'like', '%' . $request->Nombre . '%')->get();
+
+        return response()->json([
+            'categorias' => $categorias,
+        ]);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -55,10 +79,7 @@ class CatAnuncioController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+
 
     /**
      * muestra el formulario para editar el recurso especificado.
@@ -106,6 +127,7 @@ class CatAnuncioController extends Controller
         //
         $categoria = CatAnuncio::find($id);
         $categoria->delete();
-        return redirect()->route('cat_anuncios.index');
+        
+        return redirect()->route('cat_anuncios.index')->with('message', 'la categoria se elimino exitosamente');
     }
 }

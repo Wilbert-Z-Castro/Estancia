@@ -8,6 +8,8 @@ import TextArea from '@/Components/textarea.vue';
 import LinkRegresar from '@/Components/linkRegresar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
+import Swal from 'sweetalert2'
+
 
 const props = defineProps({
     Egresado: { type: Object },
@@ -41,8 +43,19 @@ const valoresIniciales = {
 const form = useForm(valoresIniciales);
 
 const submit = () => {
+    Swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera mientras se envían los datos...',
+        allowOutsideClick: false, // Deshabilita que el usuario cierre la alerta
+        didOpen: () => {
+            Swal.showLoading(); // Muestra el spinner
+        }
+    });
     form.put(route('egresados.update', props.Egresado.idEgresado), {
-        onSuccess: () => form.reset(),
+        onSuccess: () => {
+            form.reset();
+            Swal.close();
+        },
         onError: () => {
         // Enfocar el primer campo de entrada con error
             const firstErrorFieldId = Object.keys(form.errors)[0];
@@ -119,9 +132,6 @@ const SectorEmpresaria=[
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg  ">
             <div class="p-6 mx-2 border-b border-gray-200 overflow-y-auto">
-                <p>
-                    {{ form.errors }}
-                </p>
                 <form @submit.prevent="submit">
                     <!-- Fila 3 -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">

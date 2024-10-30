@@ -8,13 +8,25 @@ import Modal from '@/Components/Modal.vue';
 import linkAgregar from '@/Components/linkAgregar.vue';
 import { Head, useForm,usePage } from '@inertiajs/vue3';
 import { ref, onMounted, watch } from 'vue';
+
+import Pagination from '@/Components/Pagination.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import TextInput from '@/Components/TextInput.vue';
+import axios from 'axios';
+
 import Swal from 'sweetalert2'
 
 const props = defineProps({
-    categorias:{type:Object}
+    categorias:{type:Object,
+        default: () => ({ data: [], links: [] })
+    }
 });
 
 const {props:pageProps} = usePage();    
+
+const categorias = ref(props.categorias.data);
+const links = ref(props.categorias.links);
 
 
 const v =ref({id:'',Nombre:'',Descripcion:'',Color:''});
@@ -52,13 +64,28 @@ const submit = (a) => {
         }).then((result) => {
             
         if (result.isConfirmed) {
+            
             v.id = a.idCatAnuncio;
-            form.delete(route('cat_anuncios.destroy', v.id));
-            Swal.fire({
-            title: "Eliminado!",
-            text: "El regsitro fue eliminado exitosamente ",
-            icon: "success"
+            form.delete(route('cat_anuncios.destroy', v.id), {
+
+                onSuccess: () => {
+                    categorias.value = categorias.value.filter((item) => item.idCatAnuncio !== v.id);
+                    Swal.fire({
+                        title: "Eliminado!",
+                        text: "El regsitro fue eliminado exitosamente ",
+                        icon: "success"
+                        });
+                },
+                onError: () => {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Ocurrio un error al eliminar el registro",
+                        icon: "error"
+                        });
+                }
+
             });
+
         }
         });
     
@@ -72,6 +99,15 @@ onMounted(() => {
         }, 4000);
     }
 });
+const valoresBusqueda = {
+    search: '',
+};
+const formBuscar = useForm(valoresBusqueda);
+
+const Buscar = () => {
+    formBuscar.get(route('cat_anuncios.index'));
+};
+
 
 
 
@@ -99,13 +135,35 @@ onMounted(() => {
             </div>
         </div>
         <br>
-        <linkAgregar :href="route('cat_anuncios.create')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            Agregar
-        </linkAgregar> 
-        
+        <form @submit.prevent="Buscar">
+        <div class="flex flex-wrap items-center">             
+            <!-- Campo de búsqueda para carreras -->
+            <linkAgregar :href="route('cat_anuncios.create')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                Agregar
+            </linkAgregar>
+
+                <TextInput
+                    type="text" 
+                    class="flex-grow w-full sm:w-auto mx-2" 
+                    placeholder="Buscar Carrera" 
+                    v-model="formBuscar.search" 
+                />
+                <br>
+                <br>
+                <br>
+                <PrimaryButton>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+    
+                    Buscar
+                </PrimaryButton>
+            </div>
+        </form>
+
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
                 <div class="w-full overflow-x-auto">
@@ -164,8 +222,8 @@ onMounted(() => {
                             </tr>
 
                         </tbody>
-
                     </table>
+                    <Pagination :links="links" />
                 </div>
             </div>
         </div>

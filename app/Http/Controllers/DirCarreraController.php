@@ -41,15 +41,44 @@ class DirCarreraController extends Controller
 
     }
 
-    public function index()
+    public function index(Request $request)
     {
         //
-        $DirCarrera = DirCarrera::with('user')->paginate(12); 
+        if($request->has('busqueda') && $request->busqueda != ''){
+            $DirCarrera = DirCarrera::with('user')
+            ->join('users', 'dir_carrera.id_userDir', '=', 'users.id')
+            ->where('users.name', 'like', '%' . $request->busqueda . '%')
+            ->orWhere('users.email', 'like', '%' . $request->busqueda . '%')
+            ->orWhere('users.Username', 'like', '%' . $request->busqueda . '%')
+            ->orWhere('users.ApellidoP', 'like', '%' . $request->busqueda . '%')
+            ->orWhere('users.ApellidoM', 'like', '%' . $request->busqueda . '%')
+            ->orWhere('users.Telefono', 'like', '%' . $request->busqueda . '%')
+            ->orWhere('users.Sexo', 'like', '%' . $request->busqueda . '%')
+            ->paginate(5)
+            ->withQueryString();
+        }else{
+            $DirCarrera = DirCarrera::with('user')->paginate(5); 
+        }
+
         return Inertia::render('Pages_DirCarrera/index', [
             'DirCarrera' => $DirCarrera,
         ]);
 
     }
+    public function Buscar(Request $request)
+    {
+        
+        // Puedes agregar validaciones si es necesario
+        $DirCarrera = DirCarrera::with('user')
+            ->join('users', 'dir_carrera.id_userDir', '=', 'users.id')
+            ->where('users.name', 'like', '%' . $request->nombreDir . '%') // Ajusta el campo según sea necesario
+            ->get();
+
+        return response()->json([
+            'DirCarrera' => $DirCarrera,
+        ]);
+    }
+
 
     /**
      * Show the form for creating a new resource.

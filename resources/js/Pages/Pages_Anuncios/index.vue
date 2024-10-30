@@ -9,7 +9,10 @@ import linkAgregar from '@/Components/linkAgregar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch  } from 'vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import TextInput from '@/Components/TextInput.vue';
 import Swal from 'sweetalert2'
 
 const props = defineProps({
@@ -93,15 +96,23 @@ onMounted(() => {
     }
 });
 
+const valoresBusqueda = {
+    Titulo: '',
+};
+const formBuscar = useForm(valoresBusqueda);
+
+const Buscar = () => {
+    formBuscar.get(route('anuncios.index'));
+};
 </script>
 
 
 <template>
-    <Head title="Gestion categorias" />
+    <Head title="Gestion Anuncios" />
     
     <AuthenticatedLayout>
         <template #header>
-            Categoria de anuncios
+            Gestión de anuncios
         </template>
         <div v-if="pageProps.flash.message" class="inline-flex max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden ">
             <div class="flex justify-center items-center w-12 bg-green-500">
@@ -117,15 +128,35 @@ onMounted(() => {
             </div>
         </div>
         <br>
-        <div>
+        <form @submit.prevent="Buscar">
+        <div class="flex flex-wrap items-center">             
+            <!-- Campo de búsqueda para carreras -->
             <linkAgregar :href="route('anuncios.create')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            Agregar
-        </linkAgregar> 
-        <br>
-        </div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                Agregar
+            </linkAgregar>
+
+                <TextInput
+                    type="text" 
+                
+                    class="flex-grow w-full sm:w-auto mx-2" 
+                    placeholder="Buscar Carrera" 
+                    v-model="formBuscar.Titulo" 
+                />
+                <br>
+                <br>
+                <br>
+                <PrimaryButton>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+    
+                    Buscar
+                </PrimaryButton>
+            </div>
+        </form>
         
         
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -146,6 +177,11 @@ onMounted(() => {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y ">
+                            <tr v-if="anuncios.length === 0" class="text-gray-700">
+                                <td class="px-4 py-3 text-sm" colspan="8">
+                                    No hay anuncios
+                                </td>
+                            </tr>
                             <tr v-for="a,i in anuncios":key="a.idAnuncio" class="text-gray-700">
                                 <td class="px-4 py-3 text-sm">
                                     {{(i+1)}}

@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Models\Carrera;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Auth\Events\Registered;
 use App\Models\User;
 use App\Models\Egresado;
 use Illuminate\Support\Facades\Hash;
@@ -20,24 +21,49 @@ class EgresadoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
         $user = Auth::user();
         if($user->Rol == 'DirCarrera'){
             $id = $user->dirCarrera->idDirCarrera;
-            
-            $egresados = Egresado::join('carrera', 'egresado.Carrera', '=', 'carrera.idCarrera')
-            ->where('carrera.id_DirCarrera', $id)
-            ->with('user', 'carrera') 
-            ->paginate(12);
-            return Inertia::render('Pages_Egresados/index', [
-                'egresados' => $egresados,
-            ]);
 
+            if($request->has('busqueda') && $request->busqueda !=''){
+                $egresados = Egresado::join('carrera', 'egresado.Carrera', '=', 'carrera.idCarrera')
+                ->join('users', 'egresado.Id_user', '=', 'users.id')
+                ->where('carrera.id_DirCarrera', $id)
+                ->with('user', 'carrera')
+                ->where(function($query) use ($request) {
+                    $query->where('users.name', 'like', '%' . $request->busqueda . '%')
+                        ->orWhere(DB::raw("CONCAT(users.name, ' ', users.ApellidoP, ' ', users.ApellidoM)"), 'like', '%' . $request->busqueda . '%');
+                })
+                ->paginate(6)
+                ->withQueryString();
+            }else{
+                $egresados = Egresado::join('carrera', 'egresado.Carrera', '=', 'carrera.idCarrera')
+                ->where('carrera.id_DirCarrera', $id)
+                ->with('user', 'carrera') 
+                ->paginate(6);
+            }
+
+        }else{
+            if($request->has('busqueda') && $request->busqueda !=''){
+                $egresados = Egresado::join('carrera', 'egresado.Carrera', '=', 'carrera.idCarrera')
+                ->join('users', 'egresado.Id_user', '=', 'users.id')
+                ->with('user', 'carrera')
+                ->where(function($query) use ($request) {
+                    $query->where('users.name', 'like', '%' . $request->busqueda . '%')
+                        ->orWhere(DB::raw("CONCAT(users.name, ' ', users.ApellidoP, ' ', users.ApellidoM)"), 'like', '%' . $request->busqueda . '%');
+                })
+                ->paginate(6)
+                ->withQueryString();
+            }else{
+                $egresados = Egresado::with('user', 'Carrera')
+                ->paginate(6);
+
+            }
         }
-        $egresados = Egresado::with('user','Carrera')
-        ->paginate(12);
+
         return Inertia::render('Pages_Egresados/index', [
             'egresados' => $egresados,
         ]);
@@ -156,9 +182,43 @@ class EgresadoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request)
     {
-        //
+        $user = Auth::user();
+
+        if ($user->Rol == 'DirCarrera') {
+            $id = $user->dirCarrera->idDirCarrera;
+
+            // Consulta para egresados asociados a la carrera del director
+            $egresados = Egresado::join('carrera', 'egresado.Carrera', '=', 'carrera.idCarrera')
+                ->join('users', 'egresado.Id_user', '=', 'users.id')
+                ->where('carrera.id_DirCarrera', $id)
+                ->with('user', 'carrera')
+                ->where(function($query) use ($request) {
+                    $query->where('users.name', 'like', '%' . $request->nombreEgresado . '%')
+                        ->orWhere(DB::raw("CONCAT(users.name, ' ', users.ApellidoP, ' ', users.ApellidoM)"), 'like', '%' . $request->nombreEgresado . '%');
+                })
+                ->get();
+
+            return response()->json([
+                'egresados' => $egresados,
+            ]);
+        }
+
+        // Consulta para todos los egresados
+        $egresados = Egresado::with('user', 'Carrera')
+            ->join('users', 'egresado.Id_user', '=', 'users.id')
+            ->where(function($query) use ($request) {
+                $query->where('users.name', 'like', '%' . $request->nombreEgresado . '%')
+                    ->orWhere(DB::raw("CONCAT(users.name, ' ', users.ApellidoP, ' ', users.ApellidoM)"), 'like', '%' . $request->nombreEgresado . '%');
+            })
+            ->get();
+
+        return response()->json([
+            'egresados' => $egresados,
+        ]);
+        
+
     }
 
     public function showEgresado()

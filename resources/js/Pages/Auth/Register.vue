@@ -5,6 +5,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Swal from 'sweetalert2'
+
 import { ref } from 'vue';
 
 const form = useForm({
@@ -46,8 +48,25 @@ function generateYearRange(start, end) {
 }
 
 const submit = () => {
+    Swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera mientras se envían los datos...',
+        allowOutsideClick: false, // Deshabilita que el usuario cierre la alerta
+        didOpen: () => {
+            Swal.showLoading(); // Muestra el spinner
+        }
+    });
     form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+        onFinish: () => {
+            Swal.close();
+            form.reset('password', 'password_confirmation');
+        },
+        onError: () => {
+        // Enfocar el primer campo de entrada con error
+            Swal.close();
+            const firstErrorFieldId = Object.keys(form.errors)[0];
+            document.getElementById(firstErrorFieldId).focus();
+        }
     });
 };
 
@@ -176,7 +195,7 @@ const submit = () => {
                         <InputLabel for="telefono" value="Teléfono" />
                         <TextInput
                             id="telefono"
-                            type="text"
+                            type="tel"
                             class="mt-1 block w-full"
                             v-model="form.telefono"
                             required

@@ -9,13 +9,16 @@ import linkAgregar from '@/Components/linkAgregar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue';
-import { ref, onMounted} from 'vue';
+import { ref, onMounted,watch} from 'vue';
 import Swal from 'sweetalert2'
+import TextInput from '@/Components/TextInput.vue';
+import axios from 'axios';
+import { Inertia } from '@inertiajs/inertia';
+
 
 const props = defineProps({
     carreras:{
-        type: Object,
-        default: () => ({ data: [], links: [] })
+        type: Object
     }
 });
 
@@ -24,6 +27,10 @@ const {props:pageProps} = usePage();
 const carreras = ref(props.carreras.data);
 const links = ref(props.carreras.links);
 
+
+const imageError = (event) => {
+    event.target.src = '/img/image0_0.jpg'; // Ruta de la imagen por defecto
+};
 
 const v =ref({id:'',NombreCarrera:'',Descripcion:'',PlanEstudios:'',UbicacionOficinas:'',nombreDir:'',descripciondir:'',fechaAsginacion:''});
 const showModalView = ref(false);
@@ -53,6 +60,7 @@ const closeModalViwe = () => {
 const valoresIniviales = {
     id:0,
 };
+
 const form = useForm(valoresIniviales);
 
 onMounted(() => {
@@ -63,10 +71,12 @@ onMounted(() => {
     }
 });
 
+
+
 const submit = (a) => {
     Swal.fire({
-        title: `¿Deseas eliminar ${a.NombreCarrera}?`,
-        text: `No podrás revertir este proceso ${a.idCarrera}`,
+        title: `¿Deseas eliminar la carrera ${a.NombreCarrera}?`,
+        text: `No podrás revertir este proceso `,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -96,6 +106,16 @@ const submit = (a) => {
         }
     });
 };
+const valoresBusqueda = {
+    nombreCarrera: '',
+};
+const formBuscar = useForm(valoresBusqueda);
+
+const buscarCarrera = () => {
+    formBuscar.get(route('carreras.indexGestion'));
+};
+
+
 
 </script>
 
@@ -120,12 +140,36 @@ const submit = (a) => {
             </div>
         </div>
         <br>
-        <linkAgregar :href="route('carreras.create')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            Agregar
-        </linkAgregar> 
+        <form @submit.prevent="buscarCarrera">
+        <div class="flex flex-wrap items-center">             
+            <!-- Campo de búsqueda para carreras -->
+            <linkAgregar :href="route('carreras.create')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                Agregar
+            </linkAgregar> 
+
+                <TextInput
+                    type="text" 
+                
+                    class="flex-grow w-full sm:w-auto mx-2" 
+                    placeholder="Buscar Carrera" 
+                    v-model="formBuscar.nombreCarrera" 
+                />
+                <br>
+                <br>
+                <br>
+                <PrimaryButton>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+    
+                    Buscar
+                </PrimaryButton>
+            </div>
+        </form>
+
         
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
@@ -145,6 +189,10 @@ const submit = (a) => {
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y ">
+                            <tr v-if="carreras.length === 0" class="text-gray-700">
+                                <td class="px-4 py-3 text-sm" colspan="9">No hay carreras registradas</td>
+                            </tr>
+                            
                             <tr v-for="a,i in carreras":key="a.idCarrera" class="text-gray-700">
                                 <td class="px-4 py-3 text-sm">
                                     {{(i+1)}}
@@ -155,7 +203,7 @@ const submit = (a) => {
                                 <td class="px-4 py-3 text-sm">{{a.Descripcion}}</td>
                                 <td  class="px-4 py-3 text-sm">
                                     
-                                        <img v-if="a.PlanEstudios" :src="`/storage/${a.PlanEstudios}`" alt="Imagen" class="w-25 h-25  object-cover" />
+                                        <img v-if="a.PlanEstudios" @error="imageError"  :src="`/storage/${a.PlanEstudios}`" alt="Imagen" class="w-25 h-25  object-cover" />
                                 </td>
                                 <td class="px-4 py-3 text-sm">{{a.UbicacionOficinas}}</td>
                                 <td v-if="a.id_DirCarrera==null" class="px-4 py-3 text-sm">No hay director asignado</td>
@@ -202,7 +250,7 @@ const submit = (a) => {
                 <p > Director: <span  class="text-lg font-medium text-gray-900">{{ v.nombreDir }}</span></p>
                 <p > Info del Director: <span  class="text-lg font-medium text-gray-900">{{ v.descripciondir }}</span></p>
                 <p > Fecha de asginacion del director: <span  class="text-lg font-medium text-gray-900">{{ v.fechaAsginacion }}</span></p>
-                <img v-if="v.PlanEstudios"  :src="`/storage/${v.PlanEstudios}`" alt="Imagen" class="w-25 h-25 object-cover" />
+                <img @error="imageError" v-if="v.PlanEstudios"  :src="`/storage/${v.PlanEstudios}`" alt="Imagen" class="w-25 h-25 object-cover" />
 
             </div>
             <div class="m-6 flex justify-end">
