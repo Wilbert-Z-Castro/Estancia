@@ -29,7 +29,7 @@ const links = ref(props.carreras.links);
 
 
 const imageError = (event) => {
-    event.target.src = '/img/image0_0.jpg'; // Ruta de la imagen por defecto
+    event.target.src = '/img/NotFund.jpg'; // Ruta de la imagen por defecto
 };
 
 const v =ref({id:'',NombreCarrera:'',Descripcion:'',PlanEstudios:'',UbicacionOficinas:'',nombreDir:'',descripciondir:'',fechaAsginacion:''});
@@ -124,7 +124,7 @@ const buscarCarrera = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            Carreras
+            Gestión de Carreras
         </template>
         <div v-if="pageProps.flash.message" class="inline-flex max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden ">
             <div class="flex justify-center items-center w-12 bg-green-500">
@@ -177,15 +177,16 @@ const buscarCarrera = () => {
                     <table class="w-full whitespace-no-wrap">
                         <thead>
                             <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b ">
-                                <th class="px-4 py-3">#Numero</th>
-                                <th class="px-4 py-3">Nombre</th>
-                                <th class="px-4 py-3">Descripcion</th>
+                                <th class="px-4 py-3">#Número</th>
+                                <th class="px-4 py-3">Abreviatura</th>
+                                <th class="px-4 py-3">Nombre completo</th>
                                 <th class="px-4 py-3">Plan de Estudio</th>
-                                <th class="px-4 py-3">UbicacionOficinas</th>
+                                <th class="px-4 py-3">Ubicación de las Oficinas</th>
                                 <th class="px-4 py-3">Director</th>
                                 <th class="px-4 py-3">Editar</th>
-                                <th class="px-4 py-3">Ver</th>
                                 <th class="px-4 py-3">Borrar</th>
+                                <th class="px-4 py-3">Ver</th>
+
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y ">
@@ -232,6 +233,10 @@ const buscarCarrera = () => {
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     <PrimaryButton @click="openModalViwe(a)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        </svg>
                                         Ver
                                     </PrimaryButton>
                                 </td>
@@ -245,11 +250,10 @@ const buscarCarrera = () => {
         <Modal :show="showModalView" @close="closeModalViwe">
             <div class="p-6">
                 <p > Carrera: <span  class="text-lg font-medium text-gray-900">{{ v.NombreCarrera }}</span></p>
-                <p > Descripcion: <span  class="text-lg font-medium text-gray-900">{{ v.Descripcion }}</span></p>
-                <p > Ubicacion de Oficinas: <span  class="text-lg font-medium text-gray-900">{{ v.UbicacionOficinas }}</span></p>
+                <p > Ubicación de las oficinas: <span  class="text-lg font-medium text-gray-900">{{ v.UbicacionOficinas }}</span></p>
                 <p > Director: <span  class="text-lg font-medium text-gray-900">{{ v.nombreDir }}</span></p>
-                <p > Info del Director: <span  class="text-lg font-medium text-gray-900">{{ v.descripciondir }}</span></p>
-                <p > Fecha de asginacion del director: <span  class="text-lg font-medium text-gray-900">{{ v.fechaAsginacion }}</span></p>
+                <p > Info. del Director: <span  class="text-lg font-medium text-gray-900">{{ v.descripciondir }}</span></p>
+                <p > Fecha de asignación del director: <span class="text-lg font-medium text-gray-900">{{ v.fechaAsginacion }}</span></p>
                 <img @error="imageError" v-if="v.PlanEstudios"  :src="`/storage/${v.PlanEstudios}`" alt="Imagen" class="w-25 h-25 object-cover" />
 
             </div>

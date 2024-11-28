@@ -97,7 +97,6 @@ class PanelController extends Controller
         ->join('ofertacarrera', 'oferta_trabajo.idOfertaTrabajo', '=', 'ofertacarrera.idoferta')
         ->join('carrera', 'ofertacarrera.idcarrera', '=', 'carrera.idCarrera')
         ->orderBy('oferta_trabajo.created_at', 'desc') 
-        ->where('carrera.idCarrera', $carreraUser->idCarrera)
         ->get();
         $carreras = Carrera::select('idCarrera','NombreCarrera')->get();
 

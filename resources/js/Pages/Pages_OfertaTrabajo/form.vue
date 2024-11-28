@@ -95,7 +95,7 @@ const SectorEmpresaria=[
                                 class="mt-1 block w-full"
                                 v-model="form.TituloOferta"
                                 required
-                                placeholder="Ingrese el Titulo de la oferta"
+                                placeholder="Ingrese el Título de la oferta"
                                 autocomplete="TituloOferta"
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.TituloOferta" />
@@ -127,7 +127,7 @@ const SectorEmpresaria=[
                                 class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                 v-model="form.Requisitos"
                                 required
-                                placeholder="Lista de requsitos"  
+                                placeholder="Ingresar Lista de requsitos"  
                             />
                             <InputError class="mt-2" :message="form.errors.Requisitos" />
                         </div>
@@ -177,7 +177,7 @@ const SectorEmpresaria=[
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.Empresa" />
                         </div>
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="Ubicacion" value="Ubicacion" />
+                            <InputLabel for="Ubicacion" value="Ubicación" />
                             <TextInput
                                 id="Ubicacion"
                                 type="text"
@@ -193,7 +193,7 @@ const SectorEmpresaria=[
                     <!-- Fila 4: Imágenes -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-12 mt-4">
-                            <InputLabel for="imagenes" value="Imágenes" />
+                            <InputLabel for="imagenes" value="Seleciona la imagen" />
                             <input
                                 id="imagenes"
                                 type="file"

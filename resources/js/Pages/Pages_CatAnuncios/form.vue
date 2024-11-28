@@ -45,7 +45,7 @@ const colores = [
     <Head title="Gestion categorias formulario" />
     <AuthenticatedLayout>
         <template #header>
-            Insertar Categoria de anuncios
+            Insertar Categoría de anuncios
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ">
             <div class="p-6 mx-2 border-b border-gray-200">
@@ -60,6 +60,7 @@ const colores = [
                                 v-model="form.Nombre"
                                 required
                                 autofocus
+                                placeholder="Ingresear el Nombre de la categoria"
                                 autocomplete="Nombre"
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.Nombre" />
@@ -73,6 +74,7 @@ const colores = [
                                 v-model="form.Descripcion"
                                 required
                                 autofocus
+                                placeholder="Ingrese la descripción de la categoria"
                                 autocomplete="Descripcion"
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.Descripcion" />

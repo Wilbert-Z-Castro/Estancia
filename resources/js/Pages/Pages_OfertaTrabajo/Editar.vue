@@ -74,7 +74,7 @@ const handleFileUpload = (event) => {
 const Eliminar = (a) => {
     event.preventDefault(); 
     Swal.fire({
-        title: `¿Deseas eliminar esta imagen? ${a}`,
+        title: `¿Deseas eliminar esta imagen? `,
         text: `No podrás revertir este proceso`,
         icon: "warning",
         showCancelButton: true,
@@ -116,7 +116,7 @@ const SectorEmpresaria=[
 </script>
 
 <template>
-    <Head title="Gestion categorias formulario" />
+    <Head title="Actualizar oferta" />
     <AuthenticatedLayout>
         <template #header>
             Actualizar datos de la oferta
@@ -144,7 +144,7 @@ const SectorEmpresaria=[
                     <!-- Fila 2 -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-12 mt-4">
-                            <InputLabel for="Descripcion" value="Descripción" />
+                            <InputLabel for="Descripcion" value="Descripción de la oferta" />
                             <TextArea
                                 id="Descripcion"
                                 class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
@@ -211,13 +211,13 @@ const SectorEmpresaria=[
                                 class="mt-1 block w-full"
                                 v-model="form.Empresa"
                                 required
-                                placeholder="Nombre de la empresa"
+                                placeholder="Ingrese el nombre de la empresa"
                                 autocomplete="Empresa"
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.Empresa" />
                         </div>
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="Ubicacion" value="Ubicacion" />
+                            <InputLabel for="Ubicacion" value="Ubicación" />
                             <TextInput
                                 id="Ubicacion"
                                 type="text"

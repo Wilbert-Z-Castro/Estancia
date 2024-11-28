@@ -365,11 +365,11 @@ class EgresadoController extends Controller
             'Carrera' => 'required|integer',
             'Matricula' => 'required|string|max:45',
             'AnioEgreso' => 'required|integer|min:2007',
-            'Direccion' => 'required|string|max:45',
+            'Direccion' => 'required|string|max:255',
             'EmpresaActual' => 'required|string|max:100',
             'PuestoTrabajo' => 'required|string|max:100',
             'AniosLaboral' => 'required|integer|min:1',
-            'Adicional' => 'required|string|max:255',
+            'Adicional' => 'required|string',
             'SectorEmpresaria' => 'required|string|max:100',
 
         ];
@@ -395,7 +395,7 @@ class EgresadoController extends Controller
             'AnioEgreso.integer' => 'El campo año de egreso debe ser un número entero.',
             'AnioEgreso.min' => 'El campo año de egreso debe ser al menos 2007.',
             'Direccion.required' => 'El campo dirección es obligatorio.',
-            'Direccion.max' => 'El campo dirección no debe tener más de 45 caracteres.',
+            'Direccion.max' => 'El campo dirección no debe tener más de 255 caracteres.',
             'EmpresaActual.required' => 'El campo empresa actual es obligatorio.',
             'EmpresaActual.max' => 'El campo empresa actual no debe tener más de 100 caracteres.',
             'PuestoTrabajo.required' => 'El campo puesto de trabajo es obligatorio.',
@@ -404,7 +404,6 @@ class EgresadoController extends Controller
             'AniosLaboral.integer' => 'El campo años laborales debe ser un número entero.',
             'AniosLaboral.min' => 'El campo años laborales debe ser al menos 1.',
             'Adicional.required' => 'El campo información adicional es obligatorio.',
-            'Adicional.max' => 'El campo información adicional no debe tener más de 255 caracteres.',
             'SectorEmpresaria.required' => 'El campo sector empresarial es obligatorio.',
             'SectorEmpresaria.max' => 'El campo sector empresarial no debe tener más de 100 caracteres.',
         ];

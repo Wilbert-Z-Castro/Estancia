@@ -80,7 +80,7 @@ onMounted(() => {
     <Head title="Editar Director" />
     <AuthenticatedLayout>
         <template #header>
-            Actualizar registro de Director
+            Actualizar registro del Director
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ">
             <div class="p-6 mx-2 border-b border-gray-200">
@@ -95,17 +95,19 @@ onMounted(() => {
                                 v-model="form.name"
                                 required
                                 autofocus
+                                placeholder="Ingresa su nombre"
                                 autocomplete="name"
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.name" />
                         </div>
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="username" value="Apodo" />
+                            <InputLabel for="username" value="Apodo o nombre de usuario" />
                             <TextInput
                                 id="username"
                                 type="text"
                                 class="mt-1 block w-full"
                                 v-model="form.username"
+                                placeholder="Ingresa apodo o nombre de usuario"
                                 required
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.username" />
@@ -120,6 +122,7 @@ onMounted(() => {
                                 class="mt-1 block w-full"
                                 v-model="form.email"
                                 required
+                                placeholder="Ingresa su correo electrónico"
                                 autocomplete="email"
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.email" />
@@ -132,6 +135,7 @@ onMounted(() => {
                             <TextInput
                                 id="current_password"
                                 type="password"
+                                placeholder="Ingresa su contraseña actual"
                                 class="mt-1 block w-full"
                                 v-model="form.current_password"
                                 
@@ -144,6 +148,7 @@ onMounted(() => {
                             <TextInput
                                 id="password"
                                 type="password"
+                                placeholder="Ingresa su nueva contraseña"
                                 class="mt-1 block w-full"
                                 v-model="form.password"
                                 
@@ -158,6 +163,7 @@ onMounted(() => {
                             <TextInput
                                 id="password_confirmation"
                                 type="password"
+                                placeholder="Confirma su nueva contraseña"
                                 class="mt-1 block w-full"
                                 v-model="form.password_confirmation"
                                 
@@ -173,6 +179,7 @@ onMounted(() => {
                             <TextInput
                                 id="apellidoP"
                                 type="text"
+                                placeholder="Ingresa su apellido paterno"
                                 class="mt-1 block w-full"
                                 v-model="form.apellidoP"
                                 required
@@ -184,6 +191,7 @@ onMounted(() => {
                             <TextInput
                                 id="apellidoM"
                                 type="text"
+                                placeholder="Ingresa su apellido materno"
                                 class="mt-1 block w-full"
                                 v-model="form.apellidoM"
                                 required
@@ -193,10 +201,11 @@ onMounted(() => {
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="telefono" value="Teléfono" />
+                            <InputLabel for="telefono" value="Número de teléfono" />
                             <TextInput
                                 id="telefono"
                                 type="number"
+                                placeholder="Ingresa su número de teléfono"
                                 class="mt-1 block w-full"
                                 v-model="form.telefono"
                                 required
@@ -222,11 +231,12 @@ onMounted(() => {
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-12 mt-4">
-                            <InputLabel for="Descripcion" value="Descripción" />
+                            <InputLabel for="Descripcion" value="Perfil profesional del director" />
                             <TextArea
                                 id="Descripcion"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 v-model="form.Descripcion"
+                                placeholder="Ingresa el perfil profesional del director"
                             />
                             <InputError class="mt-2" :message="form.errors.Descripcion" />
                         </div>
@@ -240,6 +250,7 @@ onMounted(() => {
                                 class="mt-1 block w-full"
                                 v-model="form.AnioInstitucion"
                                 required
+                                placeholder="Ingresa los años de servicio en la institución"
                                 min="1"
                                 :max="new Date().getFullYear()"
                             />
@@ -250,6 +261,7 @@ onMounted(() => {
                             <TextInput
                                 id="FechaAsignacion"
                                 type="date"
+                                placeholder="Ingresa la fecha de asignación del puesto"
                                 class="mt-1 block w-full"
                                 v-model="form.FechaAsignacion"
                                 required

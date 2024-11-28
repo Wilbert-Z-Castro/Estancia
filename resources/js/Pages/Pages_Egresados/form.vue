@@ -66,9 +66,10 @@ const SectorEmpresaria=[
     { value: "Terciario",label: "Terciario" },
     { value: "Secundario",label: "Secundario" },
     { value: "Educativo",label: "Educativo" },
-    { value: "Publico",label: "Publico" },
+    { value: "Público",label: "Público" },
     { value: "Ganadero",label: "Ganadero" },
     { value: "Empresarial",label: "Empresarial" },
+    { values:"Otro",label:"Otro"},
     
 ]
 
@@ -144,6 +145,7 @@ onMounted(() => {
                                 required
                                 autofocus
                                 autocomplete="name"
+                                placeholder="Ingresar nombre del egresado"
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.name" />
                         </div>
@@ -155,6 +157,8 @@ onMounted(() => {
                                 class="mt-1 block w-full"
                                 v-model="form.username"
                                 required
+                                placeholder="Ingresa el apodo o nombre de usuario del egresado"
+
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.username" />
                         </div>
@@ -169,19 +173,22 @@ onMounted(() => {
                                 v-model="form.email"
                                 required
                                 autocomplete="email"
+                                placeholder="Ingresa el correo electrónico del egresado"
+
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.email" />
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="password" value="Cambiar Contraseña" />
+                            <InputLabel for="password" value="Contraseña" />
                             <TextInput
                                 id="password"
                                 type="password"
                                 class="mt-1 block w-full"
                                 v-model="form.password"
                                 required
+                                placeholder="Ingresa la contraseña "
                                 
                             />
                             <InputError class="mt-2" :message="form.errors.password" />
@@ -194,6 +201,7 @@ onMounted(() => {
                                 class="mt-1 block w-full"
                                 v-model="form.password_confirmation"
                                 required
+                                placeholder="Confirma la contraseña"
                             />
                             <InputError class="mt-2" :message="form.errors.password_confirmation" />
                         </div>
@@ -209,6 +217,7 @@ onMounted(() => {
                                 class="mt-1 block w-full"
                                 v-model="form.apellidoP"
                                 required
+                                placeholder="Ingresar apellido paterno del egresado"
                             />
                             <InputError class="mt-2" :message="form.errors.apellidoP" />
                         </div>
@@ -222,6 +231,7 @@ onMounted(() => {
                                 class="mt-1 block w-full"
                                 v-model="form.apellidoM"
                                 required
+                                placeholder="Ingresar apellido materno del egresado"
                             />
                             <InputError class="mt-2" :message="form.errors.apellidoM" />
                         </div>
@@ -229,7 +239,7 @@ onMounted(() => {
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <!-- Columna para 'Teléfono' -->
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="telefono" value="Teléfono" />
+                            <InputLabel for="telefono" value="Número de teléfono" />
                             <TextInput
                                 id="telefono"
                                 type="number"
@@ -238,6 +248,7 @@ onMounted(() => {
                                 required
                                 min="1"
                                 step="1"
+                                placeholder="Ingresar número de teléfono del egresado"
                             />
                             <InputError class="mt-2" :message="form.errors.telefono" />
                         </div>
@@ -262,13 +273,15 @@ onMounted(() => {
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 ">    
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="EmpresaActual" value="EmpresaActual" />
+                            <InputLabel for="EmpresaActual" value="Empresa" />
                             <TextInput
                                 id="EmpresaActual"
                                 type="text"
                                 class="mt-1 block w-full"
                                 v-model="form.EmpresaActual"
                                 required
+                                placeholder="Ingresa el nombre de la empresa actual del egresado"
+
                             />
                             <InputError class="mt-2" :message="form.errors.EmpresaActual" />
                         </div>
@@ -297,6 +310,8 @@ onMounted(() => {
                                 class="mt-1 block w-full"
                                 v-model="form.Direccion"
                                 required
+                                placeholder="Ingresa la dirección del egresado"
+
                             />
                             <InputError class="mt-2" :message="form.errors.Direccion" />
                         </div>
@@ -308,6 +323,7 @@ onMounted(() => {
                                 class="mt-1 block w-full"
                                 v-model="form.Matricula"
                                 required
+                                placeholder="Ingresa la matricula del egresado"
                             />
                             <InputError class="mt-2" :message="form.errors.Matricula" />
                         </div>
@@ -324,6 +340,7 @@ onMounted(() => {
                                 required
                                 min="2007"
                                 step="1"
+                                placeholder="Ingresa el año de egreso del egresado"
                             />
                             <InputError class="mt-2" :message="form.errors.AnioEgreso" />
                         </div>
@@ -344,7 +361,7 @@ onMounted(() => {
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="AniosLaboral" value="Año de laborando" />
+                            <InputLabel for="AniosLaboral" value="Años de experiencia laboral" />
                             <TextInput
                                 id="AniosLaboral"
                                 type="number"
@@ -353,6 +370,7 @@ onMounted(() => {
                                 required
                                 min="1"
                                 step="1"
+                                placeholder="Ingresa los años de experiencia laboral del egresado"
                             />
                             <InputError class="mt-2" :message="form.errors.AniosLaboral" />
                         </div>
@@ -379,6 +397,7 @@ onMounted(() => {
                                 class="mt-1 block w-full"
                                 v-model="form.Adicional"
                                 required
+                                placeholder="Ingresa información adicional del egresado"
                             />
                             <InputError class="mt-2" :message="form.errors.Adicional" />
                         </div>

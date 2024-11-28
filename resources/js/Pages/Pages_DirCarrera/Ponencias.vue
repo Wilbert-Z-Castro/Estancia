@@ -18,7 +18,6 @@
         </linkAgregar> 
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
-                {{   }}
                 <div v-if="$page.props.flash.message" class="inline-flex max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden ">
                     <div class="flex justify-center items-center w-12 bg-green-500">
                             <svg class="h-6 w-6 fill-current text-white" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
@@ -32,7 +31,6 @@
                         </div>
                     </div>
                 </div>
-                {{  }}
                 <div v-for="a in ponencias":key="a.idPonencias">
                     <div  class="flex justify-center mt-6"  > 
                         <div class="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow md:flex-row  dark:border-gray-700 dark:bg-gray-800 ">
@@ -54,7 +52,7 @@
                                             <a href="#">
                                                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">Egresado: {{ i.user.name }}</h5>
                                             </a>
-                                            <p class="mb-3 font-normal text-gray-700 ">Estado de la invitacion: {{i.pivot.Estado}}</p>
+                                            <p class="mb-3 font-normal text-gray-700 ">Estado de la invitación: {{i.pivot.Estado}}</p>
                                             <div  v-show="i.pivot.Estado != 'Pendiente'">
                                                 <p class="mb-3 font-normal text-gray-700 ">{{  }}</p>
                                                 <a  :href="route('Ponencias.VerMenesaje',{id: i.pivot.idAceptacionPonencia})" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 ">

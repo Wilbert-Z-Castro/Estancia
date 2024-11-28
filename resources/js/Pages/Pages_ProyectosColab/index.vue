@@ -26,27 +26,11 @@ const proyectos = ref(props.proyectos.data);
 const links = ref(props.proyectos.links);
 
 
-const v =ref({id:'',Matricula:'',carrera:'',AnioEgreso:'',EmpresaActual:'',Adicional:'',AniosLaboral:'',PuestoTrabajo:'',SectorEmpresaria:'',name:'',email:'',ApellidoP:'',ApellidoM:'',Sexo:'',Telefono:'',Direccion:''});
+const v =ref({id:'',TituloProyecto:'',carrera:'',AnioEgreso:'',EmpresaActual:'',Adicional:'',AniosLaboral:'',PuestoTrabajo:'',SectorEmpresaria:'',name:'',email:'',ApellidoP:'',ApellidoM:'',Sexo:'',Telefono:'',Direccion:''});
 const showModalView = ref(false);
 
 const openModalViwe = (a) => {
-    v.value.id = a.idEgresado;
-    v.value.name = a.user.name;
-    v.value.email = a.user.email;
-    v.value.ApellidoP = a.user.ApellidoP;
-    v.value.ApellidoM = a.user.ApellidoM;
-    v.value.Sexo = a.user.Sexo;
-    v.value.Telefono = a.user.Telefono;
-    v.value.Direccion = a.Direccion;
-    v.value.FechaAsignacion = a.FechaAsignacion;
-    v.value.Adicional = a.Adicional;
-    v.value.AniosLaboral = a.AniosLaboral;
-    v.value.EmpresaActual = a.EmpresaActual;
-    v.value.AnioEgreso = a.AnioEgreso;
-    v.value.Matricula = a.Matricula;
-    v.value.SectorEmpresaria = a.SectorEmpresaria;
-    v.value.PuestoTrabajo = a.PuestoTrabajo;
-    v.value.carrera = a.carrera.NombreCarrera;
+
     showModalView.value = true;
 
 }
@@ -65,7 +49,7 @@ const form = useForm(valoresIniviales);
 
 const submit = (a) => {
     Swal.fire({
-        title: `¿Deseas eliminar ${a}?`,
+        title: `¿Deseas eliminar el proyecto: ${a.TituloProyecto}?`,
         text: `No podrás revertir este proceso`,
         icon: "warning",
         showCancelButton: true,
@@ -74,21 +58,21 @@ const submit = (a) => {
         confirmButtonText: "Sí, Eliminar"
     }).then((result) => {
         if (result.isConfirmed) {
-            form.delete(route('egresado.destroy', a.idEgresado), {
+            form.delete(route('ProyectosColab.destroy', a.idProyectoColab), {
                 onSuccess: () => {
                    
-                    egresados.value = egresados.value.filter(item => item.idEgresado !== a.idEgresado);
+                    proyectos.value = proyectos.value.filter(item => item.idProyectoColab !== a.idProyectoColab);
                     
                     Swal.fire({
                         title: "Eliminado!",
-                        text: "El registro fue eliminado exitosamente",
+                        text: "El proyecto fue eliminado exitosamente",
                         icon: "success"
                     });
                 },
                 onError: () => {
                     Swal.fire({
                         title: "Error!",
-                        text: "Hubo un problema al eliminar el registro",
+                        text: "Hubo un problema al eliminar el proyecto",
                         icon: "error"
                     });
                 }
@@ -134,9 +118,7 @@ onMounted(() => {
             </svg>
             Crear Proyecto
         </linkAgregar> 
-        <p>
-            {{  }}
-        </p>
+ 
         
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
@@ -144,12 +126,11 @@ onMounted(() => {
                     <table class="w-full whitespace-no-wrap">
                         <thead>
                             <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b ">
-                                <th class="px-4 py-3">#Numero</th>
-                                <th class="px-4 py-3">TituloProyecto</th>
-                                <th class="px-4 py-3">Descripcion</th>
-                                <th class="px-4 py-3">FechaPublicacion</th>
+                                <th class="px-4 py-3"># Número</th>
+                                <th class="px-4 py-3">Título del Proyecto</th>
+                                <th class="px-4 py-3">Descripción</th>
+                                <th class="px-4 py-3">Fecha de Publicación</th>
                                 <th class="px-4 py-3">Editar</th>
-                                <th class="px-4 py-3">Ver</th>
                                 <th class="px-4 py-3">Borrar</th>
                             </tr>
                         </thead>
@@ -191,11 +172,7 @@ onMounted(() => {
                                     </form>
                                     
                                 </td>
-                                <td class="px-4 py-3 text-sm">
-                                    <PrimaryButton @click="openModalViwe(a)">
-                                        Ver
-                                    </PrimaryButton>
-                                </td>
+                                
                             </tr>
                         </tbody>
                     </table>
@@ -205,21 +182,7 @@ onMounted(() => {
         </div>
         <Modal :show="showModalView" @close="closeModalViwe">
             <div class="p-6">
-                <p > Nombre: <span  class="text-lg font-medium text-gray-900">{{ v.name }}</span></p>
-                <p>Email:<span  class="text-lg font-medium text-gray-900">{{v.email}}</span></p>
-                <p>Apellidos:<span  class="text-lg font-medium text-gray-900">{{v.ApellidoP}} {{v.ApellidoM}}</span></p>
-                <p>Sexo:<span  class="text-lg font-medium text-gray-900">{{v.Sexo}}</span></p>
-                <p>Telefono:<span  class="text-lg font-medium text-gray-900">{{v.Telefono}}</span></p> 
-                <p>Direccion:<span  class="text-lg font-medium text-gray-900">{{v.Direccion}}</span></p>
-                <p>Fecha de Asignacion:<span  class="text-lg font-medium text-gray-900">{{v.FechaAsignacion}}</span></p>
-                <p>Adicional:<span  class="text-lg font-medium text-gray-900">{{v.Adicional}}</span></p>
-                <p>Años Laboral:<span  class="text-lg font-medium text-gray-900">{{v.AniosLaboral}}</span></p>
-                <p>Empresa Actual:<span  class="text-lg font-medium text-gray-900">{{v.EmpresaActual}}</span></p>
-                <p>Sector Empresarial:<span  class="text-lg font-medium text-gray-900">{{v.SectorEmpresaria}}</span></p>
-                <p>Puesto de Trabajo:<span  class="text-lg font-medium text-gray-900">{{v.PuestoTrabajo}}</span></p>
-                <p>Año de Egreso:<span  class="text-lg font-medium text-gray-900">{{v.AnioEgreso}}</span></p>
-                <p>Carrera:<span  class="text-lg font-medium text-gray-900">{{v.carrera}}</span></p>
-                <p>Matricula:<span  class="text-lg font-medium text-gray-900">{{v.Matricula}}</span></p>
+                
 
 
             </div>

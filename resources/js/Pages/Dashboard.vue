@@ -183,12 +183,13 @@ onMounted(() => {
         <br>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
-                <p>Respaldo y restauracion de DB</p>
-                <p>En esta seccion podras realizar respaldos y restauraciones de la base de datos</p>
+                <p>Respaldo y restauración de DB</p>
+                <p>En esta sección podrás realizar respaldos y restauraciones de la base de datos</p>
+
                 <br>
                 <form @submit.prevent="submit">
 
-                    <InputLabel for="imagenes" value="Selecionar Archivo sql" />
+                    <InputLabel for="imagenes" value="Seleccionar archivo SQL" />
                         <input
                         id="imagenes"
                         type="file"
@@ -214,7 +215,7 @@ onMounted(() => {
                 <p>Información generar del sistema</p>
                 <div class="flex flex-wrap justify-between">
                     <div class="w-full sm:w-1/2 p-2 ">
-                        <h3 class="text-center font-semibold mb-2">Numero de Usuarios</h3>
+                        <h3 class="text-center font-semibold mb-2">Número de Usuarios</h3>
                         <div class="relative " style="padding-bottom: 50%;">
                             <BaseChart
                                 v-if="loaded"
@@ -228,7 +229,7 @@ onMounted(() => {
                         
                     </div>
                     <div class="w-full sm:w-1/2 p-2 ">
-                        <h3 class="text-center font-semibold mb-2">Numero de egresados por carrera</h3>
+                        <h3 class="text-center font-semibold mb-2">Número de egresados por carrera</h3>
                         <div class="relative " style="padding-bottom: 50%;">
                             <BaseChart
                                 v-if="loaded"

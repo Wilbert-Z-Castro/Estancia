@@ -7,7 +7,7 @@ use App\Models\Anuncio;
 use App\Models\CatAnuncio;
 use App\Models\ImagenAnuncio;
 use Illuminate\Support\Facades\Auth;
-
+use App\Rules\ImagenArrayValidation;
 
 class AnuncioController extends Controller
 {
@@ -57,21 +57,15 @@ class AnuncioController extends Controller
             'Titulo' => 'required|string|max:255',
             'Categoria' => 'required|integer',
             'Contenido' => 'required|string',
-            'imagenes' => 'nullable|array',
-            'imagenes.*' => 'file|mimes:jpeg,png,jpg,gif|max:2048',
+            'imagenes' => ['nullable', 'array', new ImagenArrayValidation],
         ], [
             'Titulo.required' => 'El título es obligatorio.',
-            'Titulo.string' => 'El título debe ser una cadena de caracteres.',
             'Titulo.max' => 'El título no puede tener más de 255 caracteres.',
             'Categoria.required' => 'La categoría es obligatoria.',
-            'Categoria.integer' => 'La categoría debe ser un número entero.',
             'Contenido.required' => 'El contenido es obligatorio.',
-            'Contenido.string' => 'El contenido debe ser una cadena de caracteres.',
             'imagenes.array' => 'Las imágenes deben ser un array.',
-            'imagenes.file' => 'Cada archivo debe ser una imagen válida.',
-            'imagenes.mimes' => 'Cada imagen debe ser de tipo: jpeg, png, jpg, gif.',
-            'imagenes.max' => 'Cada imagen no puede exceder los 2MB.',
         ]);
+    
 
         // Crear el anuncio
         $anuncio = new Anuncio();
@@ -147,8 +141,18 @@ class AnuncioController extends Controller
             'Titulo' => 'required|string|max:255',
             'Categoria' => 'required|integer',
             'Contenido' => 'required|string',
-            'imagenes.*' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048', // Validación de imágenes
+            'imagenes' => ['nullable', 'array', new ImagenArrayValidation],
+        ], [
+            'Titulo.required' => 'El título es obligatorio.',
+            'Titulo.string' => 'El título debe ser una cadena de texto.',
+            'Titulo.max' => 'El título no puede tener más de 255 caracteres.',
+            'Categoria.required' => 'La categoría es obligatoria.',
+            'Categoria.integer' => 'La categoría debe ser un número entero.',
+            'Contenido.required' => 'El contenido es obligatorio.',
+            'Contenido.string' => 'El contenido debe ser una cadena de texto.',
+            'imagenes.array' => 'Las imágenes deben ser un array.',
         ]);
+        
         $anuncio = Anuncio::find($id);
         $anuncio->Titulo = $request->input('Titulo');
         $anuncio->Categoria = $request->input('Categoria');

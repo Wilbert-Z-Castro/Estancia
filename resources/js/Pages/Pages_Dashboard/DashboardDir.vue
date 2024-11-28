@@ -55,7 +55,7 @@ const chartAnuncios = ref({
     labels: [], // Nombres de las carreras
     datasets: [
         {
-            label: 'Anuncios publicados por categoria',
+            label: 'Anuncios publicados por categoría',
             data: [], // Totales de anuncios por carrera
             backgroundColor: '#42A5F5',
         }
@@ -237,10 +237,10 @@ watch([fecha_inicioP, fecha_finP], () => {
 </script>
 
 <template>
-    <Head title="Panel de noticias" />
+    <Head title="Dashboard De director" />
     <AuthenticatedLayout>
         <template #header>
-            Panel principal
+            Dashboard de director
         </template>
         <br>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -250,19 +250,19 @@ watch([fecha_inicioP, fecha_finP], () => {
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 me-2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                         </svg>
-                        Crear pdf Egresados
+                        Crear PDF de egresados
                     </a>
                     <a :href="route('Ponencias.ReportePonencias')" target="_blank" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 inline-flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 me-2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                         </svg>
-                        Crear pdf anuncios y ponencias
+                        Crear PDF de anuncios y ponencias
                     </a>
                     <a :href="route('Carreras.ReporteCarreras')" target="_blank" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 inline-flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 me-2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                         </svg>
-                        Crear pdf carreras
+                        Crear PDF de carreras
                     </a>
 
                 </div>
@@ -287,7 +287,7 @@ watch([fecha_inicioP, fecha_finP], () => {
 
                     <!-- Segunda gráfica -->
                     <div class="w-full sm:w-1/2 p-2">
-                        <h3 class="text-center font-semibold mb-2">Numero de egresados por año de egreso</h3>
+                        <h3 class="text-center font-semibold mb-2">Número de egresados por año de egreso</h3>
                         <div class="relative" style="padding-bottom: 50%;">
                             <BaseChart
                                 v-if="loaded"
@@ -302,7 +302,7 @@ watch([fecha_inicioP, fecha_finP], () => {
 
                     <!-- Tercera gráfica -->
                     <div class="w-full sm:w-1/2 p-2">
-                        <h3 class="text-center font-semibold mb-2">Principales puesto de trabajo</h3>
+                        <h3 class="text-center font-semibold mb-2">Principales puestos de trabajo</h3>
                         <div class="relative" style="padding-bottom: 50%;">
                             <BaseChart
                                 v-if="loaded"
@@ -318,13 +318,13 @@ watch([fecha_inicioP, fecha_finP], () => {
                 </div>
                 
                 <br>
-                <h2 class="text-lg font-bold mb-4">Datos sobre anuncios y ponencias</h2>
+                <h2 class="text-lg font-bold mb-4">Datos sobre los anuncios y las ponencias</h2>
                 <div class="flex flex-wrap justify-between">
                     <!-- Primera gráfica -->
                     <div class="w-full sm:w-1/2 p-2 ">
                         <div class="grid grid-cols-1 sm:grid-cols-6 gap-4">
                             <div class="col-span-6 mt-4">                                
-                                <h2>Modificador de fechas</h2>
+                                <h2>Modificador de las fechas</h2>
                             </div>
                             <div class="col-span-6 sm:col-span-3 mt-4"> <!-- Cambiado a col-span-6 -->
                                 <InputLabel for="fecha_inicio" value="Fecha de Inicio:"/>
@@ -339,7 +339,7 @@ watch([fecha_inicioP, fecha_finP], () => {
                             </div>
                         </div>
 
-                        <h3 class="text-center font-semibold mb-2">Numero de anuncios publicados</h3>
+                        <h3 class="text-center font-semibold mb-2">Número de anuncios publicados</h3>
                         <div class="relative " style="padding-bottom: 50%;">
                             <BaseChart
                                 v-if="loaded2"
@@ -354,7 +354,7 @@ watch([fecha_inicioP, fecha_finP], () => {
                     <div class="w-full sm:w-1/2 p-2 ">
                         <div class="grid grid-cols-1 sm:grid-cols-6 gap-4">
                             <div class="col-span-6 mt-4">                                
-                                <h2>Modificador de fechas</h2>
+                                <h2>Modificador de las fechas</h2>
                             </div>
                             <div class="col-span-6 sm:col-span-3 mt-4"> <!-- Cambiado a col-span-6 -->
                                 <InputLabel for="fecha_inicio" value="Fecha de Inicio:"/>
@@ -369,7 +369,7 @@ watch([fecha_inicioP, fecha_finP], () => {
                             </div>
                         </div>
 
-                        <h3 class="text-center font-semibold mb-2">Top ponentes</h3>
+                        <h3 class="text-center font-semibold mb-2">Principales ponentes</h3>
                         <div class="relative " style="padding-bottom: 50%;">
                             <BaseChart
                                 v-if="loaded3"

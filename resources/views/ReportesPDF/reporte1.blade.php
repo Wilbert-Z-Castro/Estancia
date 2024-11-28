@@ -78,14 +78,15 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Email</th>
-                    <th>Teléfono</th>
-                    <th>Género</th>
-                    <th>Empresa Actual</th>
-                    <th>Puesto de Trabajo</th>
-                    <th>Sector Empresarial</th>
-                    <th>Año de Egreso</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Género</th>
+                <th>Empresa actual</th>
+                <th>Puesto de trabajo</th>
+                <th>Sector empresarial</th>
+                <th>Año de egreso</th>
+
                 </tr>
             </thead>
             <tbody>

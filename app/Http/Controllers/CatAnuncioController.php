@@ -64,7 +64,15 @@ class CatAnuncioController extends Controller
         $request->validate([
             'Nombre' => 'required|string|max:255',
             'Descripcion' => 'required|string|max:255',
+        ], [
+            'Nombre.required' => 'El nombre es obligatorio.',
+            'Nombre.string' => 'El nombre debe ser una cadena de texto.',
+            'Nombre.max' => 'El nombre no puede tener más de 255 caracteres.',
+            'Descripcion.required' => 'La descripción es obligatoria.',
+            'Descripcion.string' => 'La descripción debe ser una cadena de texto.',
+            'Descripcion.max' => 'La descripción no puede tener más de 255 caracteres.',
         ]);
+        
         $categorias= new CatAnuncio();
         $categorias->Nombre = $request->Nombre;
         $categorias->Descripcion = $request->Descripcion;
@@ -106,7 +114,15 @@ class CatAnuncioController extends Controller
         $request->validate([
             'Nombre' => 'required|string|max:255',
             'Descripcion' => 'required|string|max:255',
+        ], [
+            'Nombre.required' => 'El nombre es obligatorio.',
+            'Nombre.string' => 'El nombre debe ser una cadena de texto.',
+            'Nombre.max' => 'El nombre no puede tener más de 255 caracteres.',
+            'Descripcion.required' => 'La descripción es obligatoria.',
+            'Descripcion.string' => 'La descripción debe ser una cadena de texto.',
+            'Descripcion.max' => 'La descripción no puede tener más de 255 caracteres.',
         ]);
+        
         $categorias= CatAnuncio::find($id);
         $categorias->Nombre = $request->Nombre;
         $categorias->Descripcion = $request->Descripcion;

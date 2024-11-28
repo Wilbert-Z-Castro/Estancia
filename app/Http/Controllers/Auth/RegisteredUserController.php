@@ -91,7 +91,7 @@ class RegisteredUserController extends Controller
                 'empresaActual' => 'required|string|max:45',
                 'puestoTrabajo' => 'required|string|max:45',
                 'aniosLaboral' => 'required',
-                'adicional' => 'required|string|max:255',
+                'adicional' => 'required|string',
                 'sectorEmpresarial' => 'required|string|max:45',
             ], [
                 'carrera_id.required' => 'La carrera es obligatoria.',
@@ -115,7 +115,6 @@ class RegisteredUserController extends Controller
                 'aniosLaboral.required' => 'Los años de experiencia laboral son obligatorios.',
                 'adicional.required' => 'El campo adicional es obligatorio.',
                 'adicional.string' => 'El campo adicional debe ser una cadena de texto.',
-                'adicional.max' => 'El campo adicional no puede tener más de 255 caracteres.',
         
                 'sectorEmpresarial.required' => 'El sector empresarial es obligatorio.',
                 'sectorEmpresarial.string' => 'El sector empresarial debe ser una cadena de texto.',

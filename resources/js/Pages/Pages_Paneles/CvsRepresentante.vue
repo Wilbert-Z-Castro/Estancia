@@ -11,7 +11,6 @@
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
-                {{   }}
                 <div v-if="$page.props.flash.message" class="inline-flex max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden ">
                     <div class="flex justify-center items-center w-12 bg-green-500">
                             <svg class="h-6 w-6 fill-current text-white" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
@@ -32,7 +31,7 @@
                             <div class="flex flex-col justify-between p-4 leading-normal w-full">
                              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
                                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                        Publicacion: {{ a.TituloOferta}}
+                                        Publicación: {{ a.TituloOferta}}
                                     </h5>
                                     <h5 class="text-xl font-medium text-gray-900 dark:text-white sm:ml-4 sm:mt-0 mt-2">
                                         Cv enviado el: {{ formatDate(j.created_at) }}

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use App\Rules\ImagenArrayValidation;
 
 
 
@@ -80,8 +81,18 @@ class CarreraController extends Controller
             'Descripcion' => 'required|string',
             'UbicacionOficinas' => 'required|string',
             'dirCarrera_id' => 'required|integer',
-            'imagenes' => 'nullable|array',
-            'imagenes.*' => 'file|mimes:jpeg,png,jpg,gif|max:2048',
+            'imagenes' => ['nullable', 'array', new ImagenArrayValidation],
+        ],
+        [
+            'NombreCarrera.required'=>'El campo Nombre de la Carrera es obligatorio.',
+            'NombreCarrera.string'=>'El campo Nombre de la Carrera debe ser una cadena de texto.',
+            'NombreCarrera.max'=>'El campo Nombre de la Carrera no puede tener más de 255 caracteres.',
+            'Descripcion.required'=>'El campo Descripción es obligatorio.',
+            'Descripcion.string'=>'El campo Descripción debe ser una cadena de texto.',
+            'UbicacionOficinas.required'=>'El campo Ubicación de Oficinas es obligatorio.',
+            'UbicacionOficinas.string'=>'El campo Ubicación de Oficinas debe ser una cadena de texto.',
+            'dirCarrera_id.required'=>'El campo Dirección de Carrera es obligatorio.',
+            'dirCarrera_id.integer'=>'El campo Dirección de Carrera debe ser un de los nombre en la lista.',
         ]);
         $carrera = new Carrera();
         $carrera->NombreCarrera = $request->input('NombreCarrera');
@@ -143,8 +154,7 @@ class CarreraController extends Controller
             'Descripcion' => 'required|string',
             'UbicacionOficinas' => 'required|string',
             'dirCarrera_id' => 'required|integer',
-            'imagenes' => 'nullable|array',
-            'imagenes.*' => 'file|mimes:jpeg,png,jpg,gif|max:2048',
+            'imagenes' => ['nullable', 'array', new ImagenArrayValidation],
         ], [
             'NombreCarrera.required' => 'El campo Nombre de la Carrera es obligatorio.',
             'NombreCarrera.string' => 'El campo Nombre de la Carrera debe ser una cadena de texto.',
@@ -155,9 +165,6 @@ class CarreraController extends Controller
             'UbicacionOficinas.string' => 'El campo Ubicación de Oficinas debe ser una cadena de texto.',
             'dirCarrera_id.required' => 'El campo Dirección de Carrera es obligatorio.',
             'dirCarrera_id.integer' => 'El campo Dirección de Carrera debe ser un de los nombre en la lista.',
-            'imagenes.*.file' => 'Cada archivo debe ser una imagen válida.',
-            'imagenes.*.mimes' => 'Las imágenes deben estar en formato jpeg, png, jpg o gif.',
-            'imagenes.*.max' => 'Cada imagen no puede ser mayor de 2MB.',
         ]);
         $carrera = Carrera::find($id);
         $carrera->NombreCarrera = $request->input('NombreCarrera');

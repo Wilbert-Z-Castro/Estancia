@@ -43,6 +43,11 @@ class PasswordResetLinkController extends Controller
         if ($status == Password::RESET_LINK_SENT) {
             return back()->with('status', __($status));
         }
+        if ($status == Password::INVALID_USER) {
+            throw ValidationException::withMessages([
+                'email' => ['El correo no pertenece a un usuario registrado.'],
+            ]);
+        }
 
         throw ValidationException::withMessages([
             'email' => [trans($status)],

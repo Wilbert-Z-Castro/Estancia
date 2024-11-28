@@ -78,8 +78,8 @@
     <table class="table">
         <thead>
                 <tr>
-                    <th style="width: 50%;">Numero de Anuncio publicados</th>
-                    <th style="width: 50%;">Numero de Ponencias creadas </th>
+                    <th style="width: 50%;">Número de Anuncio publicados</th>
+                    <th style="width: 50%;">Número de Ponencias creadas </th>
                 </tr>
         </thead>
         <tbody>
@@ -95,7 +95,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Titulo ponencia</th>
+                    <th>Título ponencia</th>
                     <th>Fecha y hora</th>
                     <th>Lugar</th>
                     <th>Invitados</th>
@@ -139,7 +139,7 @@
         <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Numero de asistencia</th>
+                <th>Número de asistencia</th>
                 
             </tr>
         </thead>
@@ -165,9 +165,9 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Titulo</th>
-                    <th>Categoria</th>
-                    <th>Fecha de publicacion</th>
+                    <th>Título</th>
+                    <th>Categoría</th>
+                    <th>Fecha de publicación</th>
                 </tr>
             </thead>
             <tbody>

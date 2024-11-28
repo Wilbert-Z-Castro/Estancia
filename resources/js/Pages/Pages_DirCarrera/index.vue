@@ -175,7 +175,7 @@ const buscarCarrera = () => {
                     <table class="w-full whitespace-no-wrap">
                         <thead>
                             <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b ">
-                                <th class="px-4 py-3">#Numero</th>
+                                <th class="px-4 py-3">#Número</th>
                                 <th class="px-4 py-3">Nombre</th>
                                 <th class="px-4 py-3">Email</th>
                                 <th class="px-4 py-3">Apellidos</th>
@@ -248,6 +248,11 @@ const buscarCarrera = () => {
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     <PrimaryButton @click="openModalViwe(a)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        </svg>
+
                                         Ver
                                     </PrimaryButton>
                                 </td>
@@ -260,10 +265,9 @@ const buscarCarrera = () => {
         </div>
         <Modal :show="showModalView" @close="closeModalViwe">
             <div class="p-6">
-                <p > Nombre: <span  class="text-lg font-medium text-gray-900">{{ v.name }}</span></p>
+                <p > Nombre: <span  class="text-lg font-medium text-gray-900">{{ v.name }} {{v.ApellidoP}} {{v.ApellidoM}}</span></p>
                 <p > Descripción: <span  class="text-lg font-medium text-gray-900">{{v.Descripcion}}</span></p>
                 <p>Email:<span  class="text-lg font-medium text-gray-900">{{v.email}}</span></p>
-                <p>Apellidos:<span  class="text-lg font-medium text-gray-900">{{v.ApellidoP}} {{v.ApellidoM}}</span></p>
                 <p>Años en la Institucion:<span  class="text-lg font-medium text-gray-900">{{v.AnioInstitucion}}</span></p>
                 <p>Fecha de Asignacion:<span  class="text-lg font-medium text-gray-900">{{v.FechaAsignacion}}</span></p>
                 <p>Sexo:<span  class="text-lg font-medium text-gray-900">{{v.Sexo}}</span></p>

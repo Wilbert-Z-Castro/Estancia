@@ -95,6 +95,7 @@ onMounted(() => {
                                 id="name"
                                 type="text"
                                 class="mt-1 block w-full"
+                                placeholder="Ingrese el nombre del director de carrera"
                                 v-model="form.name"
                                 required
                                 autofocus
@@ -103,10 +104,11 @@ onMounted(() => {
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.name" />
                         </div>
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="username" value="Apodo" />
+                            <InputLabel for="username" value="Apodo o nombre de usuario" />
                             <TextInput
                                 id="username"
                                 type="text"
+                                placeholder="Ingrese el nombre de usuario"
                                 class="mt-1 block w-full"
                                 v-model="form.username"
                                 required
@@ -123,6 +125,7 @@ onMounted(() => {
                                 class="mt-1 block w-full"
                                 v-model="form.email"
                                 required
+                                placejholder="Ingrese el correo electrónico"
                                 autocomplete="email"
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.email" />
@@ -137,6 +140,7 @@ onMounted(() => {
                                 class="mt-1 block w-full"
                                 v-model="form.password"
                                 required
+                                placeholder="Ingrese la contraseña"
                                 
                             />
                             <InputError class="mt-2" :message="form.errors.password" />
@@ -147,6 +151,7 @@ onMounted(() => {
                                 id="password_confirmation"
                                 type="password"
                                 class="mt-1 block w-full"
+                                placeholder="Confirme la contraseña"	
                                 v-model="form.password_confirmation"
                                 required
                             />
@@ -162,6 +167,7 @@ onMounted(() => {
                                 id="apellidoP"
                                 type="text"
                                 class="mt-1 block w-full"
+                                placeholder="Ingrese el apellido paterno"
                                 v-model="form.apellidoP"
                                 required
                             />
@@ -174,6 +180,7 @@ onMounted(() => {
                             <TextInput
                                 id="apellidoM"
                                 type="text"
+                                placeholder="Ingrese el apellido materno"
                                 class="mt-1 block w-full"
                                 v-model="form.apellidoM"
                                 required
@@ -184,7 +191,7 @@ onMounted(() => {
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <!-- Columna para 'Teléfono' -->
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="telefono" value="Teléfono" />
+                            <InputLabel for="telefono" value="Número de teléfono" />
                             <TextInput
                                 id="telefono"
                                 type="number"
@@ -193,6 +200,7 @@ onMounted(() => {
                                 required
                                 min="1"
                                 step="1"
+                                placeholder="Ingrese el número de teléfono"
                             />
                             <InputError class="mt-2" :message="form.errors.telefono" />
                         </div>
@@ -216,19 +224,21 @@ onMounted(() => {
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-12 mt-4">
-                            <InputLabel for="Descripcion" value="Descripción" />
+                            <InputLabel for="Descripcion" value="Perfil profesional del director" />
                             <TextArea
                                 id="Descripcion"
                                 class="mt-1 block w-full"
                                 v-model="form.Descripcion"
                                 required
+                                placeholder="Ingresa el perfil profesional del director"
+
                             />
                             <InputError class="mt-2" :message="form.errors.Descripcion" />
                         </div>
                     </div>   
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="AnioInstitucion" value="Año de Institución" />
+                            <InputLabel for="AnioInstitucion" value="Años de servicio en la institución" />
                             <TextInput
                                 id="AnioInstitucion"
                                 type="number"
@@ -237,6 +247,7 @@ onMounted(() => {
                                 required
                                 min="1"
                                 step="1"
+                                placeholder="Ingrese los años de servicio en la institución"
                             />
                             <InputError class="mt-2" :message="form.errors.AnioInstitucion" />
                         </div>

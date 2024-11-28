@@ -82,7 +82,7 @@
         {{$datosDirector->user->email}}<br>
         {{$datosDirector->user->Telefono}}<br>
         {{$datosDirector->user->Direccion}}<br>
-        Fecha de asginacion de cargo: {{$datosDirector->FechaAsignacion}}<br>
+        Fecha de asginación de cargo: {{$datosDirector->FechaAsignacion}}<br>
         Sexo: {{$datosDirector->user->Sexo}}<br>
     </p>
     <h2>Carreras:</h2>
@@ -92,8 +92,8 @@
                 <tr>
                     <th>Nombre de la carrera</th>
                     <th>Siglas </th>
-                    <th>UbicacionOficinas</th>
-                    <th>Numero de egresado</th>
+                    <th>Ubicación de las oficinas</th>
+                    <th>Número de egresado</th>
                 </tr>
             </thead>
             <tbody>

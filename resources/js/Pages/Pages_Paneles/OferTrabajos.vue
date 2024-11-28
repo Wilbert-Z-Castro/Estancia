@@ -6,12 +6,11 @@
     <AuthenticatedLayout>
         <template #header>
             <div class="justify-center" style="text-align: center;">
-                Noticias Relevantes
+                Ofertas de Trabajo
             </div>
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
-                {{   }}
                 <div v-if="$page.props.flash.message" class="inline-flex max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden ">
                     <div class="flex justify-center items-center w-12 bg-green-500">
                             <svg class="h-6 w-6 fill-current text-white" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
@@ -30,7 +29,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"></path>
                     </svg>
-                    <span class="mx-3">Categorias</span>
+                    <span class="mx-3">Carreras</span>
                     
                 </a>
                 <transition 
@@ -52,14 +51,25 @@
                         
                     </div>
                 </transition>
-                <div v-for="a in ofertas":key="a.idOfertaTrabajo"  class="flex justify-center mt-6"> 
+                <br>
+                <div v-if="ofertas.length == 0">
+                    <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+                        <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Lo sentimos</h5>
+                        <p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">Por el momento, no hay ofertas de trabajo disponibles para esta carrera.</p>
+
+                        <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4 rtl:space-x-reverse">
+                            
+                        </div>
+                    </div>
+                </div> 
+                <div v-for="a in ofertas":key="a.idOfertaTrabajo"  class="flex justify-center mt-6">
                     <div class="flex flex-col items-center w-full bg-white border border-gray-200 rounded-lg shadow md:flex-row  dark:border-gray-700 dark:bg-gray-800 ">
-                        <PrimaryButton class="flex flex-col items-center w-full md:w-48">
+                        <PrimaryButton v-if="a.Imagen!=null" class="flex flex-col items-center w-full md:w-48">
                             <div v-if="a.Imagen!=null" >
-                                    <img :src="`/storage/${a.Imagen}`" alt="Imagen" class="object-cover  rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" />
+                                    <img @contextmenu.prevent :src="`/storage/${a.Imagen}`" alt="Imagen" class="object-cover  rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" />
                                     <br>
                             </div>
-                            <PrimaryButton @click="openModalViwe(a)" class="bg-green-600 hover:bg-green-700">
+                            <PrimaryButton v-if="a.Imagen!=null" @click="openModalViwe(a)" class="bg-green-600 hover:bg-green-700">
                                 ver mas
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
@@ -77,18 +87,17 @@
                                     {{ a.formatted_created_at }}
                                 </h5>
                             </div>
-                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 whitespace-pre-wrap break-words">Empresa:  {{ a.Empresa }}</p>
-                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 whitespace-pre-wrap break-words">Sector de trabajo: {{ a.SectorEmpre }}</p>
-                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 whitespace-pre-wrap break-words">Sector de trabajo: {{ a.SectorEmpre }}</p>
-                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 whitespace-pre-wrap break-words">Carreras destino:
+                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-100 whitespace-pre-wrap break-words">Empresa:  {{ a.Empresa }}</p>
+                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-100 whitespace-pre-wrap break-words">Sector de trabajo: {{ a.SectorEmpre }}</p>
+                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-100 whitespace-pre-wrap break-words">Carreras destino:
                                 <p v-for="j,k in a.ofertas_carreras":key="j.idOfertaCarrera" >
                                         {{ j.carrera.NombreCarrera }}
 
                                 </p>
                             </p>
-                            <pre class="mb-3 font-normal text-gray-700 dark:text-gray-400 whitespace-pre-wrap break-words">Lista de Requisitos:
+                            <pre class="mb-3 font-normal text-gray-700 dark:text-gray-100 whitespace-pre-wrap break-words">Lista de Requisitos:
 {{ a.Requisitos }}</pre>
-                            <pre class="mb-3 font-normal text-gray-700 dark:text-gray-400 whitespace-pre-wrap break-words">Descripcion del trabajo:
+                            <pre class="mb-3 font-normal text-gray-700 dark:text-gray-100 whitespace-pre-wrap break-words">Descripcion del trabajo:
 {{ a.Descripcion }}</pre>
                             <div class="flex flex-row sm:flex-row justify-left items-start sm:items-center mb-2">
                                 <linkAgregar :href="route('ofertasTrabajo.FormularioCV',{id:a.idOfertaTrabajo})">
@@ -116,7 +125,7 @@
                 
                 <p > Imagen: <span  class="text-lg font-medium text-gray-900">
                     <div  class="flex justify-center items-center">
-                        <img v-if="v.Imagen" :src="`/storage/${v.Imagen}`" alt="Imagen" class="w-full h-auto object-contain" />
+                        <img @contextmenu.prevent v-if="v.Imagen" :src="`/storage/${v.Imagen}`" alt="Imagen" class="w-full h-auto object-contain" />
                     </div>
                 </span></p>
                 

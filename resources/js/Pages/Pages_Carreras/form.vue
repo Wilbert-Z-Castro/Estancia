@@ -75,8 +75,7 @@ const props = defineProps({
     <Head title="Gestion categorias formulario" />
     <AuthenticatedLayout>
         <template #header>
-            Insertar datos del Carrera
-            {{ form.errors  }}
+            Insertar datos de la carrera
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 mx-2 border-b border-gray-200">
@@ -90,7 +89,7 @@ const props = defineProps({
                                 type="text"
                                 class="mt-1 block w-full"
                                 v-model="form.NombreCarrera"
-                                placeholder="Ingrese el nombre de la carrera"
+                                placeholder="Ingresa el nombre de la carrera"
                                 autocomplete="NombreCarrera"
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.NombreCarrera" />
@@ -106,7 +105,7 @@ const props = defineProps({
                                 class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                 v-model="form.Descripcion"
                                 required
-                                placeholder="Ingrese el Nombre completo de la carrera"
+                                placeholder="Ingresa el Nombre completo de la carrera"
                                 autocomplete="Descripcion"
                             />
                             <InputError class="mt-2" :message="form.errors.Descripcion" />
@@ -123,7 +122,7 @@ const props = defineProps({
                                 class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                 v-model="form.UbicacionOficinas"
                                 required
-                                placeholder="Ingrese la ubicación de las oficinas"
+                                placeholder="Ingresa la ubicación de las oficinas"
                                 autocomplete="UbicacionOficinas"
                             />
                             <InputError class="mt-2" :message="form.errors.UbicacionOficinas" />
@@ -149,7 +148,7 @@ const props = defineProps({
                     <!-- Fila 4: Imágenes -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-12 mt-4">
-                            <InputLabel for="imagenes" value="Imágenes" />
+                            <InputLabel for="imagenes" value="Ingresa el plan de estudio" />
                             <input
                                 id="imagenes"
                                 type="file"

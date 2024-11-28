@@ -93,10 +93,10 @@ onMounted(() => {
 </script>
 
 <template>
-    <Head title="Editar Director" />
+    <Head title="Mi perfil" />
     <AuthenticatedLayout>
         <template #header>
-            Actualizar registro de Director
+            Mi perfil
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ">
             <div class="p-6 mx-2 border-b border-gray-200">
@@ -111,16 +111,19 @@ onMounted(() => {
                                 v-model="form.name"
                                 required
                                 autofocus
+                                placeholder="Ingresa tu nombre"
                                 autocomplete="name"
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.name" />
                         </div>
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="username" value="Apodo" />
+                            <InputLabel for="username" value="Apodo o nombre de usuario" />
                             <TextInput
                                 id="username"
                                 type="text"
                                 class="mt-1 block w-full"
+                                placeholder="Ingresa apodo o nombre de usuario"
+
                                 v-model="form.username"
                                 required
                             />
@@ -135,6 +138,7 @@ onMounted(() => {
                                 type="email"
                                 class="mt-1 block w-full"
                                 v-model="form.email"
+                                placeholder="Ingresa tu correo electrónico"
                                 required
                                 autocomplete="email"
                             />
@@ -149,6 +153,7 @@ onMounted(() => {
                                 id="current_password"
                                 type="password"
                                 class="mt-1 block w-full"
+                                placeholder="Ingresa tu contraseña actual"
                                 v-model="form.current_password"
                                 
                             />
@@ -160,6 +165,7 @@ onMounted(() => {
                             <TextInput
                                 id="password"
                                 type="password"
+                                placeholder="Ingresa tu nueva contraseña"
                                 class="mt-1 block w-full"
                                 v-model="form.password"
                                 
@@ -175,6 +181,7 @@ onMounted(() => {
                                 id="password_confirmation"
                                 type="password"
                                 class="mt-1 block w-full"
+                                placeholder="Confirma tu nueva contraseña"
                                 v-model="form.password_confirmation"
                                 
                             />
@@ -191,6 +198,7 @@ onMounted(() => {
                                 type="text"
                                 class="mt-1 block w-full"
                                 v-model="form.apellidoP"
+                                placeholder="Ingresa tu apellido paterno"
                                 required
                             />
                             <InputError class="mt-2" :message="form.errors.apellidoP" />
@@ -201,6 +209,7 @@ onMounted(() => {
                                 id="apellidoM"
                                 type="text"
                                 class="mt-1 block w-full"
+                                placeholder="Ingresa tu apellido materno"
                                 v-model="form.apellidoM"
                                 required
                             />
@@ -209,12 +218,13 @@ onMounted(() => {
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="telefono" value="Teléfono" />
+                            <InputLabel for="telefono" value="Número de Teléfono" />
                             <TextInput
                                 id="telefono"
                                 type="number"
                                 class="mt-1 block w-full"
                                 v-model="form.telefono"
+                                placeholder="Ingresa tu número de teléfono"
                                 required
                                 min="1"
                                 step="1"
@@ -222,7 +232,7 @@ onMounted(() => {
                             <InputError class="mt-2" :message="form.errors.telefono" />
                         </div>
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="sexo" value="Sexo" />
+                            <InputLabel for="sexo" value="Selecione su sexo" />
                             <select
                                 id="sexo"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -238,23 +248,25 @@ onMounted(() => {
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-12 mt-4">
-                            <InputLabel for="Descripcion" value="Descripción" />
+                            <InputLabel for="Descripcion" value="Perfil profesional del director" />
                             <TextArea
                                 id="Descripcion"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 v-model="form.Descripcion"
+                                placeholder="Ingresa tu perfil profesional"
                             />
                             <InputError class="mt-2" :message="form.errors.Descripcion" />
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="AnioInstitucion" value="Año de Incorporación a la Institución" />
+                            <InputLabel for="AnioInstitucion" value="Años de servicio en la institución" />
                             <TextInput
                                 id="AnioInstitucion"
                                 type="number"
                                 class="mt-1 block w-full"
                                 v-model="form.AnioInstitucion"
+                                placeholder="Ingresa los años de servicio en la institución"
                                 required
                                 min="1"
                                 :max="new Date().getFullYear()"
@@ -262,13 +274,14 @@ onMounted(() => {
                             <InputError class="mt-2" :message="form.errors.AnioInstitucion" />
                         </div>
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="FechaAsignacion" value="Fecha de Asignación" />
+                            <InputLabel for="FechaAsignacion" value="Fecha de Asignación del Puesto" />
                             <TextInput
                             id="FechaAsignacion"
                             type="date"
                             class="mt-1 block w-full"
                             v-model="form.FechaAsignacion"
                             :max="maxDate"
+                            placeholder="Ingresa la fecha de asignación"
                             required
                             />
                             <InputError class="mt-2" :message="form.errors.FechaAsignacion" />
@@ -282,7 +295,7 @@ onMounted(() => {
 
                             Actualizar
                         </PrimaryButton>
-                        <LinkRegresar class="mx-2" :href="route('dir_carreras.index')">
+                        <LinkRegresar class="mx-2" :href="route('egresados.index')">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                  <path stroke-linecap="round" stroke-linejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
                             </svg>

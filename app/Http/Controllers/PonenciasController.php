@@ -15,6 +15,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use setasign\Fpdi\Fpdi;  
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use App\Rules\PonenciaArrayValidation;
+use App\Rules\ImagenArrayValidation;
 
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -92,8 +94,7 @@ class PonenciasController extends Controller
             'DescripcionPonencia' => 'required|string|max:1000',
             'Fecha' => 'required|date',
             'Lugar' => 'required|string|max:255',
-            'imagenes' => 'nullable|array',
-            'imagenes.*' => 'file|mimes:jpeg,png,jpg,gif|max:2048',
+            'imagenes' => ['nullable', 'array', new ImagenArrayValidation],
             'egresados' => 'required|array',
         ], [
             'TituloPonencia.required' => 'El campo título de la ponencia es obligatorio.',
@@ -110,9 +111,6 @@ class PonenciasController extends Controller
             'Lugar.required' => 'El campo lugar es obligatorio.',
             'Lugar.string' => 'El campo lugar debe ser una cadena de texto.',
             'Lugar.max' => 'El campo lugar no debe tener más de 255 caracteres.',
-            'imagenes.array' => 'El campo imágenes debe ser un array.',
-            'imagenes.*.mimes' => 'Cada imagen debe ser un archivo de tipo: jpeg, png, jpg, gif.',
-            'imagenes.*.max' => 'Cada imagen no debe tener más de 2048 kilobytes.',
             'egresados.required' => 'El campo egresados es obligatorio.',
             'egresados.array' => 'El campo egresados debe ser un array.',
             'egresados.*.integer' => 'Cada elemento en el campo egresados debe ser un número entero.',
@@ -185,12 +183,10 @@ class PonenciasController extends Controller
     public function Confirmacion(Request $request){
         $request->validate([
             'Mensaje' => 'required|string',
-            'imagenes.*' => 'file|mimes:pdf,jpeg,png,jpg,gif,ppt,pptx|max:10240',
+            'imagenes' => ['nullable', 'array', new PonenciaArrayValidation],
         ],[
             'Mensaje.required' => 'El campo mensaje es obligatorio.',
             'Mensaje.string' => 'El campo mensaje debe ser una cadena de texto.',
-            'imagenes.*.mimes' => 'Cada archivo debe ser un tipo de archivo válido: pdf, jpeg, png, jpg, gif, ppt, pptx.',
-            'imagenes.*.max' => 'Cada archivo no debe tener más de 10240 kilobytes.',
         ]);
         
         

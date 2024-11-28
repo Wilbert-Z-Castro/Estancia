@@ -210,7 +210,11 @@ class ProyectosColabController extends Controller
 
     public function destroyImagenProyecto(string $id){
         $proyecto = ProyectosColab::findOrFail($id);
-        Storage::disk('public')->delete($proyecto->Imagen);
+        if($proyecto->Imagen!=null){
+            if (Storage::disk('public')->exists($proyecto->Imagen)) {
+                Storage::disk('public')->delete($proyecto->Imagen);
+            }
+        }
         $proyecto->Imagen = null;
         $proyecto->save();
 
@@ -292,6 +296,16 @@ class ProyectosColabController extends Controller
      */
     public function destroy(string $id)
     {
+        $proyecto = ProyectosColab::findOrFail($id);
+        if ($proyecto->Imagen != null) {
+            if (Storage::disk('public')->exists($proyecto->Imagen)) {
+                Storage::disk('public')->delete($proyecto->Imagen);
+            }
+        }
+        $proyecto->delete();
+        return redirect()->route('ProyectosColab.index')->with('message', 'Proyecto eliminado exitosamente');
         //
     }
+
+    
 }

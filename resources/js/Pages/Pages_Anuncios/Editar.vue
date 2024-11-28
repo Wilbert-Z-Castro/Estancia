@@ -15,11 +15,12 @@ const props = defineProps({
     categorias:{type:Object}
 });
 const cargando = ref(false);
+const ErrorImagen = ref(false);
 
 const Eliminar = (a) => {
     event.preventDefault(); 
     Swal.fire({
-        title: `¿Deseas eliminar esta imagen? ${a.IdImagen}`,
+        title: `¿Deseas eliminar esta imagen?`,
         text: `No podrás revertir este proceso`,
         icon: "warning",
         showCancelButton: true,
@@ -101,6 +102,7 @@ const submit = () => {
         onError: () => {
             form.errors,
             cargando.value = false;
+            ErrorImagen.value = true;
             const firstErrorFieldId = Object.keys(form.errors)[0];
             document.getElementById(firstErrorFieldId).focus();
         },
@@ -128,7 +130,7 @@ const submit = () => {
                     <!-- Fila 3 -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="Titulo" value="Titulo" />
+                            <InputLabel for="Titulo" value="Título" />
                             <TextInput
                                 id="Titulo"
                                 type="text"
@@ -136,12 +138,13 @@ const submit = () => {
                                 v-model="form.Titulo"
                                 required
                                 autofocus
+                                placeholder="Ingrese el Título del anuncio"
                                 autocomplete="Titulo"
                             />
                             <InputError class="mt-2" :message="form.errors.Titulo" />
                         </div>
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="Categoria" value="Categoria" />
+                            <InputLabel for="Categoria" value="Categoría" />
                             <select
                                 id="Categoria"
                                 class="mt-1 block w-full rounded border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -167,6 +170,7 @@ const submit = () => {
                                 v-model="form.Contenido"
                                 required
                                 autofocus
+                                placeholder="Ingresa la Descripción del anuncio"
                                 autocomplete="Contenido"
                             />
                             <InputError class="mt-2" :message="form.errors.Contenido" />

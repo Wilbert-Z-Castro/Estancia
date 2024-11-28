@@ -57,7 +57,7 @@ const form = useForm(valoresIniviales);
 const submit = (a) => {
     Swal.fire({
         title: `¿Deseas eliminar ${a.Titulo}?`,
-        text: `No podrás revertir este proceso ${a.idAnuncio}`,
+        text: `No podrás revertir este proceso `,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -165,15 +165,14 @@ const Buscar = () => {
                     <table class="w-full whitespace-no-wrap">
                         <thead>
                             <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b ">
-                                <th class="px-4 py-3">#Numero</th>
-                                <th class="px-4 py-3">Titulo</th>
-                                <th class="px-4 py-3">Categoria</th>
+                                <th class="px-4 py-3">#Número</th>
+                                <th class="px-4 py-3">Título</th>
+                                <th class="px-4 py-3">Categoría</th>
                                 <th class="px-4 py-3">Contenido</th>
                                 <th class="px-4 py-3">Imagen</th>
                                 <th class="px-4 py-3">Editar</th>
                                 <th class="px-4 py-3">Borrar</th>
-                                <th class="px-4 py-3">Ver</th>
-                                
+                                <th class="px-4 py-3">Ver</th>                                
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y ">
@@ -223,6 +222,10 @@ const Buscar = () => {
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     <PrimaryButton @click="openModalViwe(a)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        </svg>
                                         Ver
                                     </PrimaryButton>
                                 </td>
@@ -237,12 +240,12 @@ const Buscar = () => {
         </div>
         <Modal :show="showModalView" @close="closeModalViwe">
             <div class="p-6">
-                <p > Titulo: <span  class="text-lg font-medium text-gray-900">{{ v.Titulo }}</span></p>
-                <p > Categoria: <span  class="text-lg font-medium text-gray-900">{{ v.Categoria }}</span></p>
+                <p > Título: <span  class="text-lg font-medium text-gray-900">{{ v.Titulo }}</span></p>
+                <p > Categoría: <span  class="text-lg font-medium text-gray-900">{{ v.Categoria }}</span></p>
                 <p > Contenido: <span  class="text-lg font-medium text-gray-900">{{ v.Contenido }}</span></p>
                 <p > Imagen: 
-                    <div v-for="imagen in  v.Imagen" :key="imagen.idImagen">
-                        <img :src="`/storage/${imagen.URL}`" alt="Imagen" class="w-20 h-20 object-cover" />
+                    <div v-for="imagen in  v.Imagen" :key="imagen.idImagen" class="flex justify-center items-center">
+                        <img :src="`/storage/${imagen.URL}`" alt="Imagen" class="w-full h-auto object-contain"  />
                     </div>
                 </p>
             </div>

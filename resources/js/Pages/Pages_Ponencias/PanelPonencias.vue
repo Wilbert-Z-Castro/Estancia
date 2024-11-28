@@ -8,7 +8,6 @@
             <div class="justify-center" style="text-align: center;">
                 Ponencias
             </div>
-            {{  }}
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
@@ -64,8 +63,8 @@
         </div>
         <Modal :show="showModalView" @close="closeModalViwe">
             <div class="p-6">
-                <p > Titulo: <span  class="text-lg font-medium text-gray-900">{{ v.Titulo }}</span></p>
-                <p > Categoria: <span  class="text-lg font-medium text-gray-900">{{ v.Categoria }}</span></p>
+                <p > Título: <span  class="text-lg font-medium text-gray-900">{{ v.Titulo }}</span></p>
+                <p > Categoría: <span  class="text-lg font-medium text-gray-900">{{ v.Categoria }}</span></p>
                 <p > Contenido: <span  class="text-lg font-medium text-gray-900">{{ v.Contenido }}</span></p>
                 <p > Imagen: 
                     <div v-for="imagen in  v.Imagen" :key="imagen.idImagen" class="flex justify-center items-center">

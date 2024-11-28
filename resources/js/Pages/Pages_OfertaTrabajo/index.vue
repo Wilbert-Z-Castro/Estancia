@@ -128,9 +128,8 @@ const buscarCarreraRepresentante = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            Ofertas de trabajos Gestion
+            Gestión de ofertas de trabajos 
         </template>
-        {{  }}
         <div v-if="pageProps.flash.message" class="inline-flex max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden ">
             <div class="flex justify-center items-center w-12 bg-green-500">
                     <svg class="h-6 w-6 fill-current text-white" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
@@ -184,26 +183,23 @@ const buscarCarreraRepresentante = () => {
             
             </div>
         <br>
-        <p>
-            {{  }}
-        </p>
-        
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 border-b border-gray-200">
                 <div class="w-full overflow-x-auto">
                     <table class="w-full whitespace-no-wrap">
                         <thead>
                             <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b ">
-                                <th class="px-4 py-3">#Numero</th>
-                                <th class="px-4 py-3">Titulo</th>
+                                <th class="px-4 py-3">#Número</th>
+                                <th class="px-4 py-3">Título</th>
                                 <th class="px-4 py-3">Empresa</th>
                                 <th class="px-4 py-3">Carreras</th>
-                                <th class="px-4 py-3">Sector Empresarial</th>
-                                <th class="px-4 py-3">Fecha publicación</th>
+                                <th class="px-4 py-3">Sector empresarial</th>
+                                <th class="px-4 py-3">Fecha de publicación</th>
                                 <th class="px-4 py-3">Imagen</th>
                                 <th class="px-4 py-3">Editar</th>
-                                <th class="px-4 py-3">Ver</th>
                                 <th class="px-4 py-3">Borrar</th>
+                                <th class="px-4 py-3">Ver</th>
+
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y ">
@@ -262,6 +258,10 @@ const buscarCarreraRepresentante = () => {
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     <PrimaryButton @click="openModalViwe(a)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        </svg>
                                         Ver
                                     </PrimaryButton>
                                 </td>
@@ -274,7 +274,7 @@ const buscarCarreraRepresentante = () => {
         </div>
         <Modal :show="showModalView" @close="closeModalViwe">
             <div class="p-6">
-                <p > Titulo: <span  class="text-lg font-medium text-gray-900">{{ v.TituloOferta }}</span></p>
+                <p > Título: <span  class="text-lg font-medium text-gray-900">{{ v.TituloOferta }}</span></p>
                 <p > Empresa: <span  class="text-lg font-medium text-gray-900">{{ v.Empresa }}</span></p>
                 <p > Descripción: <span  class="text-lg font-medium text-gray-900">{{ v.Descripcion }}</span></p>
                 <p > Fecha de publicación: <span  class="text-lg font-medium text-gray-900">{{ v.FechaOferta }}</span></p>
@@ -289,7 +289,7 @@ const buscarCarreraRepresentante = () => {
                     </span>
                 </p>
                 <p > Imagen: <span  class="text-lg font-medium text-gray-900">
-                    <img v-if="v.Imagen" :src="`/storage/${v.Imagen}`" alt="Imagen" class="w-25 h-25  object-cover" />
+                    <img  @contextmenu.prevent v-if="v.Imagen" :src="`/storage/${v.Imagen}`" alt="Imagen" class="w-25 h-25  object-cover" />
                 </span></p>
                 
 

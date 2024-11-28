@@ -77,7 +77,7 @@ onMounted(() => {
 
 
 <template>
-    <Head title="Gestion categorias formulario" />
+    <Head title="Invitación de ponencias" />
     <AuthenticatedLayout>
         <template #header>
             Crear invitación
@@ -90,14 +90,14 @@ onMounted(() => {
                     <!-- Fila 1 -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="TituloPonencia" value="Titulo de la ponencia" />
+                            <InputLabel for="TituloPonencia" value="Título de la ponencia" />
                             <TextInput
                                 id="TituloPonencia"
                                 type="text"
                                 class="mt-1 block w-full"
                                 v-model="form.TituloPonencia"
                                 required
-                                placeholder="Ingrese el titulo de la ponencia"
+                                placeholder="Ingrese el título de la ponencia"
                                 autocomplete="TituloPonencia"
                             />
                             <InputError class="mt-2 sm:col-span-2" :message="form.errors.TituloPonencia" />
@@ -107,7 +107,7 @@ onMounted(() => {
                     <!-- Fila 2 -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="col-span-12 mt-4">
-                            <InputLabel for="DescripcionPonencia" value="Descripcion de ponencia" />
+                            <InputLabel for="DescripcionPonencia" value="Descripción de ponencia" />
                             <TextArea
                                 id="DescripcionPonencia"
                                 class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"

@@ -67,7 +67,7 @@ Route::middleware(['auth','verified', 'role:Admin'])->group(function (){
     Route::get('/categoria_anauncios/crear',[CatAnuncioController::class, 'create'])->name('cat_anuncios.create');
     Route::post('/categoria_anauncios',[CatAnuncioController::class, 'store'])->name('cat_anuncios.store');
     Route::get('/categoria_anauncios/{catAnuncio}/editar',[CatAnuncioController::class, 'edit'])->name('cat_anuncios.edit');
-    Route::post('/categoria_anauncios/{catAnuncio}',[CatAnuncioController::class, 'update'])->name('cat_anuncios.update');
+    Route::put('/categoria_anauncios/{catAnuncio}',[CatAnuncioController::class, 'update'])->name('cat_anuncios.update');
     Route::delete('/categoria_anauncios/{catAnuncio}',[CatAnuncioController::class, 'destroy'])->name('cat_anuncios.destroy');
 });
 
@@ -159,8 +159,7 @@ Route::get('/ProyectosColab/crear',[ProyectosColabController::class, 'create'])-
 Route::post('/ProyectosColab',[ProyectosColabController::class, 'store'])->name('ProyectosColab.store');
 Route::get('/ListaDeProyectosColaborativos',[ProyectosColabController::class, 'PanelProyectos'])->name('ProyectosColab.PanelProyectos');
 Route::get('/LisaDeProyectosColaborativos/{idCarrera}',[ProyectosColabController::class, 'PanelProyectosCarrera'])->name('ProyectosColab.PanelCarrera');
-Route::delete('/ProyectosColab/{proyecto}',[ProyectosColabController::class, 'destroy'])->name('ProyectosColab.destroy');
-Route::delete('/ImagenesProyectos/{imagen}',[ProyectosColabController::class, 'destroyImagenProyecto'])->name('ProyectosColab.destroyImagen');
+
 
 Route::get('/EnviarSolicitud/{proyecto}',[ProyectosColabController::class, 'EnviarSolicitud'])->name('ProyectosColab.EnviarSolicitud');
 Route::post('/EnviarCvProyecto',[ProyectosColabController::class, 'EnviarCvProyecto'])->name('ProyectosColab.EnviarCvProyecto'); 

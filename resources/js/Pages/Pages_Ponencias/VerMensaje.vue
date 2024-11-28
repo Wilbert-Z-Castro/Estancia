@@ -1,7 +1,7 @@
 
 
 <template>
-    <Head title="About us" />
+    <Head title="Mensaje ponencia" />
     <AuthenticatedLayout>
         <template #header>
             <div class="justify-center" style="text-align: center;">

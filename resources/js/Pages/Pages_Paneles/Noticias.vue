@@ -6,7 +6,7 @@
     <AuthenticatedLayout>
         <template #header>
             <div class="justify-center" style="text-align: center;">
-                Noticias Relevantes
+                Noticias destacadas
             </div>
             
         </template>
@@ -18,7 +18,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"></path>
                     </svg>
-                    <span class="mx-3">Categorias</span>
+                    <span class="mx-3">Categorías</span>
                     
                 </a>
                 <transition v-for="categoria in categorias" :key="categoria.idCatAnuncio"
@@ -95,8 +95,8 @@
         </div>
         <Modal :show="showModalView" @close="closeModalViwe">
             <div class="p-6">
-                <p > Titulo: <span  class="text-lg font-medium text-gray-900">{{ v.Titulo }}</span></p>
-                <p > Categoria: <span  class="text-lg font-medium text-gray-900">{{ v.Categoria }}</span></p>
+                <p > Título: <span  class="text-lg font-medium text-gray-900">{{ v.Titulo }}</span></p>
+                <p > Categoría: <span  class="text-lg font-medium text-gray-900">{{ v.Categoria }}</span></p>
                 <p > Contenido: <span  class="text-lg font-medium text-gray-900">{{ v.Contenido }}</span></p>
                 <p > Imagen: 
                     <div v-for="imagen in  v.Imagen" :key="imagen.idImagen" class="flex justify-center items-center">

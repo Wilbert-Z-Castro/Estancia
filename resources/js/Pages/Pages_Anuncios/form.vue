@@ -20,6 +20,7 @@ const valoresIniciales = {
 const props = defineProps({
     categorias:{type:Object}
 });
+const ErrorImagen = ref(false);
 const cargando = ref(false);
 const form = useForm(valoresIniciales);
 
@@ -54,6 +55,7 @@ const submit = () => {
         },
         onError: () => {
             form.errors,
+            Swal.close();
             cargando.value = false;
             const firstErrorFieldId = Object.keys(form.errors)[0];
             document.getElementById(firstErrorFieldId).focus();
@@ -79,6 +81,8 @@ const submit = () => {
         </div>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg ">
             <div class="p-6 mx-2 border-b border-gray-200">
+                
+                
                 <form @submit.prevent="submit" enctype="multipart/form-data">
                     <!-- Fila 3 -->
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
@@ -89,15 +93,15 @@ const submit = () => {
                             type="text"
                             class="mt-1 block w-full"
                             v-model="form.Titulo"
-                            required
-                            placeholder="Ingrese el Titulo del anuncio"
+                            
+                            placeholder="Ingresa el Titulo del anuncio"
                             autofocus
                             autocomplete="Titulo"
                             />
                             <InputError class="mt-2" :message="form.errors.Titulo" />
                         </div>
                         <div class="col-span-6 mt-4">
-                            <InputLabel for="Categoria" value="Categoria" />
+                            <InputLabel for="Categoria" value="Categoría" />
                             <select
                             id="Categoria"
                             class="mt-1 block w-full rounded border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -122,7 +126,7 @@ const submit = () => {
                             class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                             v-model="form.Contenido"
                             required
-                            placeholder="Ingrese la Descripcion del anuncio"
+                            placeholder="Ingresa la Descripción del anuncio"
                             autofocus
                             autocomplete="Contenido"
                             />
@@ -150,7 +154,7 @@ const submit = () => {
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
                             </svg>
 
-                            Registrarse
+                            Publicar
                         </PrimaryButton>
                         <LinkRegresar class="mx-2" :href="route('anuncios.index')">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">

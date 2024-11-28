@@ -13,6 +13,7 @@ import Swal from 'sweetalert2'
 const props = defineProps({
     categoria:{type:Object}
 });
+const ErrorImagen = ref(false);
 
 const valoresIniviales = {
     Nombre: props.categoria.Nombre,
@@ -23,9 +24,10 @@ const valoresIniviales = {
 const form = useForm(valoresIniviales);
 
 const submit = () => {
-    form.put(route('cat_anuncios.update', props.categoria.idCatAnuncio),{
+    form.post(route('cat_anuncios.update', props.categoria.idCatAnuncio),{
         onSuccess: () => form.reset(),
         onError: () => {
+        
         const firstErrorFieldId = Object.keys(form.errors)[0];
         document.getElementById(firstErrorFieldId).focus();
         }

@@ -38,7 +38,7 @@ const submit = () => {
         </div>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
+            Tu contraseña ha sido restablecida. Ahora puedes iniciar sesión.
         </div>
 
         <form @submit.prevent="submit">
