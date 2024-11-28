@@ -41,6 +41,17 @@ const chartData3 = ref({
     labels: [], // en eje x
     datasets: [],
 });
+
+const charAniEgreso = ref({
+    labels: [], // Años de egreso
+    datasets: [
+        {
+            label: 'Carreras',
+            data: [], // Totales de egresados por año
+        }
+    ],
+});
+
 const chartPonencias = ref({
     labels: [], // Nombres de las carreras
     datasets: [
@@ -108,18 +119,28 @@ const fetchChartData = async () => {
         chartData.value.labels = response.data.egresados.map(egresado => egresado.carrera.NombreCarrera);
         chartData.value.datasets[0].data = response.data.egresados.map(egresado => egresado.total);
 
-        chartData2.value.labels = response.data.egresadosanios.map(egresado => egresado.NombreCarrera);
-        const numeroCarreras=response.data.egresados.length;
-        for(let i=0; i<numeroCarreras; i++){
-            chartData2.value.datasets.push({
-                label: response.data.egresadosanios[i].AnioEgreso,
-                data: response.data.egresadosanios.map(egresado => 
-                    egresado.AnioEgreso === response.data.egresadosanios[i].AnioEgreso ? egresado.total : 0
-                ),
-                backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`,
+        // Definir etiquetas para el eje X: Nombre de las carreras
+            chartData2.value.labels = [...new Set(response.data.egresadosanios.map(egresado => egresado.NombreCarrera))];
+
+            // Agrupar los datos por año de egreso
+            const groupedByYear = response.data.egresadosanios.reduce((acc, egresado) => {
+                if (!acc[egresado.AnioEgreso]) {
+                    acc[egresado.AnioEgreso] = {};
+                }
+                acc[egresado.AnioEgreso][egresado.NombreCarrera] = egresado.total;
+                return acc;
+            }, {});
+
+            // Crear datasets para cada año
+            chartData2.value.datasets = Object.keys(groupedByYear).map(year => {
+                const data = chartData2.value.labels.map(carrera => groupedByYear[year][carrera] || 0);
+                return {
+                    label: year, // El año como etiqueta del dataset
+                    data,
+                    backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`,
+                };
             });
 
-        }
         chartData3.value.labels = response.data.puestoDetrabajos.map(puesto => puesto.PuestoTrabajo);
         response.data.egresados.map(egresado => 
             chartData3.value.datasets.push({

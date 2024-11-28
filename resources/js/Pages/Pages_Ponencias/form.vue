@@ -8,6 +8,7 @@ import TextInput from '@/Components/TextInput.vue';
 import TextArea from '@/Components/textarea.vue';
 import LinkRegresar from '@/Components/linkRegresar.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import Swal from 'sweetalert2'
 
 const props = defineProps({
     ponentes:{type:Object},
@@ -45,9 +46,21 @@ const handleFileUpload = (event) => {
 };
 
 const submit = () => {
+    Swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera mientras se envían los datos...',
+        allowOutsideClick: false, // Deshabilita que el usuario cierre la alerta
+        didOpen: () => {
+            Swal.showLoading(); // Muestra el spinner
+        }
+    });
     form.post(route('Ponencias.store'), {
-        onSuccess: () => form.reset(),
+        onSuccess: () => {
+            form.reset();
+            Swal.close();
+        },
         onError: () => {
+            Swal.close();
         const firstErrorFieldId = Object.keys(form.errors)[0];
         document.getElementById(firstErrorFieldId).focus();
         }
@@ -84,7 +97,7 @@ onMounted(() => {
             
         </template>
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 mx-2 border-b border-gray-200">
+            <div class="p-6 mx-2 border-b border-gray-200 overflow-y-auto">
 
                 <form @submit.prevent="submit">
                     <!-- Fila 1 -->
@@ -201,7 +214,7 @@ onMounted(() => {
                             </svg>
                             Enviar invitación
                         </PrimaryButton>
-                        <LinkRegresar class="mx-2" :href="route('cat_anuncios.index')">
+                        <LinkRegresar class="mx-2" :href="route('Ponencias.index')">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
                             </svg>
